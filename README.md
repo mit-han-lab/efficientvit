@@ -31,11 +31,11 @@ pip install tqdm opencv-python
 - Cityscapes: https://www.cityscapes-dataset.com/
 - ADE20K: https://groups.csail.mit.edu/vision/datasets/ADE20K/
 
-### Download Pretrained models
-
+### Download Pretrained Models
+Mobile latency is measured on Qualcomm Snapdragon 8Gen1 with Tensorflow-Lite, fp32, batch size 1.
 #### ImageNet
 
-| Model         |  Resolution | ImageNet Top1 Acc | ImageNet Top5 Acc |  Params |  MACs |  Mobile Latency (Qualcomm Snapdragon 8Gen1) | Checkpoint | 
+| Model         |  Resolution | ImageNet Top1 Acc | ImageNet Top5 Acc |  Params |  MACs |  Mobile Latency | Checkpoint | 
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:------------:|:------------:|
 | EfficientViT-B1 | 224 | 79.4 | 94.3 | 9.1M | 0.52G | 19ms | [link](https://drive.google.com/file/d/1hKN_hvLG4nmRzbfzKY7GlqwpR5uKpOOk/view?usp=share_link) |
 | EfficientViT-B1 | 256 | 79.9 | 94.7 | 9.1M | 0.68G | 24ms | [link](https://drive.google.com/file/d/1hXcG_jB0ODMOESsSkzVye-58B4F3Cahs/view?usp=share_link) |
@@ -50,7 +50,7 @@ pip install tqdm opencv-python
 
 #### Cityscapes
 
-| Model         |  Resolution | Cityscapes mIoU | Params |  MACs |  Mobile Latency (Qualcomm Snapdragon 8Gen1) | Checkpoint | 
+| Model         |  Resolution | Cityscapes mIoU | Params |  MACs |  Mobile Latency | Checkpoint | 
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:------------:|
 |EfficientViT-B0 | 960x1920 | 75.5 | 0.7M | 3.9G | 0.20s | [link](https://drive.google.com/file/d/1AOe053EcLTpcW9hE7A7ENT5w2gIyYSWx/view?usp=share_link) |
 | EfficientViT-B1 | 896x1792 | 80.1 | 4.8M | 19G | 0.82s | [link](https://drive.google.com/file/d/1GzDuKUrB1A-SVbpFuzInjf87BcBm6ypc/view?usp=share_link) |
@@ -59,7 +59,7 @@ pip install tqdm opencv-python
 
 #### ADE20K
 
-| Model         |  Resolution | ADE20K mIoU | Params |  MACs |  Mobile Latency (Qualcomm Snapdragon 8Gen1) | Checkpoint | 
+| Model         |  Resolution | ADE20K mIoU | Params |  MACs |  Mobile Latency | Checkpoint | 
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:------------:|
 | EfficientViT-B1 | 480 | 42.7 | 4.8M | 2.7G | 0.10s | [link](https://drive.google.com/file/d/1_TIXoXkfoNkMwXgN___ejY8lqfDzCpqG/view?usp=share_link) |
 | EfficientViT-B2 | 416 | 45.1 | 15M | 6.0G | 0.21s | [link](https://drive.google.com/file/d/1qFgjibkx2djSsMV-jx8oUqt8ODgCD-d4/view?usp=share_link) |
