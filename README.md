@@ -112,6 +112,18 @@ Example:
 python eval_seg_model.py --dataset cityscapes --crop_size 1184 --model b3-r1184 --save_path demo/cityscapes/b3-r1184/
 ```
 
+## Benchmarking with TFLite
+
+To generate TFLite files, please refer to `export_tflite.py`. It requires the TinyNN package.
+```bash
+pip install git+https://github.com/alibaba/TinyNeuralNetwork.git
+```
+
+Example:
+```bash
+python export_tflite.py --export_path model.tflite --task seg --dataset ade20k --model b3 --resolution 512 512
+```
+
 ## Contact
 Han Cai: hancai@mit.edu
 
