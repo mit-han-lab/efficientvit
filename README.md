@@ -127,6 +127,11 @@ python export_tflite.py --export_path model.tflite --task seg --dataset ade20k -
 ## Contact
 Han Cai: hancai@mit.edu
 
+## TODO
+- [ ] Add super resolution models
+- [ ] Add object detection models
+- [ ] Add training code
+
 ## Citation
 If EfficientViT is useful or relevant to your research, please kindly recognize our contributions by citing our paper:
 ```
