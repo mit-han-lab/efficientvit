@@ -1,18 +1,17 @@
-import os
 import argparse
 import math
-from tqdm import tqdm
-from typing import List
+import os
 
 import torch.utils.data
-from torchvision import transforms, datasets
+from torchvision import datasets, transforms
 from torchvision.transforms.functional import InterpolationMode
+from tqdm import tqdm
 
-from models.utils import AverageMeter
-from models.cls_model_zoo import create_cls_model
+from efficientvit.apps.utils import AverageMeter
+from efficientvit.cls_model_zoo import create_cls_model
 
 
-def accuracy(output: torch.Tensor, target: torch.Tensor, topk=(1,)) -> List[torch.Tensor]:
+def accuracy(output: torch.Tensor, target: torch.Tensor, topk=(1,)) -> list[torch.Tensor]:
     maxk = max(topk)
     batch_size = target.shape[0]
 
@@ -53,7 +52,9 @@ def main():
             args.path,
             transforms.Compose(
                 [
-                    transforms.Resize(int(math.ceil(args.image_size / args.crop_ratio)), interpolation=InterpolationMode.BICUBIC),
+                    transforms.Resize(
+                        int(math.ceil(args.image_size / args.crop_ratio)), interpolation=InterpolationMode.BICUBIC
+                    ),
                     transforms.CenterCrop(args.image_size),
                     transforms.ToTensor(),
                     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
@@ -71,8 +72,8 @@ def main():
     model = torch.nn.DataParallel(model).cuda()
     model.eval()
 
-    top1 = AverageMeter()
-    top5 = AverageMeter()
+    top1 = AverageMeter(is_distributed=False)
+    top5 = AverageMeter(is_distributed=False)
     with torch.no_grad():
         with tqdm(total=len(data_loader), desc=f"Eval {args.model} on ImageNet") as t:
             for images, labels in data_loader:
@@ -94,6 +95,7 @@ def main():
                 t.update(1)
 
     print(f"Top1 Acc={top1.avg:.1f}, Top5 Acc={top5.avg:.1f}")
+
 
 if __name__ == "__main__":
     main()

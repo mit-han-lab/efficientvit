@@ -1,0 +1,61 @@
+data_provider:
+  dataset: imagenet
+  data_dir: /dataset/imagenet
+  rrc_config:
+    train_interpolate: random
+    test_interpolate: bicubic
+    test_crop_ratio: 1.0
+  data_aug:
+    name: randaug
+    n: 1
+    m: 3
+  base_batch_size: 128
+  valid_size: null
+  n_worker: 8
+  image_size:
+  - 128
+  - 160
+  - 192
+  - 224
+  drop_last: false
+
+run_config:
+  n_epochs: 300
+  base_lr: 0.00025
+  warmup_epochs: 20
+  warmup_lr: 0.0
+  lr_schedule_name: cosine
+  lr_schedule_param: {}
+  optimizer_name: adamw
+  optimizer_params:
+    eps: 1.0e-08
+    betas:
+    - 0.9
+    - 0.999
+  weight_decay: 0.1
+  no_wd_keys:
+  - norm
+  - bias
+  grad_clip: 2.0
+  reset_bn: true
+  reset_bn_size: 16000
+  reset_bn_batch_size: 100
+  eval_image_size:
+  - 224
+  label_smooth: 0.1
+  mixup_config:
+    op:
+    - - mixup
+      - 0.1
+      - 1.0
+    - - cutmix
+      - 0.1
+      - 1.0
+  bce: true
+
+backbone_drop:
+  name: droppath
+  drop_prob: 0.05
+  linear_decay: true
+
+ema_decay: 0.9998

@@ -1,0 +1,22 @@
+data_provider:
+  data_aug:
+    name: randaug
+    n: 2
+    m: 6
+
+run_config:
+  mixup_config:
+    op:
+    - - mixup
+      - 0.3
+      - 1.0
+    - - cutmix
+      - 0.3
+      - 1.0
+
+backbone_drop:
+  drop_prob: 0.1
+
+net_config:
+  name: b3
+  dropout: 0

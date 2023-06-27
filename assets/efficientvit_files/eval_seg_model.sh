@@ -1,20 +1,20 @@
-# Cityscapes: mIoU = 75.5
-python eval_seg_model.py --dataset cityscapes --crop_size 960 --model b0-r960
+# Cityscapes: mIoU = 75.7
+python eval_seg_model.py --dataset cityscapes --model b0
 
-# Cityscapes: mIoU = 80.1
-python eval_seg_model.py --dataset cityscapes --crop_size 896 --model b1-r896
+# Cityscapes: mIoU = 80.5
+python eval_seg_model.py --dataset cityscapes --model b1
 
 # Cityscapes: mIoU = 82.1
-python eval_seg_model.py --dataset cityscapes --crop_size 1024 --model b2-r1024
+python eval_seg_model.py --dataset cityscapes --model b2
 
-# Cityscapes: mIoU = 83.2
-python eval_seg_model.py --dataset cityscapes --crop_size 1184 --model b3-r1184
+# Cityscapes: mIoU = 83.0
+python eval_seg_model.py --dataset cityscapes --model b3
 
-# ADE20K: mIoU = 42.7
-python eval_seg_model.py --dataset ade20k --path /dataset/ade20k-full/images/validation --crop_size 480 --model b1-r480
+# ADE20K: mIoU = 42.8
+python eval_seg_model.py --dataset ade20k --crop_size 512 --model b1 --path /dataset/ade20k/images/validation 
 
-# ADE20K: mIoU = 45.1
-python eval_seg_model.py --dataset ade20k --path /dataset/ade20k-full/images/validation --crop_size 416 --model b2-r416
+# ADE20K: mIoU = 45.9
+python eval_seg_model.py --dataset ade20k --crop_size 512 --model b2 --path /dataset/ade20k/images/validation
 
 # ADE20K: mIoU = 49.0
-python eval_seg_model.py --dataset ade20k --path /dataset/ade20k-full/images/validation --crop_size 512 --model b3-r512
+python eval_seg_model.py --dataset ade20k --crop_size 512 --model b3 --path /dataset/ade20k/images/validation

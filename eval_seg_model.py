@@ -1,32 +1,32 @@
-import cv2
-import os
 import argparse
-import pathlib
-import numpy as np
 import math
-from tqdm import tqdm
-from typing import Dict, Tuple, Optional, Any, Iterable
-from PIL import Image
+import os
+import pathlib
 
+import cv2
+import numpy as np
 import torch
 import torchvision.transforms.functional as F
-from torchvision import transforms
+from PIL import Image
 from torch.utils.data.dataset import Dataset
+from torchvision import transforms
+from tqdm import tqdm
 
-from models.utils import resize, AverageMeter
-from models.seg_model_zoo import create_seg_model
+from efficientvit.apps.utils import AverageMeter
+from efficientvit.models.utils import resize
+from efficientvit.seg_model_zoo import create_seg_model
 
 
 class Resize(object):
     def __init__(
         self,
-        crop_size: Optional[Tuple[int, int]],
-        interpolation: Optional[int] = cv2.INTER_CUBIC,
+        crop_size: tuple[int, int] or None,
+        interpolation: int or None = cv2.INTER_CUBIC,
     ):
         self.crop_size = crop_size
         self.interpolation = interpolation
 
-    def __call__(self, feed_dict: Dict[str, np.ndarray]) -> Dict[str, np.ndarray]:
+    def __call__(self, feed_dict: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
         if self.crop_size is None or self.interpolation is None:
             return feed_dict
 
@@ -36,7 +36,9 @@ class Resize(object):
         h, w, _ = image.shape
         if width != w or height != h:
             image = cv2.resize(
-                image, dsize=(width, height), interpolation=self.interpolation,
+                image,
+                dsize=(width, height),
+                interpolation=self.interpolation,
             )
         return {
             "data": image,
@@ -50,7 +52,7 @@ class ToTensor(object):
         self.std = std
         self.inplace = inplace
 
-    def __call__(self, feed_dict: Dict[str, np.ndarray]) -> Dict[str, torch.Tensor]:
+    def __call__(self, feed_dict: dict[str, np.ndarray]) -> dict[str, torch.Tensor]:
         image, mask = feed_dict["data"], feed_dict["label"]
         image = image.transpose((2, 0, 1))  # (H, W, C) -> (C, H, W)
         image = torch.as_tensor(image, dtype=torch.float32).div(255.0)
@@ -67,7 +69,7 @@ class SegIOU:
         self.num_classes = num_classes
         self.ignore_index = ignore_index
 
-    def __call__(self, outputs: torch.Tensor, targets: torch.Tensor) -> Dict[str, torch.Tensor]:
+    def __call__(self, outputs: torch.Tensor, targets: torch.Tensor) -> dict[str, torch.Tensor]:
         outputs = (outputs + 1) * (targets != self.ignore_index)
         targets = (targets + 1) * (targets != self.ignore_index)
         intersections = outputs * (outputs == targets)
@@ -180,7 +182,7 @@ class CityscapesDataset(Dataset):
         )
     )
 
-    def __init__(self, data_dir: str, crop_size: Optional[Tuple[int, int]] = None):
+    def __init__(self, data_dir: str, crop_size: tuple[int, int] or None = None):
         super().__init__()
 
         # load samples
@@ -200,15 +202,17 @@ class CityscapesDataset(Dataset):
         self.samples = samples
 
         # build transform
-        self.transform = transforms.Compose([
-            Resize(crop_size),
-            ToTensor(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ])
+        self.transform = transforms.Compose(
+            [
+                Resize(crop_size),
+                ToTensor(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            ]
+        )
 
     def __len__(self) -> int:
         return len(self.samples)
 
-    def __getitem__(self, index: int) -> Dict[str, Any]:
+    def __getitem__(self, index: int) -> dict[str, any]:
         image_path, mask_path = self.samples[index]
         image = np.array(Image.open(image_path).convert("RGB"))
         mask = np.array(Image.open(mask_path))
@@ -532,6 +536,7 @@ class ADE20KDataset(Dataset):
         [102, 255, 0],
         [92, 0, 255],
     )
+
     def __init__(self, data_dir: str, crop_size=512):
         super().__init__()
 
@@ -550,14 +555,16 @@ class ADE20KDataset(Dataset):
                 samples.append((image_path, mask_path))
         self.samples = samples
 
-        self.transform = transforms.Compose([
-            ToTensor(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ])
-    
+        self.transform = transforms.Compose(
+            [
+                ToTensor(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            ]
+        )
+
     def __len__(self) -> int:
         return len(self.samples)
 
-    def __getitem__(self, index: int) -> Dict[str, Any]:
+    def __getitem__(self, index: int) -> dict[str, any]:
         image_path, mask_path = self.samples[index]
         image = np.array(Image.open(image_path).convert("RGB"))
         mask = np.array(Image.open(mask_path), dtype=np.int64) - 1
@@ -571,7 +578,9 @@ class ADE20KDataset(Dataset):
             th = math.ceil(h / w * tw / 32) * 32
         if th != h or tw != w:
             image = cv2.resize(
-                image, dsize=(tw, th), interpolation=cv2.INTER_CUBIC,
+                image,
+                dsize=(tw, th),
+                interpolation=cv2.INTER_CUBIC,
             )
 
         feed_dict = {
@@ -590,15 +599,13 @@ class ADE20KDataset(Dataset):
 def get_canvas(
     image: np.ndarray,
     mask: np.ndarray,
-    colors: Iterable,
+    colors: tuple or list,
     opacity=0.5,
 ) -> np.ndarray:
     image_shape = image.shape[:2]
     mask_shape = mask.shape
     if image_shape != mask_shape:
-        mask = cv2.resize(
-            mask, dsize=(image_shape[1], image_shape[0]), interpolation=cv2.INTER_NEAREST
-        )
+        mask = cv2.resize(mask, dsize=(image_shape[1], image_shape[0]), interpolation=cv2.INTER_NEAREST)
     seg_mask = np.zeros_like(image, dtype=np.uint8)
     for k, color in enumerate(colors):
         seg_mask[mask == k, :] = color
@@ -609,7 +616,7 @@ def get_canvas(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--path", type=str, default="/dataset/cityscapes-full/leftImg8bit/val")
+    parser.add_argument("--path", type=str, default="/dataset/cityscapes/leftImg8bit/val")
     parser.add_argument("--dataset", type=str, default="cityscapes", choices=["cityscapes", "ade20k"])
     parser.add_argument("--gpu", type=str, default="0")
     parser.add_argument("--batch_size", help="batch size per gpu", type=int, default=1)
@@ -650,8 +657,8 @@ def main():
 
     if args.save_path is not None:
         os.makedirs(args.save_path, exist_ok=True)
-    interaction = AverageMeter()
-    union = AverageMeter()
+    interaction = AverageMeter(is_distributed=False)
+    union = AverageMeter(is_distributed=False)
     iou = SegIOU(len(dataset.classes))
     with torch.no_grad():
         with tqdm(total=len(data_loader), desc=f"Eval {args.model} on {args.dataset}") as t:
@@ -686,6 +693,7 @@ def main():
                             fout.write(f"{idx}:\t{image_path}\n")
 
     print(f"mIoU = {(interaction.sum / union.sum).cpu().mean().item() * 100:.1f}")
+
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,3 @@
+net_config:
+  name: b2
+  dropout: 0
