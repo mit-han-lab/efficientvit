@@ -20,6 +20,9 @@ Here are the results of EfficientViT on image classification:
 <img src="assets/efficientvit_files/cls_results.png"  width="450">
 </p>
 
+## News
+- [2023/07/18] EfficientViT is accepted by ICCV 2023.
+
 ## Getting Started
 
 ### Installation
