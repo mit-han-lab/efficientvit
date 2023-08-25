@@ -50,7 +50,7 @@ def zero_last_gamma(model: nn.Module, init_val=0) -> None:
                 parent_module = m.main.point_conv
             elif isinstance(m.main, ops.ConvLayer):
                 parent_module = m.main
-            elif isinstance(m.main, (ops.LiteMSA)):
+            elif isinstance(m.main, (ops.LiteMLA)):
                 parent_module = m.main.proj
             else:
                 parent_module = None

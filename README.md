@@ -4,7 +4,7 @@
 
 ## About EfficientViT Models
 
-EfficientViT is a new family of vision models for efficient high-resolution vision, especially segmentation. The core building block of EfficientViT is a new lightweight multi-scale attention module that achieves global receptive field and multi-scale learning with only hardware-efficient operations. 
+EfficientViT is a new family of vision models for efficient high-resolution dense prediction. The core building block of EfficientViT is a new lightweight multi-scale linear attention module that achieves global receptive field and multi-scale learning with only hardware-efficient operations. 
 
 Here are comparisons with prior SOTA semantic segmentation models:
 <p align="left">
@@ -39,10 +39,11 @@ pip install -r requirements.txt
 - ADE20K: https://groups.csail.mit.edu/vision/datasets/ADE20K/
 
 ### Download Pretrained Models
-Latency is measured on NVIDIA Jetson Nano and NVIDIA Jetson AGX Orin  with TensorRT, fp16, batch size 1.
+Latency is measured on NVIDIA Jetson Nano and NVIDIA Jetson AGX Orin  with TensorRT, fp16. Data transfer time is included in the latency.
+
 #### ImageNet
 
-| Model         |  Resolution | ImageNet Top1 Acc | ImageNet Top5 Acc |  Params |  MACs |  Jetson Nano | Jetson Orin | Checkpoint |
+| Model         |  Resolution | ImageNet Top1 Acc | ImageNet Top5 Acc |  Params |  MACs |  Jetson Nano (bs1) | Jetson Orin (bs1) | Checkpoint |
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:------------:|:------------:|:------------:|
 | EfficientViT-B1 | 224 | 79.4 | 94.3 | 9.1M | 0.52G | 24.8ms | 1.48ms | [link](https://drive.google.com/file/d/1hKN_hvLG4nmRzbfzKY7GlqwpR5uKpOOk/view?usp=share_link) |
 | EfficientViT-B1 | 256 | 79.9 | 94.7 | 9.1M | 0.68G | 28.5ms | 1.57ms | [link](https://drive.google.com/file/d/1hXcG_jB0ODMOESsSkzVye-58B4F3Cahs/view?usp=share_link) |
@@ -54,9 +55,17 @@ Latency is measured on NVIDIA Jetson Nano and NVIDIA Jetson AGX Orin  with Tenso
 | EfficientViT-B3 | 256 | 83.8 | 96.5 | 49M  | 5.2G  | 120ms  | 4.74ms | [link](https://drive.google.com/file/d/1y1rnir4I0XiId-oTCcHhs7jqnrHGFi-g/view?usp=share_link) |
 | EfficientViT-B3 | 288 | 84.2 | 96.7 | 49M  | 6.5G  | 141ms  | 5.63ms | [link](https://drive.google.com/file/d/1KfwbGtlyFgslNr4LIHERv6aCfkItEvRk/view?usp=share_link) |
 
+| Model         |  Resolution | ImageNet Top1 Acc | ImageNet Top5 Acc |  Params |  MACs |  A100 Throughput | Checkpoint |
+|----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:------------:|:------------:|
+| EfficientNetV2-S | 384 | 83.9 | - | 22M | 8.8G | 2869 image/s | - |
+| EfficientNetV2-M | 480 | 85.1 | - | 54M | 24G | 1160 image/s | - |
+| |
+| EfficientViT-L1 | 224 |  84.5 | 96.9 | 53M | 5.3G | 6207 image/s | [coming soon] |
+| EfficientViT-L2 | 224 |  85.1 | 97.1 | 64M | 6.9G | 4998 image/s | [coming soon] |
+
 #### Cityscapes
 
-| Model         |  Resolution | Cityscapes mIoU | Params |  MACs |  Jetson Nano | Jetson Orin | Checkpoint |
+| Model         |  Resolution | Cityscapes mIoU | Params |  MACs |  Jetson Nano (bs1) | Jetson Orin (bs1) | Checkpoint |
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:---------:|:------------:|
 | EfficientViT-B0 | 1024x2048 | 75.7 | 0.7M | 4.4G | 275ms  | 9.9ms  | [link](https://drive.google.com/file/d/1Ix1Dh3xlpaf0Wzh01Xmo-hAYkoXt1EAD/view?usp=sharing) |
 | EfficientViT-B1 | 1024x2048 | 80.5 | 4.8M | 25G  | 819ms  | 24.3ms | [link](https://drive.google.com/file/d/1jNjLFtIUNvu5MwSupgFHLc-2kmFLiu67/view?usp=sharing) |
@@ -65,7 +74,7 @@ Latency is measured on NVIDIA Jetson Nano and NVIDIA Jetson AGX Orin  with Tenso
 
 #### ADE20K
 
-| Model         |  Resolution | ADE20K mIoU | Params |  MACs |  Jetson Nano | Jetson Orin | Checkpoint |
+| Model         |  Resolution | ADE20K mIoU | Params |  MACs |  Jetson Nano (bs1) | Jetson Orin (bs1) | Checkpoint |
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:---------:|:------------:|
 | EfficientViT-B1 | 512 | 42.8 | 4.8M | 3.1G | 110ms | 4.0ms  | [link](https://drive.google.com/file/d/13YNtEJ-mRnAhu0fIs2EnAP-3TmSneRAC/view?usp=sharing) |
 | EfficientViT-B2 | 512 | 45.9 | 15M  | 9.1G | 212ms | 7.3ms  | [link](https://drive.google.com/file/d/1k5sWY6aJ1FCtMt4GRTZqSFlJ-u_TSHzc/view?usp=sharing) |
@@ -144,8 +153,9 @@ Han Cai: hancai@mit.edu
 - [x] ImageNet Pretrained models
 - [x] Segmentation Pretrained models
 - [x] ImageNet training code
-- [ ] Super resolution models
-- [ ] Object detection models
+- [ ] EfficientViT L series, designed for cloud
+- [ ] EfficientViT for segment anything
+- [ ] EfficientViT for super-resolution
 - [ ] Segmentation training code
 
 ## Citation

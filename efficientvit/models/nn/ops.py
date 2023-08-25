@@ -15,7 +15,7 @@ __all__ = [
     "IdentityLayer",
     "DSConv",
     "MBConv",
-    "LiteMSA",
+    "LiteMLA",
     "EfficientViTBlock",
     "ResidualBlock",
     "DAGBlock",
@@ -231,8 +231,8 @@ class MBConv(nn.Module):
         return x
 
 
-class LiteMSA(nn.Module):
-    r"""Lightweight multi-scale attention"""
+class LiteMLA(nn.Module):
+    r"""Lightweight multi-scale linear attention"""
 
     def __init__(
         self,
@@ -246,8 +246,10 @@ class LiteMSA(nn.Module):
         act_func=(None, None),
         kernel_func="relu",
         scales: tuple[int, ...] = (5,),
+        eps=1.0e-15,
     ):
-        super(LiteMSA, self).__init__()
+        super(LiteMLA, self).__init__()
+        self.eps = eps
         heads = heads or int(in_channels // dim * heads_ratio)
 
         total_dim = heads * dim
@@ -293,18 +295,14 @@ class LiteMSA(nn.Module):
         )
 
     @autocast(enabled=False)
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        B, _, H, W = list(x.size())
+    def relu_linear_att(self, qkv: torch.Tensor) -> torch.Tensor:
+        B, _, H, W = list(qkv.size())
 
-        # generate multi-scale q, k, v
-        qkv = self.qkv(x)
-        multi_scale_qkv = [qkv]
-        for op in self.aggreg:
-            multi_scale_qkv.append(op(qkv))
-        multi_scale_qkv = torch.cat(multi_scale_qkv, dim=1)
+        if qkv.dtype == torch.float16:
+            qkv = qkv.float()
 
-        multi_scale_qkv = torch.reshape(
-            multi_scale_qkv,
+        qkv = torch.reshape(
+            qkv,
             (
                 B,
                 -1,
@@ -312,27 +310,38 @@ class LiteMSA(nn.Module):
                 H * W,
             ),
         )
-        multi_scale_qkv = torch.transpose(multi_scale_qkv, -1, -2)
+        qkv = torch.transpose(qkv, -1, -2)
         q, k, v = (
-            multi_scale_qkv[..., 0 : self.dim],
-            multi_scale_qkv[..., self.dim : 2 * self.dim],
-            multi_scale_qkv[..., 2 * self.dim :],
+            qkv[..., 0 : self.dim],
+            qkv[..., self.dim : 2 * self.dim],
+            qkv[..., 2 * self.dim :],
         )
 
-        # lightweight global attention
+        # lightweight linear attention
         q = self.kernel_func(q)
         k = self.kernel_func(k)
 
+        # linear matmul
         trans_k = k.transpose(-1, -2)
 
         v = F.pad(v, (0, 1), mode="constant", value=1)
         kv = torch.matmul(trans_k, v)
         out = torch.matmul(q, kv)
-        out = out[..., :-1] / (out[..., -1:] + 1e-15)
+        out = out[..., :-1] / (out[..., -1:] + self.eps)
 
-        # final projecttion
         out = torch.transpose(out, -1, -2)
         out = torch.reshape(out, (B, -1, H, W))
+        return out
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # generate multi-scale q, k, v
+        qkv = self.qkv(x)
+        multi_scale_qkv = [qkv]
+        for op in self.aggreg:
+            multi_scale_qkv.append(op(qkv))
+        multi_scale_qkv = torch.cat(multi_scale_qkv, dim=1)
+
+        out = self.relu_linear_att(multi_scale_qkv)
         out = self.proj(out)
 
         return out
@@ -350,7 +359,7 @@ class EfficientViTBlock(nn.Module):
     ):
         super(EfficientViTBlock, self).__init__()
         self.context_module = ResidualBlock(
-            LiteMSA(
+            LiteMLA(
                 in_channels=in_channels,
                 out_channels=in_channels,
                 heads_ratio=heads_ratio,
