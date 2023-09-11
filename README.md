@@ -41,7 +41,7 @@ pip install -r requirements.txt
 - ADE20K: https://groups.csail.mit.edu/vision/datasets/ADE20K/
 
 ### Download Pretrained Models
-Latency is measured on NVIDIA Jetson Nano and NVIDIA Jetson AGX Orin  with TensorRT, fp16. Data transfer time is included in the latency.
+Latency/Throughput is measured on NVIDIA Jetson Nano, NVIDIA Jetson AGX Orin, and Nvidia A100 GPU with TensorRT, fp16. Data transfer time is included.
 
 #### ImageNet
 | Model         |  Resolution | ImageNet Top1 Acc | ImageNet Top5 Acc |  Params |  MACs |  A100 Throughput | Checkpoint |
