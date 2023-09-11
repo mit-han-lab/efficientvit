@@ -15,6 +15,8 @@ __all__ = [
     "IdentityLayer",
     "DSConv",
     "MBConv",
+    "FusedMBConv",
+    "ResBlock",
     "LiteMLA",
     "EfficientViTBlock",
     "ResidualBlock",
@@ -228,6 +230,97 @@ class MBConv(nn.Module):
         x = self.inverted_conv(x)
         x = self.depth_conv(x)
         x = self.point_conv(x)
+        return x
+
+
+class FusedMBConv(nn.Module):
+    def __init__(
+        self,
+        in_channels: int,
+        out_channels: int,
+        kernel_size=3,
+        stride=1,
+        mid_channels=None,
+        expand_ratio=6,
+        groups=1,
+        use_bias=False,
+        norm=("bn2d", "bn2d"),
+        act_func=("relu6", None),
+    ):
+        super().__init__()
+        use_bias = val2tuple(use_bias, 2)
+        norm = val2tuple(norm, 2)
+        act_func = val2tuple(act_func, 2)
+
+        mid_channels = mid_channels or round(in_channels * expand_ratio)
+
+        self.spatial_conv = ConvLayer(
+            in_channels,
+            mid_channels,
+            kernel_size,
+            stride,
+            groups=groups,
+            use_bias=use_bias[0],
+            norm=norm[0],
+            act_func=act_func[0],
+        )
+        self.point_conv = ConvLayer(
+            mid_channels,
+            out_channels,
+            1,
+            use_bias=use_bias[1],
+            norm=norm[1],
+            act_func=act_func[1],
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = self.spatial_conv(x)
+        x = self.point_conv(x)
+        return x
+
+
+class ResBlock(nn.Module):
+    def __init__(
+        self,
+        in_channels: int,
+        out_channels: int,
+        kernel_size=3,
+        stride=1,
+        mid_channels=None,
+        expand_ratio=1,
+        use_bias=False,
+        norm=("bn2d", "bn2d"),
+        act_func=("relu6", None),
+    ):
+        super().__init__()
+        use_bias = val2tuple(use_bias, 2)
+        norm = val2tuple(norm, 2)
+        act_func = val2tuple(act_func, 2)
+
+        mid_channels = mid_channels or round(in_channels * expand_ratio)
+
+        self.conv1 = ConvLayer(
+            in_channels,
+            mid_channels,
+            kernel_size,
+            stride,
+            use_bias=use_bias[0],
+            norm=norm[0],
+            act_func=act_func[0],
+        )
+        self.conv2 = ConvLayer(
+            mid_channels,
+            out_channels,
+            kernel_size,
+            1,
+            use_bias=use_bias[1],
+            norm=norm[1],
+            act_func=act_func[1],
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = self.conv1(x)
+        x = self.conv2(x)
         return x
 
 

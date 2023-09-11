@@ -4,7 +4,7 @@ from torch.nn.modules.batchnorm import _BatchNorm
 
 from efficientvit.models.utils import build_kwargs_from_config
 
-__all__ = ["build_norm", "reset_bn"]
+__all__ = ["build_norm", "reset_bn", "set_norm_eps"]
 
 
 # register normalization function here
@@ -115,3 +115,10 @@ def reset_bn(
             assert isinstance(m, _BatchNorm)
             m.running_mean.data[:feature_dim].copy_(bn_mean[name].avg)
             m.running_var.data[:feature_dim].copy_(bn_var[name].avg)
+
+
+def set_norm_eps(model: nn.Module, eps: float or None = None) -> None:
+    for m in model.modules():
+        if isinstance(m, (nn.GroupNorm, nn.LayerNorm, _BatchNorm)):
+            if eps is not None:
+                m.eps = eps

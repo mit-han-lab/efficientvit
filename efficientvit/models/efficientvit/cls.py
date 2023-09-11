@@ -1,16 +1,20 @@
 import torch
 import torch.nn as nn
 
-from efficientvit.models.efficientvit.backbone import EfficientViTBackbone
+from efficientvit.models.efficientvit.backbone import EfficientViTBackbone, EfficientViTLargeBackbone
 from efficientvit.models.nn import ConvLayer, LinearLayer, OpSequential
 from efficientvit.models.utils import build_kwargs_from_config
 
 __all__ = [
     "EfficientViTCls",
+    ######################
     "efficientvit_cls_b0",
     "efficientvit_cls_b1",
     "efficientvit_cls_b2",
     "efficientvit_cls_b3",
+    ######################
+    "efficientvit_cls_l1",
+    "efficientvit_cls_l2",
 ]
 
 
@@ -41,7 +45,7 @@ class ClsHead(OpSequential):
 
 
 class EfficientViTCls(nn.Module):
-    def __init__(self, backbone: EfficientViTBackbone, head: ClsHead) -> None:
+    def __init__(self, backbone: EfficientViTBackbone or EfficientViTLargeBackbone, head: ClsHead) -> None:
         super().__init__()
         self.backbone = backbone
         self.head = head
@@ -102,6 +106,36 @@ def efficientvit_cls_b3(**kwargs) -> EfficientViTCls:
     head = ClsHead(
         in_channels=512,
         width_list=[2304, 2560],
+        **build_kwargs_from_config(kwargs, ClsHead),
+    )
+    model = EfficientViTCls(backbone, head)
+    return model
+
+
+def efficientvit_cls_l1(**kwargs) -> EfficientViTCls:
+    from efficientvit.models.efficientvit.backbone import efficientvit_backbone_l1
+
+    backbone = efficientvit_backbone_l1(**kwargs)
+
+    head = ClsHead(
+        in_channels=512,
+        width_list=[3072, 3200],
+        act_func="gelu",
+        **build_kwargs_from_config(kwargs, ClsHead),
+    )
+    model = EfficientViTCls(backbone, head)
+    return model
+
+
+def efficientvit_cls_l2(**kwargs) -> EfficientViTCls:
+    from efficientvit.models.efficientvit.backbone import efficientvit_backbone_l2
+
+    backbone = efficientvit_backbone_l2(**kwargs)
+
+    head = ClsHead(
+        in_channels=512,
+        width_list=[3072, 3200],
+        act_func="gelu",
         **build_kwargs_from_config(kwargs, ClsHead),
     )
     model = EfficientViTCls(backbone, head)

@@ -74,7 +74,7 @@ def main():
 
     top1 = AverageMeter(is_distributed=False)
     top5 = AverageMeter(is_distributed=False)
-    with torch.no_grad():
+    with torch.inference_mode():
         with tqdm(total=len(data_loader), desc=f"Eval {args.model} on ImageNet") as t:
             for images, labels in data_loader:
                 images, labels = images.cuda(), labels.cuda()

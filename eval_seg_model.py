@@ -660,7 +660,7 @@ def main():
     interaction = AverageMeter(is_distributed=False)
     union = AverageMeter(is_distributed=False)
     iou = SegIOU(len(dataset.classes))
-    with torch.no_grad():
+    with torch.inference_mode():
         with tqdm(total=len(data_loader), desc=f"Eval {args.model} on {args.dataset}") as t:
             for feed_dict in data_loader:
                 images, mask = feed_dict["data"].cuda(), feed_dict["label"].cuda()

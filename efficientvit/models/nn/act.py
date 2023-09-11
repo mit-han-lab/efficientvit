@@ -1,3 +1,5 @@
+from functools import partial
+
 import torch.nn as nn
 
 from efficientvit.models.utils import build_kwargs_from_config
@@ -10,6 +12,8 @@ REGISTERED_ACT_DICT: dict[str, type] = {
     "relu": nn.ReLU,
     "relu6": nn.ReLU6,
     "hswish": nn.Hardswish,
+    "silu": nn.SiLU,
+    "gelu": partial(nn.GELU, approximate="tanh"),
 }
 
 

@@ -2,26 +2,28 @@
 
 ### [paper](https://arxiv.org/abs/2205.14756) | [poster](assets/efficientvit_files/poster.pdf)
 
+## News
+**If you are interested in getting updates, please join our mailing list [here](https://forms.gle/Z6DNkRidJ1ouxmUk9).**
+- [2023/07/18] EfficientViT is accepted by ICCV 2023.
+
+## Demo
+EfficientViT-L1 (45.9ms on Nvidia Jetson AGX Orin, 82.7 mIoU on Cityscapes)
+
+[![Watch the video](assets/demo/cityscapes_l1_demo.png)](assets/demo/cityscapes_l1_demo.mp4)
+
 ## About EfficientViT Models
 
 EfficientViT is a new family of vision models for efficient high-resolution dense prediction. The core building block of EfficientViT is a new lightweight multi-scale linear attention module that achieves global receptive field and multi-scale learning with only hardware-efficient operations. 
-
-Here are comparisons with prior SOTA semantic segmentation models:
-<p align="left">
-<img src="assets/efficientvit_files/city_results.png"  width="900">
-</p>
-
-<p align="left">
-<img src="assets/efficientvit_files/ade_results.png"  width="900">
-</p>
 
 Here are the results of EfficientViT on image classification:
 <p align="left">
 <img src="assets/efficientvit_files/cls_results.png"  width="450">
 </p>
 
-## News
-- [2023/07/18] EfficientViT is accepted by ICCV 2023.
+Here are comparisons with prior SOTA semantic segmentation models:
+<p align="left">
+<img src="assets/efficientvit_files/city_results.png"  width="900">
+</p>
 
 ## Getting Started
 
@@ -48,9 +50,11 @@ Latency is measured on NVIDIA Jetson Nano and NVIDIA Jetson AGX Orin  with Tenso
 | EfficientViT-B1 | 224 | 79.4 | 94.3 | 9.1M | 0.52G | 24.8ms | 1.48ms | [link](https://drive.google.com/file/d/1hKN_hvLG4nmRzbfzKY7GlqwpR5uKpOOk/view?usp=share_link) |
 | EfficientViT-B1 | 256 | 79.9 | 94.7 | 9.1M | 0.68G | 28.5ms | 1.57ms | [link](https://drive.google.com/file/d/1hXcG_jB0ODMOESsSkzVye-58B4F3Cahs/view?usp=share_link) |
 | EfficientViT-B1 | 288 | 80.4 | 95.0 | 9.1M | 0.86G | 34.5ms | 1.82ms | [link](https://drive.google.com/file/d/1sE_Suz9gOOUO7o5r9eeAT4nKK8Hrbhsu/view?usp=share_link) |
+| |
 | EfficientViT-B2 | 224 | 82.1 | 95.8 | 24M  | 1.6G  | 50.6ms | 2.63ms | [link](https://drive.google.com/file/d/1DiM-iqVGTrq4te8mefHl3e1c12u4qR7d/view?usp=share_link) |
 | EfficientViT-B2 | 256 | 82.7 | 96.1 | 24M  | 2.1G  | 58.5ms | 2.84ms | [link](https://drive.google.com/file/d/192OOk4ISitwlyW979M-FSJ_fYMMW9HQz/view?usp=share_link) |
 | EfficientViT-B2 | 288 | 83.1 | 96.3 | 24M  | 2.6G  | 69.9ms | 3.30ms | [link](https://drive.google.com/file/d/1aodcepOyne667hvBAGpf9nDwmd5g0NpU/view?usp=share_link) |
+| |
 | EfficientViT-B3 | 224 | 83.5 | 96.4 | 49M  | 4.0G  | 101ms  | 4.36ms | [link](https://drive.google.com/file/d/18RZDGLiY8KsyJ7LGic4mg1JHwd-a_ky6/view?usp=share_link) |
 | EfficientViT-B3 | 256 | 83.8 | 96.5 | 49M  | 5.2G  | 120ms  | 4.74ms | [link](https://drive.google.com/file/d/1y1rnir4I0XiId-oTCcHhs7jqnrHGFi-g/view?usp=share_link) |
 | EfficientViT-B3 | 288 | 84.2 | 96.7 | 49M  | 6.5G  | 141ms  | 5.63ms | [link](https://drive.google.com/file/d/1KfwbGtlyFgslNr4LIHERv6aCfkItEvRk/view?usp=share_link) |
@@ -60,8 +64,14 @@ Latency is measured on NVIDIA Jetson Nano and NVIDIA Jetson AGX Orin  with Tenso
 | EfficientNetV2-S | 384 | 83.9 | - | 22M | 8.8G | 2869 image/s | - |
 | EfficientNetV2-M | 480 | 85.1 | - | 54M | 24G | 1160 image/s | - |
 | |
-| EfficientViT-L1 | 224 |  84.5 | 96.9 | 53M | 5.3G | 6207 image/s | [coming soon] |
-| EfficientViT-L2 | 224 |  85.1 | 97.1 | 64M | 6.9G | 4998 image/s | [coming soon] |
+| EfficientViT-L1 | 224 |  84.5 | 96.9 | 53M | 5.3G | 6207 image/s | [link](https://drive.google.com/file/d/1q5y0YbN08O4ToUBK8RfZSDKp-s1y5_44/view?usp=sharing) |
+| |
+| EfficientViT-L2 | 224 |  85.0 | 97.1 | 64M | 6.9G | 4998 image/s | [link](https://drive.google.com/file/d/1FEjImtyIQhG4VsHsstLgNM09Y9qJn9Sk/view?usp=sharing) |
+| EfficientViT-L2 | 256 |  85.4 | 97.2 | 64M | 9.1G | 3969 image/s | [link](https://drive.google.com/file/d/1pvYtY0ckAAMTkRq6TbwpQ0U1p_urz2fE/view?usp=sharing) |
+| EfficientViT-L2 | 288 |  85.6 | 97.4 | 64M | 11G  | 3102 image/s | [link](https://drive.google.com/file/d/1GDr0y45YPX8iWEWNq5fEmjo0UgyZLpUs/view?usp=sharing) |
+| EfficientViT-L2 | 320 |  85.8 | 97.4 | 64M | 14G  | 2525 image/s | [link](https://drive.google.com/file/d/1GDr0y45YPX8iWEWNq5fEmjo0UgyZLpUs/view?usp=sharing) |
+| EfficientViT-L2 | 352 |  85.9 | 97.5 | 64M | 17G  | 2099 image/s | [link](https://drive.google.com/file/d/1gEkrj2JScJEcUgxeBSVKpUYBbple99yI/view?usp=sharing) |
+| EfficientViT-L2 | 384 |  86.0 | 97.5 | 64M | 20G  | 1784 image/s | [link](https://drive.google.com/file/d/1MpjduiCTbUVS1XJri4_eqCbARJyYo74b/view?usp=sharing) |
 
 #### Cityscapes
 
@@ -86,9 +96,9 @@ Latency is measured on NVIDIA Jetson Nano and NVIDIA Jetson AGX Orin  with Tenso
 from efficientvit.cls_model_zoo import create_cls_model
 
 model = create_cls_model(
-  name="b3", 
+  name="l2", 
   pretrained=True, 
-  weight_url="assets/checkpoints/cls/b3-r288.pt"
+  weight_url="assets/checkpoints/cls/l2-r384.pt"
 )
 ```
 
