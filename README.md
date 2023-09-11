@@ -9,7 +9,7 @@
 ## Demo
 EfficientViT-L1 (45.9ms on Nvidia Jetson AGX Orin, 82.7 mIoU on Cityscapes)
 
-[![Watch the video](assets/demo/cityscapes_l1_demo.png)](https://www.youtube.com/watch?v=9vjyMCE-IbI)
+![demo](assets/demo/cityscapes_l1_demo.gif)
 
 ## About EfficientViT Models
 
