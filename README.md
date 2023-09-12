@@ -1,9 +1,10 @@
-# EfficientViT
+# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
 
 ### [paper](https://arxiv.org/abs/2205.14756) | [poster](assets/efficientvit_files/poster.pdf)
 
 ## News
 **If you are interested in getting updates, please join our mailing list [here](https://forms.gle/Z6DNkRidJ1ouxmUk9).**
+- [2023/09/12] EfficientViT is highlighted by [MIT home page](https://www.mit.edu/archive/spotlight/efficient-computer-vision/) and [MIT News](https://news.mit.edu/2023/ai-model-high-resolution-computer-vision-0912).
 - [2023/07/18] EfficientViT is accepted by ICCV 2023.
 
 ## Demo
