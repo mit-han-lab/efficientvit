@@ -74,7 +74,7 @@ ade20k
 Latency/Throughput is measured on NVIDIA Jetson Nano, NVIDIA Jetson AGX Orin, and Nvidia A100 GPU with TensorRT, fp16. Data transfer time is included.
 
 #### ImageNet
-All EfficientViT classification models are on ImageNet-1K with random initialization (300 epochs + 20 warmup epochs) using supervised learning.
+All EfficientViT classification models are trained on ImageNet-1K with random initialization (300 epochs + 20 warmup epochs) using supervised learning.
 
 | Model         |  Resolution | ImageNet Top1 Acc | ImageNet Top5 Acc |  Params |  MACs |  A100 Throughput | Checkpoint |
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:------------:|:------------:|
