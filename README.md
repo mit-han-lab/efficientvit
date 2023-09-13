@@ -38,8 +38,37 @@ pip install -r requirements.txt
 
 ### Dataset
 - ImageNet: https://www.image-net.org/
+```
+Our code expects the ImageNet dataset directory to follow the following structure:
+
+imagenet
+├── train
+├── val
+```
 - Cityscapes: https://www.cityscapes-dataset.com/
+```
+Our code expects the Cityscapes dataset directory to follow the following structure:
+
+cityscapes
+├── gtFine
+|   ├── train
+|   ├── val
+├── leftImg8bit
+|   ├── train
+|   ├── val
+```
 - ADE20K: https://groups.csail.mit.edu/vision/datasets/ADE20K/
+```
+Our code expects the ADE20K dataset directory to follow the following structure:
+
+ade20k
+├── annotations
+|   ├── training
+|   ├── validation
+├── images
+|   ├── training
+|   ├── validation
+```
 
 ### Download Pretrained Models
 Latency/Throughput is measured on NVIDIA Jetson Nano, NVIDIA Jetson AGX Orin, and Nvidia A100 GPU with TensorRT, fp16. Data transfer time is included.
