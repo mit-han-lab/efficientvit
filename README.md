@@ -71,7 +71,7 @@ ade20k
 ```
 
 ### Download Pretrained Models
-Latency/Throughput is measured on NVIDIA Jetson Nano, NVIDIA Jetson AGX Orin, and Nvidia A100 GPU with TensorRT, fp16. Data transfer time is included.
+Latency/Throughput is measured on NVIDIA Jetson Nano, NVIDIA Jetson AGX Orin, and NVIDIA A100 GPU with TensorRT, fp16. Data transfer time is included.
 
 #### ImageNet
 All EfficientViT classification models are trained on ImageNet-1K with random initialization (300 epochs + 20 warmup epochs) using supervised learning.
