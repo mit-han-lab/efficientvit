@@ -5,6 +5,7 @@ from efficientvit.models.efficientvit.backbone import EfficientViTBackbone
 from efficientvit.models.nn import (
     ConvLayer,
     DAGBlock,
+    FusedMBConv,
     IdentityLayer,
     MBConv,
     OpSequential,
@@ -19,6 +20,8 @@ __all__ = [
     "efficientvit_seg_b1",
     "efficientvit_seg_b2",
     "efficientvit_seg_b3",
+    "efficientvit_seg_l1",
+    "efficientvit_seg_l2",
 ]
 
 
@@ -32,6 +35,7 @@ class SegHead(DAGBlock):
         head_width: int,
         head_depth: int,
         expand_ratio: float,
+        middle_op: str,
         final_expand: float or None,
         n_classes: int,
         dropout=0,
@@ -53,13 +57,24 @@ class SegHead(DAGBlock):
 
         middle = []
         for _ in range(head_depth):
-            block = MBConv(
-                head_width,
-                head_width,
-                expand_ratio=expand_ratio,
-                norm=norm,
-                act_func=(act_func, act_func, None),
-            )
+            if middle_op == "mbconv":
+                block = MBConv(
+                    head_width,
+                    head_width,
+                    expand_ratio=expand_ratio,
+                    norm=norm,
+                    act_func=(act_func, act_func, None),
+                )
+            elif middle_op == "fmbconv":
+                block = FusedMBConv(
+                    head_width,
+                    head_width,
+                    expand_ratio=expand_ratio,
+                    norm=norm,
+                    act_func=(act_func, None),
+                )
+            else:
+                raise NotImplementedError
             middle.append(ResidualBlock(block, IdentityLayer()))
         middle = OpSequential(middle)
 
@@ -112,6 +127,7 @@ def efficientvit_seg_b0(dataset: str, **kwargs) -> EfficientViTSeg:
             head_width=32,
             head_depth=1,
             expand_ratio=4,
+            middle_op="mbconv",
             final_expand=4,
             n_classes=19,
             **build_kwargs_from_config(kwargs, SegHead),
@@ -136,6 +152,7 @@ def efficientvit_seg_b1(dataset: str, **kwargs) -> EfficientViTSeg:
             head_width=64,
             head_depth=3,
             expand_ratio=4,
+            middle_op="mbconv",
             final_expand=4,
             n_classes=19,
             **build_kwargs_from_config(kwargs, SegHead),
@@ -149,6 +166,7 @@ def efficientvit_seg_b1(dataset: str, **kwargs) -> EfficientViTSeg:
             head_width=64,
             head_depth=3,
             expand_ratio=4,
+            middle_op="mbconv",
             final_expand=None,
             n_classes=150,
             **build_kwargs_from_config(kwargs, SegHead),
@@ -173,6 +191,7 @@ def efficientvit_seg_b2(dataset: str, **kwargs) -> EfficientViTSeg:
             head_width=96,
             head_depth=3,
             expand_ratio=4,
+            middle_op="mbconv",
             final_expand=4,
             n_classes=19,
             **build_kwargs_from_config(kwargs, SegHead),
@@ -186,6 +205,7 @@ def efficientvit_seg_b2(dataset: str, **kwargs) -> EfficientViTSeg:
             head_width=96,
             head_depth=3,
             expand_ratio=4,
+            middle_op="mbconv",
             final_expand=None,
             n_classes=150,
             **build_kwargs_from_config(kwargs, SegHead),
@@ -210,6 +230,7 @@ def efficientvit_seg_b3(dataset: str, **kwargs) -> EfficientViTSeg:
             head_width=128,
             head_depth=3,
             expand_ratio=4,
+            middle_op="mbconv",
             final_expand=4,
             n_classes=19,
             **build_kwargs_from_config(kwargs, SegHead),
@@ -223,8 +244,91 @@ def efficientvit_seg_b3(dataset: str, **kwargs) -> EfficientViTSeg:
             head_width=128,
             head_depth=3,
             expand_ratio=4,
+            middle_op="mbconv",
             final_expand=None,
             n_classes=150,
+            **build_kwargs_from_config(kwargs, SegHead),
+        )
+    else:
+        raise NotImplementedError
+    model = EfficientViTSeg(backbone, head)
+    return model
+
+
+def efficientvit_seg_l1(dataset: str, **kwargs) -> EfficientViTSeg:
+    from efficientvit.models.efficientvit.backbone import efficientvit_backbone_l1
+
+    backbone = efficientvit_backbone_l1(**kwargs)
+
+    if dataset == "cityscapes":
+        head = SegHead(
+            fid_list=["stage4", "stage3", "stage2"],
+            in_channel_list=[512, 256, 128],
+            stride_list=[32, 16, 8],
+            head_stride=8,
+            head_width=256,
+            head_depth=3,
+            expand_ratio=1,
+            middle_op="fmbconv",
+            final_expand=None,
+            n_classes=19,
+            act_func="gelu",
+            **build_kwargs_from_config(kwargs, SegHead),
+        )
+    elif dataset == "ade20k":
+        head = SegHead(
+            fid_list=["stage4", "stage3", "stage2"],
+            in_channel_list=[512, 256, 128],
+            stride_list=[32, 16, 8],
+            head_stride=8,
+            head_width=128,
+            head_depth=3,
+            expand_ratio=4,
+            middle_op="fmbconv",
+            final_expand=8,
+            n_classes=150,
+            act_func="gelu",
+            **build_kwargs_from_config(kwargs, SegHead),
+        )
+    else:
+        raise NotImplementedError
+    model = EfficientViTSeg(backbone, head)
+    return model
+
+
+def efficientvit_seg_l2(dataset: str, **kwargs) -> EfficientViTSeg:
+    from efficientvit.models.efficientvit.backbone import efficientvit_backbone_l2
+
+    backbone = efficientvit_backbone_l2(**kwargs)
+
+    if dataset == "cityscapes":
+        head = SegHead(
+            fid_list=["stage4", "stage3", "stage2"],
+            in_channel_list=[512, 256, 128],
+            stride_list=[32, 16, 8],
+            head_stride=8,
+            head_width=256,
+            head_depth=5,
+            expand_ratio=1,
+            middle_op="fmbconv",
+            final_expand=None,
+            n_classes=19,
+            act_func="gelu",
+            **build_kwargs_from_config(kwargs, SegHead),
+        )
+    elif dataset == "ade20k":
+        head = SegHead(
+            fid_list=["stage4", "stage3", "stage2"],
+            in_channel_list=[512, 256, 128],
+            stride_list=[32, 16, 8],
+            head_stride=8,
+            head_width=128,
+            head_depth=3,
+            expand_ratio=4,
+            middle_op="fmbconv",
+            final_expand=8,
+            n_classes=150,
+            act_func="gelu",
             **build_kwargs_from_config(kwargs, SegHead),
         )
     else:

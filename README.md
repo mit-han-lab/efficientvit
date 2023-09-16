@@ -106,6 +106,11 @@ All EfficientViT classification models are trained on ImageNet-1K with random in
 
 #### Cityscapes
 
+| Model         |  Resolution | Cityscapes mIoU | Params |  MACs |  Jetson Orin Latency (bs1) | A100 Throughput (bs1) | Checkpoint |
+|----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:---------:|:------------:|
+| EfficientViT-L1 | 1024x2048 | 82.7 | 40M | 282G | 45.9ms  | 122 image/s | [link](https://www.dropbox.com/scl/fi/7s1ou7bdsbwwvq9bmjjuv/l1.pt?rlkey=m1ysvjkhrb0pb7uuyoir92p77&dl=0) |
+| EfficientViT-L2 | 1024x2048 | 83.2 | 53M | 396G | 60.0ms  | 102 image/s | [link](https://www.dropbox.com/scl/fi/erehtq6j1daushirhbzc5/l2.pt?rlkey=068makdxpdh469ueps2trhte1&dl=0) |
+
 | Model         |  Resolution | Cityscapes mIoU | Params |  MACs |  Jetson Nano (bs1) | Jetson Orin (bs1) | Checkpoint |
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:---------:|:------------:|
 | EfficientViT-B0 | 1024x2048 | 75.7 | 0.7M | 4.4G | 275ms  | 9.9ms  | [link](https://drive.google.com/file/d/1Ix1Dh3xlpaf0Wzh01Xmo-hAYkoXt1EAD/view?usp=sharing) |
@@ -114,6 +119,11 @@ All EfficientViT classification models are trained on ImageNet-1K with random in
 | EfficientViT-B3 | 1024x2048 | 83.0 | 40M  | 179G | 3192ms | 81.8ms | [link](https://drive.google.com/file/d/19aiy3qrKqx1n8zzy_ewYn4-Z3LM4bkn4/view?usp=sharing) |
 
 #### ADE20K
+
+| Model         |  Resolution | ADE20K mIoU | Params |  MACs |  Jetson Orin Latency (bs1) | A100 Throughput (bs16) | Checkpoint |
+|----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:---------:|:------------:|
+| EfficientViT-L1 | 512x512 | 49.1 | 40M | 36G | 7.2ms  | 947 image/s | [link](https://www.dropbox.com/scl/fi/kn4g04fgme9uctaazsgct/l1.pt?rlkey=x1052if1ae7795yafp3urib5r&dl=0) |
+| EfficientViT-L2 | 512x512 | 50.7 | 51M | 45G | 9.0ms | 758 image/s | [link](https://www.dropbox.com/scl/fi/565wb47z1f5re9jckr42t/l2.pt?rlkey=ojffxngf6iv0oiost6c2tskul&dl=0) |
 
 | Model         |  Resolution | ADE20K mIoU | Params |  MACs |  Jetson Nano (bs1) | Jetson Orin (bs1) | Checkpoint |
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:---------:|:------------:|
