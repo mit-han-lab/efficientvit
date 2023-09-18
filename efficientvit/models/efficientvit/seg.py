@@ -1,7 +1,11 @@
+# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
+# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
+# International Conference on Computer Vision (ICCV), 2023
+
 import torch
 import torch.nn as nn
 
-from efficientvit.models.efficientvit.backbone import EfficientViTBackbone
+from efficientvit.models.efficientvit.backbone import EfficientViTBackbone, EfficientViTLargeBackbone
 from efficientvit.models.nn import (
     ConvLayer,
     DAGBlock,
@@ -101,7 +105,7 @@ class SegHead(DAGBlock):
 
 
 class EfficientViTSeg(nn.Module):
-    def __init__(self, backbone: EfficientViTBackbone, head: SegHead) -> None:
+    def __init__(self, backbone: EfficientViTBackbone or EfficientViTLargeBackbone, head: SegHead) -> None:
         super().__init__()
         self.backbone = backbone
         self.head = head

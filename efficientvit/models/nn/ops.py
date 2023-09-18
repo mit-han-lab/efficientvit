@@ -1,12 +1,15 @@
+# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
+# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
+# International Conference on Computer Vision (ICCV), 2023
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.cuda.amp import autocast
 
+from efficientvit.models.nn.act import build_act
+from efficientvit.models.nn.norm import build_norm
 from efficientvit.models.utils import get_same_padding, list_sum, resize, val2list, val2tuple
-
-from .act import build_act
-from .norm import build_norm
 
 __all__ = [
     "ConvLayer",
@@ -89,6 +92,8 @@ class UpSampleLayer(nn.Module):
         self.align_corners = align_corners
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        if (self.size is not None and tuple(x.shape[-2:]) == self.size) or self.factor == 1:
+            return x
         return resize(x, self.size, self.factor, self.mode, self.align_corners)
 
 

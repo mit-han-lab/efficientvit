@@ -1,3 +1,7 @@
+# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
+# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
+# International Conference on Computer Vision (ICCV), 2023
+
 import torch
 import torch.nn as nn
 from torch.nn.modules.batchnorm import _BatchNorm

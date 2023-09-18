@@ -1,3 +1,7 @@
+# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
+# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
+# International Conference on Computer Vision (ICCV), 2023
+
 import torch
 import torch.nn as nn
 
@@ -21,6 +25,7 @@ __all__ = [
     "efficientvit_backbone_b2",
     "efficientvit_backbone_b3",
     "EfficientViTLargeBackbone",
+    "efficientvit_backbone_l0",
     "efficientvit_backbone_l1",
     "efficientvit_backbone_l2",
 ]
@@ -328,6 +333,15 @@ class EfficientViTLargeBackbone(nn.Module):
             output_dict["stage%d" % stage_id] = x = stage(x)
         output_dict["stage_final"] = x
         return output_dict
+
+
+def efficientvit_backbone_l0(**kwargs) -> EfficientViTLargeBackbone:
+    backbone = EfficientViTLargeBackbone(
+        width_list=[32, 64, 128, 256, 512],
+        depth_list=[1, 1, 1, 4, 4],
+        **build_kwargs_from_config(kwargs, EfficientViTLargeBackbone),
+    )
+    return backbone
 
 
 def efficientvit_backbone_l1(**kwargs) -> EfficientViTLargeBackbone:

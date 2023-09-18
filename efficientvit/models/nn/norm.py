@@ -1,21 +1,35 @@
+# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
+# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
+# International Conference on Computer Vision (ICCV), 2023
+
 import torch
 import torch.nn as nn
 from torch.nn.modules.batchnorm import _BatchNorm
 
 from efficientvit.models.utils import build_kwargs_from_config
 
-__all__ = ["build_norm", "reset_bn", "set_norm_eps"]
+__all__ = ["LayerNorm2d", "build_norm", "reset_bn", "set_norm_eps"]
+
+
+class LayerNorm2d(nn.LayerNorm):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        out = x - torch.mean(x, dim=1, keepdim=True)
+        out = out / torch.sqrt(torch.square(out).mean(dim=1, keepdim=True) + self.eps)
+        if self.elementwise_affine:
+            out = out * self.weight.view(1, -1, 1, 1) + self.bias.view(1, -1, 1, 1)
+        return out
 
 
 # register normalization function here
 REGISTERED_NORM_DICT: dict[str, type] = {
     "bn2d": nn.BatchNorm2d,
     "ln": nn.LayerNorm,
+    "ln2d": LayerNorm2d,
 }
 
 
 def build_norm(name="bn2d", num_features=None, **kwargs) -> nn.Module or None:
-    if name == "ln":
+    if name in ["ln", "ln2d"]:
         kwargs["normalized_shape"] = num_features
     else:
         kwargs["num_features"] = num_features

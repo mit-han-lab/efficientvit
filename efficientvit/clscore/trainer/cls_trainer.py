@@ -1,3 +1,7 @@
+# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
+# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
+# International Conference on Computer Vision (ICCV), 2023
+
 import os
 import sys
 
@@ -9,9 +13,8 @@ from tqdm import tqdm
 
 from efficientvit.apps.trainer import Trainer
 from efficientvit.apps.utils import AverageMeter, sync_tensor
+from efficientvit.clscore.trainer.utils import accuracy, apply_mixup, label_smooth
 from efficientvit.models.utils import list_join, list_mean, torch_random_choices
-
-from .utils import accuracy, apply_mixup, label_smooth
 
 __all__ = ["ClsTrainer"]
 

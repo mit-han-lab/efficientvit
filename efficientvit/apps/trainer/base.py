@@ -1,3 +1,7 @@
+# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
+# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
+# International Conference on Computer Vision (ICCV), 2023
+
 import os
 
 import torch
@@ -5,11 +9,10 @@ import torch.nn as nn
 import torchpack.distributed as dist
 
 from efficientvit.apps.data_provider import DataProvider, parse_image_size
+from efficientvit.apps.trainer.run_config import RunConfig
 from efficientvit.apps.utils import EMA
 from efficientvit.models.nn.norm import reset_bn
 from efficientvit.models.utils import is_parallel, load_state_dict_from_file
-
-from .run_config import RunConfig
 
 __all__ = ["Trainer"]
 
