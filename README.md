@@ -96,8 +96,8 @@ In this version, the EfficientViT segment anything models are trained using the 
 | NanoSAM  | 70.6 | 79.6 | 73.8 | 62.4 | - | - | 744 image/s | - |
 | MobileSAM | 72.8 | 80.4 | 75.9 | 65.8 | - | - | 297 image/s | - |
 ||
-| EfficientViT-L0 | 74.5 | 81.4 | 77.2 | 68.2 | 31M | 35G | 1009 image/s | [link](https://www.dropbox.com/scl/fi/jvemt62abv6tfpn33luy2/l0.pt?rlkey=ijo7i64n6kpnhnrwd3uux8vhf&dl=0) |
-| EfficientViT-L1 | 75.2 | 81.8 | 78.1 | 68.9 | 44M | 49G | 815 image/s | [link](https://www.dropbox.com/scl/fi/7j968vmeyx1oiojubkqbm/l1.pt?rlkey=ogpprp1et1zgwucsy8731vv0h&dl=0) |
+| EfficientViT-L0 | 74.5 | 81.4 | 77.2 | 68.2 | 31M | 35G | 1009 image/s | [link](https://drive.google.com/file/d/1AiaX67kT-TX5yr0wOZn51jICj-k5aBmx/view?usp=sharing) |
+| EfficientViT-L1 | 75.2 | 81.8 | 78.1 | 68.9 | 44M | 49G | 815 image/s | [link](https://drive.google.com/file/d/1ji6NcDfZF8b2kkFn9DolnbaOGSqklECe/view?usp=sharing) |
 
 ### ImageNet
 
@@ -147,8 +147,8 @@ All EfficientViT classification models are trained on ImageNet-1K with random in
 
 | Model         |  Resolution | Cityscapes mIoU | Params |  MACs |  Jetson Orin Latency (bs1) | A100 Throughput (bs1) | Checkpoint |
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:---------:|:------------:|
-| EfficientViT-L1 | 1024x2048 | 82.7 | 40M | 282G | 45.9ms  | 122 image/s | [link](https://www.dropbox.com/scl/fi/7s1ou7bdsbwwvq9bmjjuv/l1.pt?rlkey=m1ysvjkhrb0pb7uuyoir92p77&dl=0) |
-| EfficientViT-L2 | 1024x2048 | 83.2 | 53M | 396G | 60.0ms  | 102 image/s | [link](https://www.dropbox.com/scl/fi/erehtq6j1daushirhbzc5/l2.pt?rlkey=068makdxpdh469ueps2trhte1&dl=0) |
+| EfficientViT-L1 | 1024x2048 | 82.7 | 40M | 282G | 45.9ms  | 122 image/s | [link](https://drive.google.com/file/d/1iiy-LHpGIutXbPV-tJThAtz6jAgNcuxX/view?usp=sharing) |
+| EfficientViT-L2 | 1024x2048 | 83.2 | 53M | 396G | 60.0ms  | 102 image/s | [link](https://drive.google.com/file/d/1U7Ryk0Iha8r00MK2hsYx88-PKJTmvSCR/view?usp=sharing) |
 
 <details>
   <summary>EfficientViT B series</summary>
@@ -170,8 +170,8 @@ All EfficientViT classification models are trained on ImageNet-1K with random in
 
 | Model         |  Resolution | ADE20K mIoU | Params |  MACs |  Jetson Orin Latency (bs1) | A100 Throughput (bs16) | Checkpoint |
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:---------:|:------------:|
-| EfficientViT-L1 | 512x512 | 49.1 | 40M | 36G | 7.2ms  | 947 image/s | [link](https://www.dropbox.com/scl/fi/kn4g04fgme9uctaazsgct/l1.pt?rlkey=x1052if1ae7795yafp3urib5r&dl=0) |
-| EfficientViT-L2 | 512x512 | 50.7 | 51M | 45G | 9.0ms | 758 image/s | [link](https://www.dropbox.com/scl/fi/565wb47z1f5re9jckr42t/l2.pt?rlkey=ojffxngf6iv0oiost6c2tskul&dl=0) |
+| EfficientViT-L1 | 512x512 | 49.1 | 40M | 36G | 7.2ms  | 947 image/s | [link](https://drive.google.com/file/d/1ErosNnztXT3ncrppWWPEMp5pag5WE-Vy/view?usp=sharing) |
+| EfficientViT-L2 | 512x512 | 50.7 | 51M | 45G | 9.0ms | 758 image/s | [link](https://drive.google.com/file/d/1UBEWNOqi6ks5h09Zoe6wWalUA8a2a7fi/view?usp=sharing) |
 
 <details>
   <summary>EfficientViT B series</summary>
