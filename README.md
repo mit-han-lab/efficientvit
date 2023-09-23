@@ -113,8 +113,8 @@ All EfficientViT classification models are trained on ImageNet-1K with random in
 
 | Model         |  Resolution | ImageNet Top1 Acc | ImageNet Top5 Acc |  Params |  MACs |  A100 Throughput | Checkpoint |
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:------------:|:------------:|
-| EfficientNetV2-S | 384x384 | 83.9 | - | 22M | 8.8G | 2869 image/s | - |
-| EfficientNetV2-M | 480x480 | 85.1 | - | 54M | 24G | 1160 image/s | - |
+| EfficientNetV2-S | 384x384 | [83.9](https://github.com/google/automl/tree/master/efficientnetv2#2-pretrained-efficientnetv2-checkpoints) | - | 22M | 8.4G | 2869 image/s | - |
+| EfficientNetV2-M | 480x480 | [85.2](https://github.com/google/automl/tree/master/efficientnetv2#2-pretrained-efficientnetv2-checkpoints) | - | 54M | 25G | 1160 image/s | - |
 | |
 | EfficientViT-L1 | 224x224 |  84.484 | 96.862 | 53M | 5.3G | 6207 image/s | [link](https://drive.google.com/file/d/1q5y0YbN08O4ToUBK8RfZSDKp-s1y5_44/view?usp=sharing) |
 | |
