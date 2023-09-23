@@ -262,7 +262,7 @@ Example:
 python eval_seg_model.py --dataset cityscapes --crop_size 1024 --model b3 --save_path demo/cityscapes/b3/
 ```
 
-## Benchmarking with TFLite
+## Export TFLite
 
 To generate TFLite files, please refer to `tflite_export.py`. It requires the TinyNN package.
 
@@ -276,13 +276,17 @@ Example:
 python tflite_export.py --export_path model.tflite --task seg --dataset ade20k --model b3 --resolution 512 512
 ```
 
-## Benchmarking with TensorRT
+## Export TensorRT
 
 To generate onnx files, please refer to `onnx_export.py`.
 
 ## Training
 
 Please see [TRAINING.md](TRAINING.md) for detailed training instructions.
+
+## Third-Party Implementation/Integration
+- [timm](https://github.com/huggingface/pytorch-image-models): [link](https://github.com/huggingface/pytorch-image-models/blob/main/timm/models/efficientvit_mit.py)
+- [X-AnyLabeling](https://github.com/CVHub520/X-AnyLabeling): [link](https://github.com/CVHub520/X-AnyLabeling/blob/main/anylabeling/services/auto_labeling/efficientvit_sam.py)
 
 ## Contact
 
