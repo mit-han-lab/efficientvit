@@ -112,7 +112,7 @@ def main():
 
             t.set_postfix(get_coco_metric(results))
             t.update()
-    print(", ".join([f"{key}={val:.1f}" for key, val in get_coco_metric(results).items()]))
+    print(", ".join([f"{key}={val:.3f}" for key, val in get_coco_metric(results).items()]))
 
 
 if __name__ == "__main__":

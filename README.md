@@ -15,7 +15,7 @@ EfficientViT-L0 for Segment Anything (1009 image/s on A100 GPU)
 ![demo](assets/demo/sam_l0_point.jpg)
 ![demo](assets/demo/sam_l0_all.jpg)
 
-EfficientViT-L1 for Semantic Segmentation (45.9ms on Nvidia Jetson AGX Orin, 82.7 mIoU on Cityscapes)
+EfficientViT-L1 for Semantic Segmentation (45.9ms on Nvidia Jetson AGX Orin, 82.716 mIoU on Cityscapes)
 
 ![demo](assets/demo/cityscapes_l1.gif)
 
@@ -93,11 +93,11 @@ In this version, the EfficientViT segment anything models are trained using the 
 
 | Image Encoder  | COCO-val2017 mIoU (all) | COCO-val2017 mIoU (large) | COCO-val2017 mIoU (medium) | COCO-val2017 mIoU (small) | Params |  MACs | A100 Throughput | Checkpoint |
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:---------:|:------------:|:------------:|
-| NanoSAM  | 70.6 | 79.6 | 73.8 | 62.4 | - | - | 744 image/s | - |
-| MobileSAM | 72.8 | 80.4 | 75.9 | 65.8 | - | - | 297 image/s | - |
+| NanoSAM  | [70.6](https://github.com/NVIDIA-AI-IOT/nanosam#%EF%B8%8F-performance) | 79.6 | 73.8 | 62.4 | - | - | 744 image/s | - |
+| MobileSAM | [72.8]((https://github.com/NVIDIA-AI-IOT/nanosam#%EF%B8%8F-performance)) | 80.4 | 75.9 | 65.8 | - | - | 297 image/s | - |
 ||
-| EfficientViT-L0 | 74.5 | 81.4 | 77.2 | 68.2 | 31M | 35G | 1009 image/s | [link](https://drive.google.com/file/d/1AiaX67kT-TX5yr0wOZn51jICj-k5aBmx/view?usp=sharing) |
-| EfficientViT-L1 | 75.2 | 81.8 | 78.1 | 68.9 | 44M | 49G | 815 image/s | [link](https://drive.google.com/file/d/1ji6NcDfZF8b2kkFn9DolnbaOGSqklECe/view?usp=sharing) |
+| EfficientViT-L0 | 74.454 | 81.410 | 77.201 | 68.159 | 31M | 35G | 1009 image/s | [link](https://drive.google.com/file/d/1AiaX67kT-TX5yr0wOZn51jICj-k5aBmx/view?usp=sharing) |
+| EfficientViT-L1 | 75.183 | 81.786 | 78.110 | 68.944 | 44M | 49G | 815 image/s | [link](https://drive.google.com/file/d/1ji6NcDfZF8b2kkFn9DolnbaOGSqklECe/view?usp=sharing) |
 
 ### ImageNet
 
@@ -112,31 +112,31 @@ All EfficientViT classification models are trained on ImageNet-1K with random in
 | EfficientNetV2-S | 384x384 | 83.9 | - | 22M | 8.8G | 2869 image/s | - |
 | EfficientNetV2-M | 480x480 | 85.1 | - | 54M | 24G | 1160 image/s | - |
 | |
-| EfficientViT-L1 | 224x224 |  84.5 | 96.9 | 53M | 5.3G | 6207 image/s | [link](https://drive.google.com/file/d/1q5y0YbN08O4ToUBK8RfZSDKp-s1y5_44/view?usp=sharing) |
+| EfficientViT-L1 | 224x224 |  84.484 | 96.862 | 53M | 5.3G | 6207 image/s | [link](https://drive.google.com/file/d/1q5y0YbN08O4ToUBK8RfZSDKp-s1y5_44/view?usp=sharing) |
 | |
-| EfficientViT-L2 | 224x224 |  85.0 | 97.1 | 64M | 6.9G | 4998 image/s | [link](https://drive.google.com/file/d/1FEjImtyIQhG4VsHsstLgNM09Y9qJn9Sk/view?usp=sharing) |
-| EfficientViT-L2 | 256x256 |  85.4 | 97.2 | 64M | 9.1G | 3969 image/s | [link](https://drive.google.com/file/d/1pvYtY0ckAAMTkRq6TbwpQ0U1p_urz2fE/view?usp=sharing) |
-| EfficientViT-L2 | 288x288 |  85.6 | 97.4 | 64M | 11G  | 3102 image/s | [link](https://drive.google.com/file/d/1GDr0y45YPX8iWEWNq5fEmjo0UgyZLpUs/view?usp=sharing) |
-| EfficientViT-L2 | 320x320 |  85.7 | 97.4 | 64M | 14G  | 2525 image/s | [link](https://drive.google.com/file/d/1GDr0y45YPX8iWEWNq5fEmjo0UgyZLpUs/view?usp=sharing) |
-| EfficientViT-L2 | 352x352 |  85.9 | 97.5 | 64M | 17G  | 2099 image/s | [link](https://drive.google.com/file/d/1gEkrj2JScJEcUgxeBSVKpUYBbple99yI/view?usp=sharing) |
-| EfficientViT-L2 | 384x384 |  86.0 | 97.5 | 64M | 20G  | 1784 image/s | [link](https://drive.google.com/file/d/1MpjduiCTbUVS1XJri4_eqCbARJyYo74b/view?usp=sharing) |
+| EfficientViT-L2 | 224x224 |  85.050 | 97.090 | 64M | 6.9G | 4998 image/s | [link](https://drive.google.com/file/d/1FEjImtyIQhG4VsHsstLgNM09Y9qJn9Sk/view?usp=sharing) |
+| EfficientViT-L2 | 256x256 |  85.366 | 97.216 | 64M | 9.1G | 3969 image/s | [link](https://drive.google.com/file/d/1pvYtY0ckAAMTkRq6TbwpQ0U1p_urz2fE/view?usp=sharing) |
+| EfficientViT-L2 | 288x288 |  85.630 | 97.364 | 64M | 11G  | 3102 image/s | [link](https://drive.google.com/file/d/1GDr0y45YPX8iWEWNq5fEmjo0UgyZLpUs/view?usp=sharing) |
+| EfficientViT-L2 | 320x320 |  85.734 | 97.438 | 64M | 14G  | 2525 image/s | [link](https://drive.google.com/file/d/1GDr0y45YPX8iWEWNq5fEmjo0UgyZLpUs/view?usp=sharing) |
+| EfficientViT-L2 | 352x352 |  85.868 | 97.516 | 64M | 17G  | 2099 image/s | [link](https://drive.google.com/file/d/1gEkrj2JScJEcUgxeBSVKpUYBbple99yI/view?usp=sharing) |
+| EfficientViT-L2 | 384x384 |  85.978 | 97.518 | 64M | 20G  | 1784 image/s | [link](https://drive.google.com/file/d/1MpjduiCTbUVS1XJri4_eqCbARJyYo74b/view?usp=sharing) |
 
 <details>
   <summary>EfficientViT B series</summary>
 
   | Model         |  Resolution | ImageNet Top1 Acc | ImageNet Top5 Acc |  Params |  MACs |  Jetson Nano (bs1) | Jetson Orin (bs1) | Checkpoint |
   |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:------------:|:------------:|:------------:|
-  | EfficientViT-B1 | 224x224 | 79.4 | 94.3 | 9.1M | 0.52G | 24.8ms | 1.48ms | [link](https://drive.google.com/file/d/1hKN_hvLG4nmRzbfzKY7GlqwpR5uKpOOk/view?usp=share_link) |
-  | EfficientViT-B1 | 256x256 | 79.9 | 94.7 | 9.1M | 0.68G | 28.5ms | 1.57ms | [link](https://drive.google.com/file/d/1hXcG_jB0ODMOESsSkzVye-58B4F3Cahs/view?usp=share_link) |
-  | EfficientViT-B1 | 288x288 | 80.4 | 95.0 | 9.1M | 0.86G | 34.5ms | 1.82ms | [link](https://drive.google.com/file/d/1sE_Suz9gOOUO7o5r9eeAT4nKK8Hrbhsu/view?usp=share_link) |
+  | EfficientViT-B1 | 224x224 | 79.390 | 94.346 | 9.1M | 0.52G | 24.8ms | 1.48ms | [link](https://drive.google.com/file/d/1hKN_hvLG4nmRzbfzKY7GlqwpR5uKpOOk/view?usp=share_link) |
+  | EfficientViT-B1 | 256x256 | 79.918 | 94.704 | 9.1M | 0.68G | 28.5ms | 1.57ms | [link](https://drive.google.com/file/d/1hXcG_jB0ODMOESsSkzVye-58B4F3Cahs/view?usp=share_link) |
+  | EfficientViT-B1 | 288x288 | 80.410 | 94.984 | 9.1M | 0.86G | 34.5ms | 1.82ms | [link](https://drive.google.com/file/d/1sE_Suz9gOOUO7o5r9eeAT4nKK8Hrbhsu/view?usp=share_link) |
   | |
-  | EfficientViT-B2 | 224x224 | 82.1 | 95.8 | 24M  | 1.6G  | 50.6ms | 2.63ms | [link](https://drive.google.com/file/d/1DiM-iqVGTrq4te8mefHl3e1c12u4qR7d/view?usp=share_link) |
-  | EfficientViT-B2 | 256x256 | 82.7 | 96.1 | 24M  | 2.1G  | 58.5ms | 2.84ms | [link](https://drive.google.com/file/d/192OOk4ISitwlyW979M-FSJ_fYMMW9HQz/view?usp=share_link) |
-  | EfficientViT-B2 | 288x288 | 83.1 | 96.3 | 24M  | 2.6G  | 69.9ms | 3.30ms | [link](https://drive.google.com/file/d/1aodcepOyne667hvBAGpf9nDwmd5g0NpU/view?usp=share_link) |
+  | EfficientViT-B2 | 224x224 | 82.100 | 95.782 | 24M  | 1.6G  | 50.6ms | 2.63ms | [link](https://drive.google.com/file/d/1DiM-iqVGTrq4te8mefHl3e1c12u4qR7d/view?usp=share_link) |
+  | EfficientViT-B2 | 256x256 | 82.698 | 96.096 | 24M  | 2.1G  | 58.5ms | 2.84ms | [link](https://drive.google.com/file/d/192OOk4ISitwlyW979M-FSJ_fYMMW9HQz/view?usp=share_link) |
+  | EfficientViT-B2 | 288x288 | 83.086 | 96.302 | 24M  | 2.6G  | 69.9ms | 3.30ms | [link](https://drive.google.com/file/d/1aodcepOyne667hvBAGpf9nDwmd5g0NpU/view?usp=share_link) |
   | |
-  | EfficientViT-B3 | 224x224 | 83.5 | 96.4 | 49M  | 4.0G  | 101ms  | 4.36ms | [link](https://drive.google.com/file/d/18RZDGLiY8KsyJ7LGic4mg1JHwd-a_ky6/view?usp=share_link) |
-  | EfficientViT-B3 | 256x256 | 83.8 | 96.5 | 49M  | 5.2G  | 120ms  | 4.74ms | [link](https://drive.google.com/file/d/1y1rnir4I0XiId-oTCcHhs7jqnrHGFi-g/view?usp=share_link) |
-  | EfficientViT-B3 | 288x288 | 84.2 | 96.7 | 49M  | 6.5G  | 141ms  | 5.63ms | [link](https://drive.google.com/file/d/1KfwbGtlyFgslNr4LIHERv6aCfkItEvRk/view?usp=share_link) |
+  | EfficientViT-B3 | 224x224 | 83.468 | 96.356 | 49M  | 4.0G  | 101ms  | 4.36ms | [link](https://drive.google.com/file/d/18RZDGLiY8KsyJ7LGic4mg1JHwd-a_ky6/view?usp=share_link) |
+  | EfficientViT-B3 | 256x256 | 83.806 | 96.514 | 49M  | 5.2G  | 120ms  | 4.74ms | [link](https://drive.google.com/file/d/1y1rnir4I0XiId-oTCcHhs7jqnrHGFi-g/view?usp=share_link) |
+  | EfficientViT-B3 | 288x288 | 84.150 | 96.732 | 49M  | 6.5G  | 141ms  | 5.63ms | [link](https://drive.google.com/file/d/1KfwbGtlyFgslNr4LIHERv6aCfkItEvRk/view?usp=share_link) |
 </details>
 
 ### Cityscapes
@@ -147,18 +147,18 @@ All EfficientViT classification models are trained on ImageNet-1K with random in
 
 | Model         |  Resolution | Cityscapes mIoU | Params |  MACs |  Jetson Orin Latency (bs1) | A100 Throughput (bs1) | Checkpoint |
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:---------:|:------------:|
-| EfficientViT-L1 | 1024x2048 | 82.7 | 40M | 282G | 45.9ms  | 122 image/s | [link](https://drive.google.com/file/d/1iiy-LHpGIutXbPV-tJThAtz6jAgNcuxX/view?usp=sharing) |
-| EfficientViT-L2 | 1024x2048 | 83.2 | 53M | 396G | 60.0ms  | 102 image/s | [link](https://drive.google.com/file/d/1U7Ryk0Iha8r00MK2hsYx88-PKJTmvSCR/view?usp=sharing) |
+| EfficientViT-L1 | 1024x2048 | 82.716 | 40M | 282G | 45.9ms  | 122 image/s | [link](https://drive.google.com/file/d/1iiy-LHpGIutXbPV-tJThAtz6jAgNcuxX/view?usp=sharing) |
+| EfficientViT-L2 | 1024x2048 | 83.228 | 53M | 396G | 60.0ms  | 102 image/s | [link](https://drive.google.com/file/d/1U7Ryk0Iha8r00MK2hsYx88-PKJTmvSCR/view?usp=sharing) |
 
 <details>
   <summary>EfficientViT B series</summary>
 
   | Model         |  Resolution | Cityscapes mIoU | Params |  MACs |  Jetson Nano (bs1) | Jetson Orin (bs1) | Checkpoint |
   |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:---------:|:------------:|
-  | EfficientViT-B0 | 1024x2048 | 75.7 | 0.7M | 4.4G | 275ms  | 9.9ms  | [link](https://drive.google.com/file/d/1Ix1Dh3xlpaf0Wzh01Xmo-hAYkoXt1EAD/view?usp=sharing) |
-  | EfficientViT-B1 | 1024x2048 | 80.5 | 4.8M | 25G  | 819ms  | 24.3ms | [link](https://drive.google.com/file/d/1jNjLFtIUNvu5MwSupgFHLc-2kmFLiu67/view?usp=sharing) |
-  | EfficientViT-B2 | 1024x2048 | 82.1 | 15M  | 74G  | 1676ms | 46.5ms | [link](https://drive.google.com/file/d/1bwGjzVQOg_ygML8F9JhsIj-ntn-cuWmB/view?usp=sharing) |
-  | EfficientViT-B3 | 1024x2048 | 83.0 | 40M  | 179G | 3192ms | 81.8ms | [link](https://drive.google.com/file/d/19aiy3qrKqx1n8zzy_ewYn4-Z3LM4bkn4/view?usp=sharing) |
+  | EfficientViT-B0 | 1024x2048 | 75.653 | 0.7M | 4.4G | 275ms  | 9.9ms  | [link](https://drive.google.com/file/d/1Ix1Dh3xlpaf0Wzh01Xmo-hAYkoXt1EAD/view?usp=sharing) |
+  | EfficientViT-B1 | 1024x2048 | 80.547 | 4.8M | 25G  | 819ms  | 24.3ms | [link](https://drive.google.com/file/d/1jNjLFtIUNvu5MwSupgFHLc-2kmFLiu67/view?usp=sharing) |
+  | EfficientViT-B2 | 1024x2048 | 82.073 | 15M  | 74G  | 1676ms | 46.5ms | [link](https://drive.google.com/file/d/1bwGjzVQOg_ygML8F9JhsIj-ntn-cuWmB/view?usp=sharing) |
+  | EfficientViT-B3 | 1024x2048 | 83.016 | 40M  | 179G | 3192ms | 81.8ms | [link](https://drive.google.com/file/d/19aiy3qrKqx1n8zzy_ewYn4-Z3LM4bkn4/view?usp=sharing) |
 
 </details>
 
@@ -170,17 +170,17 @@ All EfficientViT classification models are trained on ImageNet-1K with random in
 
 | Model         |  Resolution | ADE20K mIoU | Params |  MACs |  Jetson Orin Latency (bs1) | A100 Throughput (bs16) | Checkpoint |
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:---------:|:------------:|
-| EfficientViT-L1 | 512x512 | 49.1 | 40M | 36G | 7.2ms  | 947 image/s | [link](https://drive.google.com/file/d/1ErosNnztXT3ncrppWWPEMp5pag5WE-Vy/view?usp=sharing) |
-| EfficientViT-L2 | 512x512 | 50.7 | 51M | 45G | 9.0ms | 758 image/s | [link](https://drive.google.com/file/d/1UBEWNOqi6ks5h09Zoe6wWalUA8a2a7fi/view?usp=sharing) |
+| EfficientViT-L1 | 512x512 | 49.191 | 40M | 36G | 7.2ms  | 947 image/s | [link](https://drive.google.com/file/d/1ErosNnztXT3ncrppWWPEMp5pag5WE-Vy/view?usp=sharing) |
+| EfficientViT-L2 | 512x512 | 50.702 | 51M | 45G | 9.0ms | 758 image/s | [link](https://drive.google.com/file/d/1UBEWNOqi6ks5h09Zoe6wWalUA8a2a7fi/view?usp=sharing) |
 
 <details>
   <summary>EfficientViT B series</summary>
 
   | Model         |  Resolution | ADE20K mIoU | Params |  MACs |  Jetson Nano (bs1) | Jetson Orin (bs1) | Checkpoint |
   |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:---------:|:------------:|
-  | EfficientViT-B1 | 512x512 | 42.8 | 4.8M | 3.1G | 110ms | 4.0ms  | [link](https://drive.google.com/file/d/13YNtEJ-mRnAhu0fIs2EnAP-3TmSneRAC/view?usp=sharing) |
-  | EfficientViT-B2 | 512x512 | 45.9 | 15M  | 9.1G | 212ms | 7.3ms  | [link](https://drive.google.com/file/d/1k5sWY6aJ1FCtMt4GRTZqSFlJ-u_TSHzc/view?usp=sharing) |
-  | EfficientViT-B3 | 512x512 | 49.0 | 39M  | 22G  | 411ms | 12.5ms | [link](https://drive.google.com/file/d/1ghpTf9GTTj_8mn5QJh-7cLK1_wL3pKWr/view?usp=sharing) |
+  | EfficientViT-B1 | 512x512 | 42.840 | 4.8M | 3.1G | 110ms | 4.0ms  | [link](https://drive.google.com/file/d/13YNtEJ-mRnAhu0fIs2EnAP-3TmSneRAC/view?usp=sharing) |
+  | EfficientViT-B2 | 512x512 | 45.941 | 15M  | 9.1G | 212ms | 7.3ms  | [link](https://drive.google.com/file/d/1k5sWY6aJ1FCtMt4GRTZqSFlJ-u_TSHzc/view?usp=sharing) |
+  | EfficientViT-B3 | 512x512 | 49.013 | 39M  | 22G  | 411ms | 12.5ms | [link](https://drive.google.com/file/d/1ghpTf9GTTj_8mn5QJh-7cLK1_wL3pKWr/view?usp=sharing) |
 
 </details>
 

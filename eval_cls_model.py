@@ -98,7 +98,7 @@ def main():
                 )
                 t.update(1)
 
-    print(f"Top1 Acc={top1.avg:.1f}, Top5 Acc={top5.avg:.1f}")
+    print(f"Top1 Acc={top1.avg:.3f}, Top5 Acc={top5.avg:.3f}")
 
 
 if __name__ == "__main__":
