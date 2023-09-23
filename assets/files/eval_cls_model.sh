@@ -37,7 +37,7 @@ python eval_cls_model.py --model l2-r256 --image_size 256 --crop_ratio 1.0
 # Top1 Acc=85.6, Top5 Acc=97.4
 python eval_cls_model.py --model l2-r288 --image_size 288 --crop_ratio 1.0
 
-# Top1 Acc=85.8, Top5 Acc=97.4
+# Top1 Acc=85.7, Top5 Acc=97.4
 python eval_cls_model.py --model l2-r320 --image_size 320 --crop_ratio 1.0
 
 # Top1 Acc=85.9, Top5 Acc=97.5
