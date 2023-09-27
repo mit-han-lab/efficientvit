@@ -1,4 +1,4 @@
-# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
+# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction ([paper](https://arxiv.org/abs/2205.14756), [poster](assets/files/efficientvit_poster.pdf))
 
 ## News
 
