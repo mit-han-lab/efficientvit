@@ -3,17 +3,10 @@
 # International Conference on Computer Vision (ICCV), 2023
 
 import argparse
-import inspect
-import os
-import sys
 
 import numpy as np
 from torchvision.datasets import CocoDetection
 from tqdm import tqdm
-
-current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir)
 
 from efficientvit.models.efficientvit.sam import EfficientViTSamPredictor
 from efficientvit.sam_model_zoo import create_sam_model

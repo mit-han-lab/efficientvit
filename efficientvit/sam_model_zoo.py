@@ -2,7 +2,12 @@
 # Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
 # International Conference on Computer Vision (ICCV), 2023
 
-from efficientvit.models.efficientvit import EfficientViTSam, efficientvit_sam_l0, efficientvit_sam_l1
+from efficientvit.models.efficientvit import (
+    EfficientViTSam,
+    efficientvit_sam_l0,
+    efficientvit_sam_l1,
+    efficientvit_sam_l2,
+)
 from efficientvit.models.nn.norm import set_norm_eps
 from efficientvit.models.utils import load_state_dict_from_file
 
@@ -12,6 +17,7 @@ __all__ = ["create_sam_model"]
 REGISTERED_SAM_MODEL: dict[str, str] = {
     "l0": "assets/checkpoints/sam/l0.pt",
     "l1": "assets/checkpoints/sam/l1.pt",
+    "l2": "assets/checkpoints/sam/l2.pt",
 }
 
 
@@ -19,6 +25,7 @@ def create_sam_model(name: str, pretrained=True, weight_url: str or None = None,
     model_dict = {
         "l0": efficientvit_sam_l0,
         "l1": efficientvit_sam_l1,
+        "l2": efficientvit_sam_l2,
     }
 
     model_id = name.split("-")[0]

@@ -3,9 +3,7 @@
 # International Conference on Computer Vision (ICCV), 2023
 
 import argparse
-import inspect
 import os
-import sys
 import time
 
 import cv2
@@ -14,10 +12,6 @@ import numpy as np
 import yaml
 from matplotlib.patches import Rectangle
 from PIL import Image
-
-current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir)
 
 from efficientvit.apps.utils import parse_unknown_args
 from efficientvit.models.efficientvit.sam import EfficientViTSamAutomaticMaskGenerator, EfficientViTSamPredictor

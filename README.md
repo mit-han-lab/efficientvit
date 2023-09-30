@@ -102,6 +102,7 @@ In this version, the EfficientViT segment anything models are trained using the 
 ||
 | EfficientViT-L0 | 74.454 | 81.410 | 77.201 | 68.159 | 31M | 35G | 1009 image/s | [link](https://drive.google.com/file/d/1AiaX67kT-TX5yr0wOZn51jICj-k5aBmx/view?usp=sharing) |
 | EfficientViT-L1 | 75.183 | 81.786 | 78.110 | 68.944 | 44M | 49G | 815 image/s | [link](https://drive.google.com/file/d/1ji6NcDfZF8b2kkFn9DolnbaOGSqklECe/view?usp=sharing) |
+| EfficientViT-L2 | 75.656 | 81.706 | 78.644 | 69.689 | 57M | 69G | 634 image/s | [link](https://huggingface.co/han-cai/efficientvit-sam/blob/main/l2.pt) |
 
 ### ImageNet
 
@@ -124,6 +125,11 @@ All EfficientViT classification models are trained on ImageNet-1K with random in
 | EfficientViT-L2 | 320x320 |  85.734 | 97.438 | 64M | 14G  | 2525 image/s | [link](https://drive.google.com/file/d/1GDr0y45YPX8iWEWNq5fEmjo0UgyZLpUs/view?usp=sharing) |
 | EfficientViT-L2 | 352x352 |  85.868 | 97.516 | 64M | 17G  | 2099 image/s | [link](https://drive.google.com/file/d/1gEkrj2JScJEcUgxeBSVKpUYBbple99yI/view?usp=sharing) |
 | EfficientViT-L2 | 384x384 |  85.978 | 97.518 | 64M | 20G  | 1784 image/s | [link](https://drive.google.com/file/d/1MpjduiCTbUVS1XJri4_eqCbARJyYo74b/view?usp=sharing) |
+| |
+| EfficientViT-L3 | 224x224 | 85.814 | 97.198 | 246M | 28G | 2081 image/s | [link](https://huggingface.co/han-cai/efficientvit-imagenet/blob/main/l3-r224.pt) |
+| EfficientViT-L3 | 256x256 | 85.938 | 97.318 | 246M | 36G | 1641 image/s | [link](https://huggingface.co/han-cai/efficientvit-imagenet/blob/main/l3-r256.pt) |
+| EfficientViT-L3 | 288x288 | 86.070 | 97.440 | 246M | 46G | 1276 image/s | [link](https://huggingface.co/han-cai/efficientvit-imagenet/blob/main/l3-r288.pt) |
+| EfficientViT-L3 | 320x320 | 86.230 | 97.474 | 246M | 56G | 1049 image/s | [link](https://huggingface.co/han-cai/efficientvit-imagenet/blob/main/l3-r320.pt) |
 
 <details>
   <summary>EfficientViT B series</summary>
@@ -194,7 +200,7 @@ All EfficientViT classification models are trained on ImageNet-1K with random in
 from efficientvit.sam_model_zoo import create_sam_model
 
 efficientvit_sam = create_sam_model(
-  name="l1", weight_url="assets/checkpoints/sam/l1.pt",
+  name="l2", weight_url="assets/checkpoints/sam/l2.pt",
 )
 efficientvit_sam = efficientvit_sam.cuda().eval()
 ```
@@ -280,9 +286,11 @@ Example:
 python tflite_export.py --export_path model.tflite --task seg --dataset ade20k --model b3 --resolution 512 512
 ```
 
-## Export TensorRT
+## Export ONNX
 
-To generate onnx files, please refer to `onnx_export.py`.
+To generate ONNX files, please refer to `onnx_export.py`.
+
+To export ONNX files for EfficientViT SAM models, please refer to the [scripts](https://github.com/CVHub520/efficientvit/tree/main#benchmarking-with-onnxruntime) shared by [CVHub](https://github.com/CVHub520).
 
 ## Training
 

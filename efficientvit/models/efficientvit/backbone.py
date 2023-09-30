@@ -28,6 +28,7 @@ __all__ = [
     "efficientvit_backbone_l0",
     "efficientvit_backbone_l1",
     "efficientvit_backbone_l2",
+    "efficientvit_backbone_l3",
 ]
 
 
@@ -356,6 +357,15 @@ def efficientvit_backbone_l1(**kwargs) -> EfficientViTLargeBackbone:
 def efficientvit_backbone_l2(**kwargs) -> EfficientViTLargeBackbone:
     backbone = EfficientViTLargeBackbone(
         width_list=[32, 64, 128, 256, 512],
+        depth_list=[1, 2, 2, 8, 8],
+        **build_kwargs_from_config(kwargs, EfficientViTLargeBackbone),
+    )
+    return backbone
+
+
+def efficientvit_backbone_l3(**kwargs) -> EfficientViTLargeBackbone:
+    backbone = EfficientViTLargeBackbone(
+        width_list=[64, 128, 256, 512, 1024],
         depth_list=[1, 2, 2, 8, 8],
         **build_kwargs_from_config(kwargs, EfficientViTLargeBackbone),
     )

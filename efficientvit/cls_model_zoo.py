@@ -10,6 +10,7 @@ from efficientvit.models.efficientvit import (
     efficientvit_cls_b3,
     efficientvit_cls_l1,
     efficientvit_cls_l2,
+    efficientvit_cls_l3,
 )
 from efficientvit.models.nn.norm import set_norm_eps
 from efficientvit.models.utils import load_state_dict_from_file
@@ -40,6 +41,11 @@ REGISTERED_CLS_MODEL: dict[str, str] = {
     "l2-r320": "assets/checkpoints/cls/l2-r320.pt",
     "l2-r352": "assets/checkpoints/cls/l2-r352.pt",
     "l2-r384": "assets/checkpoints/cls/l2-r384.pt",
+    ###############################################
+    "l3-r224": "assets/checkpoints/cls/l3-r224.pt",
+    "l3-r256": "assets/checkpoints/cls/l3-r256.pt",
+    "l3-r288": "assets/checkpoints/cls/l3-r288.pt",
+    "l3-r320": "assets/checkpoints/cls/l3-r320.pt",
 }
 
 
@@ -52,6 +58,7 @@ def create_cls_model(name: str, pretrained=True, weight_url: str or None = None,
         #########################
         "l1": efficientvit_cls_l1,
         "l2": efficientvit_cls_l2,
+        "l3": efficientvit_cls_l3,
     }
 
     model_id = name.split("-")[0]
@@ -59,7 +66,7 @@ def create_cls_model(name: str, pretrained=True, weight_url: str or None = None,
         raise ValueError(f"Do not find {name} in the model zoo. List of models: {list(model_dict.keys())}")
     else:
         model = model_dict[model_id](**kwargs)
-    if model_id in ["l1", "l2"]:
+    if model_id in ["l1", "l2", "l3"]:
         set_norm_eps(model, 1e-7)
 
     if pretrained:

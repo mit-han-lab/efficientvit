@@ -45,3 +45,15 @@ python eval_cls_model.py --model l2-r352 --image_size 352 --crop_ratio 1.0
 
 # Top1 Acc=85.978, Top5 Acc=97.518
 python eval_cls_model.py --model l2-r384 --image_size 384 --crop_ratio 1.0
+
+# Top1 Acc=85.814, Top5 Acc=97.198
+python eval_cls_model.py --model l3-r224 --image_size 224 --crop_ratio 1.0
+
+# Top1 Acc=85.938, Top5 Acc=97.318
+python eval_cls_model.py --model l3-r256 --image_size 256 --crop_ratio 1.0
+
+# Top1 Acc=86.070, Top5 Acc=97.440
+python eval_cls_model.py --model l3-r288 --image_size 288 --crop_ratio 1.0
+
+# Top1 Acc=86.230, Top5 Acc=97.474
+python eval_cls_model.py --model l3-r320 --image_size 320 --crop_ratio 1.0

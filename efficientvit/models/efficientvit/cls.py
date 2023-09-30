@@ -19,6 +19,7 @@ __all__ = [
     ######################
     "efficientvit_cls_l1",
     "efficientvit_cls_l2",
+    "efficientvit_cls_l3",
 ]
 
 
@@ -139,6 +140,21 @@ def efficientvit_cls_l2(**kwargs) -> EfficientViTCls:
     head = ClsHead(
         in_channels=512,
         width_list=[3072, 3200],
+        act_func="gelu",
+        **build_kwargs_from_config(kwargs, ClsHead),
+    )
+    model = EfficientViTCls(backbone, head)
+    return model
+
+
+def efficientvit_cls_l3(**kwargs) -> EfficientViTCls:
+    from efficientvit.models.efficientvit.backbone import efficientvit_backbone_l3
+
+    backbone = efficientvit_backbone_l3(**kwargs)
+
+    head = ClsHead(
+        in_channels=1024,
+        width_list=[6144, 6400],
         act_func="gelu",
         **build_kwargs_from_config(kwargs, ClsHead),
     )
