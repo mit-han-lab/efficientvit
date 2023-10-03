@@ -39,13 +39,13 @@ REGISTERED_CLS_MODEL: dict[str, str] = {
     "l2-r256": "assets/checkpoints/cls/l2-r256.pt",
     "l2-r288": "assets/checkpoints/cls/l2-r288.pt",
     "l2-r320": "assets/checkpoints/cls/l2-r320.pt",
-    "l2-r352": "assets/checkpoints/cls/l2-r352.pt",
     "l2-r384": "assets/checkpoints/cls/l2-r384.pt",
     ###############################################
     "l3-r224": "assets/checkpoints/cls/l3-r224.pt",
     "l3-r256": "assets/checkpoints/cls/l3-r256.pt",
     "l3-r288": "assets/checkpoints/cls/l3-r288.pt",
     "l3-r320": "assets/checkpoints/cls/l3-r320.pt",
+    "l3-r384": "assets/checkpoints/cls/l3-r384.pt",
 }
 
 

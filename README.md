@@ -123,13 +123,13 @@ All EfficientViT classification models are trained on ImageNet-1K with random in
 | EfficientViT-L2 | 256x256 |  85.366 | 97.216 | 64M | 9.1G | 3969 image/s | [link](https://drive.google.com/file/d/1pvYtY0ckAAMTkRq6TbwpQ0U1p_urz2fE/view?usp=sharing) |
 | EfficientViT-L2 | 288x288 |  85.630 | 97.364 | 64M | 11G  | 3102 image/s | [link](https://drive.google.com/file/d/1GDr0y45YPX8iWEWNq5fEmjo0UgyZLpUs/view?usp=sharing) |
 | EfficientViT-L2 | 320x320 |  85.734 | 97.438 | 64M | 14G  | 2525 image/s | [link](https://drive.google.com/file/d/1GDr0y45YPX8iWEWNq5fEmjo0UgyZLpUs/view?usp=sharing) |
-| EfficientViT-L2 | 352x352 |  85.868 | 97.516 | 64M | 17G  | 2099 image/s | [link](https://drive.google.com/file/d/1gEkrj2JScJEcUgxeBSVKpUYBbple99yI/view?usp=sharing) |
 | EfficientViT-L2 | 384x384 |  85.978 | 97.518 | 64M | 20G  | 1784 image/s | [link](https://drive.google.com/file/d/1MpjduiCTbUVS1XJri4_eqCbARJyYo74b/view?usp=sharing) |
 | |
 | EfficientViT-L3 | 224x224 | 85.814 | 97.198 | 246M | 28G | 2081 image/s | [link](https://huggingface.co/han-cai/efficientvit-imagenet/blob/main/l3-r224.pt) |
 | EfficientViT-L3 | 256x256 | 85.938 | 97.318 | 246M | 36G | 1641 image/s | [link](https://huggingface.co/han-cai/efficientvit-imagenet/blob/main/l3-r256.pt) |
 | EfficientViT-L3 | 288x288 | 86.070 | 97.440 | 246M | 46G | 1276 image/s | [link](https://huggingface.co/han-cai/efficientvit-imagenet/blob/main/l3-r288.pt) |
 | EfficientViT-L3 | 320x320 | 86.230 | 97.474 | 246M | 56G | 1049 image/s | [link](https://huggingface.co/han-cai/efficientvit-imagenet/blob/main/l3-r320.pt) |
+| EfficientViT-L3 | 384x384 | 86.408 | 97.632 | 246M | 81G | 724 image/s | [link](https://huggingface.co/han-cai/efficientvit-imagenet/blob/main/l3-r384.pt) |
 
 <details>
   <summary>EfficientViT B series</summary>
@@ -223,7 +223,7 @@ efficientvit_mask_generator = EfficientViTSamAutomaticMaskGenerator(efficientvit
 from efficientvit.cls_model_zoo import create_cls_model
 
 model = create_cls_model(
-  name="l2", weight_url="assets/checkpoints/cls/l2-r384.pt"
+  name="l3", weight_url="assets/checkpoints/cls/l3-r384.pt"
 )
 ```
 
