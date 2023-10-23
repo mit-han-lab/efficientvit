@@ -32,28 +32,25 @@ def apply_droppath(
     drop_prob: float,
     linear_decay=True,
     scheduled=True,
+    skip=0,
 ) -> None:
-    n_valid_blocks = 0
+    all_valid_blocks = []
     for m in network.modules():
-        if isinstance(m, ResidualBlock) and isinstance(m.shortcut, IdentityLayer):
-            n_valid_blocks += 1
-    _id = 1
-    for m in network.modules():
-        to_update_dict = {}
         for name, sub_module in m.named_children():
             if isinstance(sub_module, ResidualBlock) and isinstance(sub_module.shortcut, IdentityLayer):
-                prob = drop_prob * _id / n_valid_blocks if linear_decay else drop_prob
-                to_update_dict[name] = DropPathResidualBlock(
-                    sub_module.main,
-                    sub_module.shortcut,
-                    sub_module.post_act,
-                    sub_module.pre_norm,
-                    prob,
-                    scheduled,
-                )
-                _id += 1
-        for name, sub_module in to_update_dict.items():
-            m._modules[name] = sub_module
+                all_valid_blocks.append((m, name, sub_module))
+    all_valid_blocks = all_valid_blocks[skip:]
+    for i, (m, name, sub_module) in enumerate(all_valid_blocks):
+        prob = drop_prob * (i + 1) / len(all_valid_blocks) if linear_decay else drop_prob
+        new_module = DropPathResidualBlock(
+            sub_module.main,
+            sub_module.shortcut,
+            sub_module.post_act,
+            sub_module.pre_norm,
+            prob,
+            scheduled,
+        )
+        m._modules[name] = new_module
 
 
 class DropPathResidualBlock(ResidualBlock):

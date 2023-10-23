@@ -50,13 +50,16 @@ def cutmix(
     flipped_images = images[rand_index]
     flipped_target = target[rand_index]
 
-    h, w = images.shape[-2:]
-    bbx1, bby1, bbx2, bby2 = rand_bbox(
-        h=h,
-        w=w,
-        lam=lam,
-        rand_func=torch_randint,
-    )
-    images[:, :, bby1:bby2, bbx1:bbx2] = flipped_images[:, :, bby1:bby2, bbx1:bbx2]
-    lam = 1 - ((bbx2 - bbx1) * (bby2 - bby1) / (h * w))
+    b, _, h, w = images.shape
+    lam_list = []
+    for i in range(b):
+        bbx1, bby1, bbx2, bby2 = rand_bbox(
+            h=h,
+            w=w,
+            lam=lam,
+            rand_func=torch_randint,
+        )
+        images[i, :, bby1:bby2, bbx1:bbx2] = flipped_images[i, :, bby1:bby2, bbx1:bbx2]
+        lam_list.append(1 - ((bbx2 - bbx1) * (bby2 - bby1) / (h * w)))
+    lam = torch.Tensor(lam_list).to(images.device).view(b, 1)
     return images, lam * target + (1 - lam) * flipped_target

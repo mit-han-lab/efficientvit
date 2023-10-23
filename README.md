@@ -4,6 +4,7 @@
 
 **If you are interested in getting updates, please join our mailing list [here](https://forms.gle/Z6DNkRidJ1ouxmUk9).**
 
+- [2023/10/22] ImageNet training scripts for the EfficientViT L series have been released.
 - [2023/09/18] **EfficientViT for Segment Anything Model (SAM)** is released. EfficientViT SAM runs at 1009 images/s on A100 GPU, compared to ViT-H (12 images/s), mobileSAM (297 images/s), and nanoSAM (744 image/s, but much lower mIoU)
 - [2023/09/12] EfficientViT is highlighted by [MIT home page](https://www.mit.edu/archive/spotlight/efficient-computer-vision/) and [MIT News](https://news.mit.edu/2023/ai-model-high-resolution-computer-vision-0912).
 - [2023/07/18] EfficientViT is accepted by ICCV 2023.
@@ -24,6 +25,7 @@ EfficientViT-L1 for Semantic Segmentation (45.9ms on Nvidia Jetson AGX Orin, 82.
 EfficientViT is a new family of ViT models for efficient high-resolution dense prediction vision tasks. The core building block of EfficientViT is a lightweight, multi-scale linear attention module that achieves global receptive field and multi-scale learning with only hardware-efficient operations, making EfficientViT TensorRT-friendly and suitable for GPU deployment.
 
 ## Third-Party Implementation/Integration
+
 - [timm](https://github.com/huggingface/pytorch-image-models): [link](https://github.com/huggingface/pytorch-image-models/blob/main/timm/models/efficientvit_mit.py)
 - [X-AnyLabeling](https://github.com/CVHub520/X-AnyLabeling): [link](https://github.com/CVHub520/X-AnyLabeling/blob/main/anylabeling/services/auto_labeling/efficientvit_sam.py)
 

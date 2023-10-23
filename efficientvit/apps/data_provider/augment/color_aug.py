@@ -58,7 +58,7 @@ class RandAug(ImageAug):
     def __init__(self, config: dict[str, any], mean: tuple[float, float, float], key="data"):
         n = config.get("n", 2)
         m = config.get("m", 9)
-        mstd = config.get("mstd", 0.5)
+        mstd = config.get("mstd", 1.0)
         inc = config.get("inc", 1)
         tpct = config.get("tpct", 0.45)
         config_str = f"rand-n{n}-m{m}-mstd{mstd}-inc{inc}"

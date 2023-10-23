@@ -25,6 +25,7 @@ parser.add_argument("--rand_init", type=str, default="trunc_normal@0.02")
 parser.add_argument("--last_gamma", type=float, default=0)
 
 parser.add_argument("--auto_restart_thresh", type=float, default=1.0)
+parser.add_argument("--save_freq", type=int, default=1)
 
 
 def main():
@@ -83,7 +84,7 @@ def main():
         trainer.sync_model()
 
     # launch training
-    trainer.train()
+    trainer.train(save_freq=args.save_freq)
 
 
 if __name__ == "__main__":

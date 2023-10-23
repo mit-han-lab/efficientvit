@@ -1,0 +1,31 @@
+data_provider:
+  data_aug:
+  - name: randaug
+    n: 2
+    m: 5
+  - name: erase
+    p: 0.2
+
+run_config:
+  base_lr: 0.00015
+  mixup_config:
+    op:
+    - - mixup
+      - 0.4
+      - 1.0
+    - - cutmix
+      - 0.4
+      - 1.0
+  mesa:
+    thresh: 0.25
+    ratio: 2.75
+
+backbone_drop:
+  name: droppath
+  drop_prob: 0.1
+  linear_decay: true
+  skip: 3
+
+net_config:
+  name: l2
+  dropout: 0

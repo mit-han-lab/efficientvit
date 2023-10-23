@@ -444,6 +444,14 @@ class LiteMLA(nn.Module):
 
         return out
 
+    @staticmethod
+    def configure_litemla(model: nn.Module, **kwargs) -> None:
+        eps = kwargs.get("eps", None)
+        for m in model.modules():
+            if isinstance(m, LiteMLA):
+                if eps is not None:
+                    m.eps = eps
+
 
 class EfficientViTBlock(nn.Module):
     def __init__(

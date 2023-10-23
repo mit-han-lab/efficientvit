@@ -17,7 +17,7 @@ data_provider:
   - 160
   - 192
   - 224
-  drop_last: false
+  drop_last: true
 
 run_config:
   n_epochs: 300
@@ -52,6 +52,7 @@ run_config:
       - 0.1
       - 1.0
   bce: true
+  mesa: null
 
 backbone_drop:
   name: droppath

@@ -52,7 +52,7 @@ class ImageNetDataProvider(DataProvider):
         )
         self.data_aug = data_aug
 
-        super(ImageNetDataProvider, self).__init__(
+        super().__init__(
             train_batch_size,
             test_batch_size,
             valid_size,
@@ -89,10 +89,17 @@ class ImageNetDataProvider(DataProvider):
         ]
 
         # data augmentation
+        post_aug = []
         if self.data_aug is not None:
             for aug_op in val2list(self.data_aug):
                 if aug_op["name"] == "randaug":
                     data_aug = RandAug(aug_op, mean=self.mean_std["mean"])
+                elif aug_op["name"] == "erase":
+                    from timm.data.random_erasing import RandomErasing
+
+                    random_erase = RandomErasing(aug_op["p"], device="cpu")
+                    post_aug.append(random_erase)
+                    data_aug = None
                 else:
                     raise NotImplementedError
                 if data_aug is not None:
@@ -101,6 +108,7 @@ class ImageNetDataProvider(DataProvider):
             *train_transforms,
             transforms.ToTensor(),
             transforms.Normalize(**self.mean_std),
+            *post_aug,
         ]
         return transforms.Compose(train_transforms)
 

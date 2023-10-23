@@ -8,6 +8,7 @@ import sys
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import torchpack.distributed as dist
 from tqdm import tqdm
 
@@ -111,9 +112,23 @@ class ClsTrainer(Trainer):
         images = feed_dict["data"]
         labels = feed_dict["label"]
 
+        # setup mesa
+        if self.run_config.mesa is not None and self.run_config.mesa["thresh"] <= self.run_config.progress:
+            ema_model = self.ema.shadows
+            with torch.inference_mode():
+                ema_output = ema_model(images).detach()
+            ema_output = torch.clone(ema_output)
+            ema_output = F.sigmoid(ema_output).detach()
+        else:
+            ema_output = None
+
         with torch.autocast(device_type="cuda", dtype=torch.float16, enabled=self.fp16):
             output = self.model(images)
             loss = self.train_criterion(output, labels)
+            # mesa loss
+            if ema_output is not None:
+                mesa_loss = self.train_criterion(output, ema_output)
+                loss = loss + self.run_config.mesa["ratio"] * mesa_loss
         self.scaler.scale(loss).backward()
 
         # calc train top1 acc
@@ -174,7 +189,7 @@ class ClsTrainer(Trainer):
             "train_loss": train_loss.avg,
         }
 
-    def train(self, trials=0) -> None:
+    def train(self, trials=0, save_freq=1) -> None:
         if self.run_config.bce:
             self.train_criterion = nn.BCEWithLogitsLoss()
         else:
@@ -192,7 +207,7 @@ class ClsTrainer(Trainer):
                 if self.best_val - avg_top1 > self.auto_restart_thresh:
                     self.write_log(f"Abnormal accuracy drop: {self.best_val} -> {avg_top1}")
                     self.load_model(os.path.join(self.checkpoint_path, "model_best.pt"))
-                    return self.train(trials + 1)
+                    return self.train(trials + 1, save_freq)
 
             # log
             val_log = self.run_config.epoch_format(epoch)
@@ -211,8 +226,9 @@ class ClsTrainer(Trainer):
             self.write_log(val_log, prefix="valid", print_log=False)
 
             # save model
-            self.save_model(
-                only_state_dict=False,
-                epoch=epoch,
-                model_name="model_best.pt" if is_best else "checkpoint.pt",
-            )
+            if (epoch + 1) % save_freq == 0 or (is_best and self.run_config.progress > 0.8):
+                self.save_model(
+                    only_state_dict=False,
+                    epoch=epoch,
+                    model_name="model_best.pt" if is_best else "checkpoint.pt",
+                )
