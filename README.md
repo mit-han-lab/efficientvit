@@ -102,9 +102,9 @@ In this version, the EfficientViT segment anything models are trained using the 
 | NanoSAM  | [70.6](https://github.com/NVIDIA-AI-IOT/nanosam#%EF%B8%8F-performance) | 79.6 | 73.8 | 62.4 | - | - | 744 image/s | - |
 | MobileSAM | [72.8](https://github.com/NVIDIA-AI-IOT/nanosam#%EF%B8%8F-performance) | 80.4 | 75.9 | 65.8 | - | - | 297 image/s | - |
 ||
-| EfficientViT-L0 | 74.454 | 81.410 | 77.201 | 68.159 | 31M | 35G | 1009 image/s | [link](https://drive.google.com/file/d/1AiaX67kT-TX5yr0wOZn51jICj-k5aBmx/view?usp=sharing) |
-| EfficientViT-L1 | 75.183 | 81.786 | 78.110 | 68.944 | 44M | 49G | 815 image/s | [link](https://drive.google.com/file/d/1ji6NcDfZF8b2kkFn9DolnbaOGSqklECe/view?usp=sharing) |
-| EfficientViT-L2 | 75.656 | 81.706 | 78.644 | 69.689 | 57M | 69G | 634 image/s | [link](https://huggingface.co/han-cai/efficientvit-sam/blob/main/l2.pt) |
+| EfficientViT-L0-SAM | 74.454 | 81.410 | 77.201 | 68.159 | 31M | 35G | 1009 image/s | [link](https://drive.google.com/file/d/1AiaX67kT-TX5yr0wOZn51jICj-k5aBmx/view?usp=sharing) |
+| EfficientViT-L1-SAM | 75.183 | 81.786 | 78.110 | 68.944 | 44M | 49G | 815 image/s | [link](https://drive.google.com/file/d/1ji6NcDfZF8b2kkFn9DolnbaOGSqklECe/view?usp=sharing) |
+| EfficientViT-L2-SAM | 75.656 | 81.706 | 78.644 | 69.689 | 57M | 69G | 634 image/s | [link](https://huggingface.co/han-cai/efficientvit-sam/blob/main/l2.pt) |
 
 ### ImageNet
 
