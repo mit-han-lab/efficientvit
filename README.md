@@ -307,8 +307,9 @@ Han Cai: <hancai@mit.edu>
 - [x] ImageNet Pretrained models
 - [x] Segmentation Pretrained models
 - [x] ImageNet training code
-- [ ] EfficientViT L series, designed for cloud
-- [ ] EfficientViT for segment anything
+- [x] EfficientViT L series, designed for cloud
+- [x] EfficientViT for segment anything
+- [ ] EfficientViT for image generation
 - [ ] EfficientViT for super-resolution
 - [ ] Segmentation training code
 
