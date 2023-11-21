@@ -4,6 +4,7 @@
 
 **If you are interested in getting updates, please join our mailing list [here](https://forms.gle/Z6DNkRidJ1ouxmUk9).**
 
+- [2023/11/20] EfficientViT is available in the [NVIDIA Jetson Generative AI Lab](https://www.jetson-ai-lab.com/tutorial_efficientvit.html).
 - [2023/11/20] We will soon release the second version of EfficientViT SAM models. Preview of the new version:
 
 | Image Encoder | A100 Throughput |Zero-Shot LVIS mIoU (all) | Zero-Shot COCO-val2017 mIoU (all) | 
@@ -33,6 +34,7 @@ EfficientViT is a new family of ViT models for efficient high-resolution dense p
 
 ## Third-Party Implementation/Integration
 
+- [NVIDIA Jetson Generative AI Lab](https://www.jetson-ai-lab.com/tutorial_efficientvit.html)
 - [timm](https://github.com/huggingface/pytorch-image-models): [link](https://github.com/huggingface/pytorch-image-models/blob/main/timm/models/efficientvit_mit.py)
 - [X-AnyLabeling](https://github.com/CVHub520/X-AnyLabeling): [link](https://github.com/CVHub520/X-AnyLabeling/blob/main/anylabeling/services/auto_labeling/efficientvit_sam.py)
 
