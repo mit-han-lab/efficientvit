@@ -22,12 +22,12 @@ def iou(mask_a: np.ndarray, mask_b: np.ndarray) -> float:
     return float(intersection / union) * 100
 
 
-def predict_mask(predictor: EfficientViTSamPredictor, bbox: list[int]) -> np.ndarray:
+def predict_mask(predictor: EfficientViTSamPredictor, bbox: list[int], multimask=True) -> np.ndarray:
     masks, iou_predictions, _ = predictor.predict(
         point_coords=None,
         point_labels=None,
         box=np.array(bbox),
-        multimask_output=True,
+        multimask_output=multimask,
     )
 
     mask = masks[iou_predictions.argmax()]
@@ -64,6 +64,7 @@ def main():
     parser.add_argument("--anno_path", type=str, default="/dataset/coco/annotations/instances_val2017.json")
     parser.add_argument("--model", type=str)
     parser.add_argument("--weight_url", type=str, default=None)
+    parser.add_argument("--multimask", action="store_true")
 
     args = parser.parse_args()
 
@@ -88,7 +89,7 @@ def main():
                 bbox = bbox_xywh_to_xyxy(ann["bbox"])
                 mask = dataset.coco.annToMask(ann)
                 mask_coco = mask > 0
-                mask_sam = predict_mask(efficientvit_sam_predictor, bbox)
+                mask_sam = predict_mask(efficientvit_sam_predictor, bbox, multimask=args.multimask)
 
                 miou = iou(mask_sam, mask_coco)
                 result = {

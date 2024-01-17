@@ -5,13 +5,7 @@
 **If you are interested in getting updates, please join our mailing list [here](https://forms.gle/Z6DNkRidJ1ouxmUk9).**
 
 - [2023/11/20] EfficientViT is available in the [NVIDIA Jetson Generative AI Lab](https://www.jetson-ai-lab.com/tutorial_efficientvit.html).
-- [2023/11/20] We will soon release the second version of EfficientViT SAM models. Preview of the new version:
-
-| Image Encoder | A100 Throughput |Zero-Shot LVIS mIoU (all) | Zero-Shot COCO-val2017 mIoU (all) | 
-|----------------------|:----------:|:----------:|:---------:|
-| [SAM-ViT-H](https://github.com/facebookresearch/segment-anything)  |  12 image/s | 75.4 | 77.4 |
-| EfficientViT-L0-SAM-v2 | 1009 image/s | 76.3 | 77.1 | 
-
+- [2023/11/20] We will soon release the second version of EfficientViT SAM models.
 - [2023/10/22] ImageNet training scripts for the EfficientViT L series have been released.
 - [2023/09/18] **EfficientViT for Segment Anything Model (SAM)** is released. EfficientViT SAM runs at 1009 images/s on A100 GPU, compared to ViT-H (12 images/s), mobileSAM (297 images/s), and nanoSAM (744 image/s, but much lower mIoU)
 - [2023/09/12] EfficientViT is highlighted by [MIT home page](https://www.mit.edu/archive/spotlight/efficient-computer-vision/) and [MIT News](https://news.mit.edu/2023/ai-model-high-resolution-computer-vision-0912).

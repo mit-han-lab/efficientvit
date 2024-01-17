@@ -42,6 +42,7 @@ __all__ = [
     "efficientvit_sam_l0",
     "efficientvit_sam_l1",
     "efficientvit_sam_l2",
+    "efficientvit_sam_l3",
 ]
 
 
@@ -558,6 +559,24 @@ def efficientvit_sam_l2(image_size: int = 512, **kwargs) -> EfficientViTSam:
         in_channel_list=[512, 256, 128],
         head_width=256,
         head_depth=12,
+        expand_ratio=1,
+        middle_op="fmbconv",
+    )
+
+    image_encoder = EfficientViTSamImageEncoder(backbone, neck)
+    return build_efficientvit_sam(image_encoder, image_size)
+
+
+def efficientvit_sam_l3(image_size: int = 512, **kwargs) -> EfficientViTSam:
+    from efficientvit.models.efficientvit.backbone import efficientvit_backbone_l3
+
+    backbone = efficientvit_backbone_l3(**kwargs)
+
+    neck = SamNeck(
+        fid_list=["stage4", "stage3", "stage2"],
+        in_channel_list=[1024, 512, 256],
+        head_width=256,
+        head_depth=16,
         expand_ratio=1,
         middle_op="fmbconv",
     )
