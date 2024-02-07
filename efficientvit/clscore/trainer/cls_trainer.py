@@ -9,11 +9,10 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torchpack.distributed as dist
 from tqdm import tqdm
 
 from efficientvit.apps.trainer import Trainer
-from efficientvit.apps.utils import AverageMeter, sync_tensor
+from efficientvit.apps.utils import AverageMeter, is_master, sync_tensor
 from efficientvit.clscore.trainer.utils import accuracy, apply_mixup, label_smooth
 from efficientvit.models.utils import list_join, list_mean, torch_random_choices
 
@@ -45,7 +44,7 @@ class ClsTrainer(Trainer):
             with tqdm(
                 total=len(data_loader),
                 desc=f"Validate Epoch #{epoch + 1}",
-                disable=not dist.is_master(),
+                disable=not is_master(),
                 file=sys.stdout,
             ) as t:
                 for images, labels in data_loader:
@@ -149,7 +148,7 @@ class ClsTrainer(Trainer):
         with tqdm(
             total=len(self.data_provider.train),
             desc="Train Epoch #{}".format(epoch + 1),
-            disable=not dist.is_master(),
+            disable=not is_master(),
             file=sys.stdout,
         ) as t:
             for images, labels in self.data_provider.train:

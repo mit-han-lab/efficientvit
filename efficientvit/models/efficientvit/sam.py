@@ -25,11 +25,12 @@ from efficientvit.models.nn import (
     IdentityLayer,
     MBConv,
     OpSequential,
+    ResBlock,
     ResidualBlock,
     UpSampleLayer,
     build_norm,
 )
-from efficientvit.models.utils import get_device
+from efficientvit.models.utils import build_kwargs_from_config, get_device
 
 __all__ = [
     "SamPad",
@@ -42,7 +43,8 @@ __all__ = [
     "efficientvit_sam_l0",
     "efficientvit_sam_l1",
     "efficientvit_sam_l2",
-    "efficientvit_sam_l3",
+    "efficientvit_sam_xl0",
+    "efficientvit_sam_xl1",
 ]
 
 
@@ -124,7 +126,7 @@ class SamNeck(DAGBlock):
 
         middle = []
         for _ in range(head_depth):
-            if middle_op == "mbconv":
+            if middle_op == "mb":
                 block = MBConv(
                     head_width,
                     head_width,
@@ -132,8 +134,16 @@ class SamNeck(DAGBlock):
                     norm=norm,
                     act_func=(act_func, act_func, None),
                 )
-            elif middle_op == "fmbconv":
+            elif middle_op == "fmb":
                 block = FusedMBConv(
+                    head_width,
+                    head_width,
+                    expand_ratio=expand_ratio,
+                    norm=norm,
+                    act_func=(act_func, None),
+                )
+            elif middle_op == "res":
+                block = ResBlock(
                     head_width,
                     head_width,
                     expand_ratio=expand_ratio,
@@ -524,7 +534,7 @@ def efficientvit_sam_l0(image_size: int = 512, **kwargs) -> EfficientViTSam:
         head_width=256,
         head_depth=4,
         expand_ratio=1,
-        middle_op="fmbconv",
+        middle_op="fmb",
     )
 
     image_encoder = EfficientViTSamImageEncoder(backbone, neck)
@@ -542,7 +552,7 @@ def efficientvit_sam_l1(image_size: int = 512, **kwargs) -> EfficientViTSam:
         head_width=256,
         head_depth=8,
         expand_ratio=1,
-        middle_op="fmbconv",
+        middle_op="fmb",
     )
 
     image_encoder = EfficientViTSamImageEncoder(backbone, neck)
@@ -560,25 +570,57 @@ def efficientvit_sam_l2(image_size: int = 512, **kwargs) -> EfficientViTSam:
         head_width=256,
         head_depth=12,
         expand_ratio=1,
-        middle_op="fmbconv",
+        middle_op="fmb",
     )
 
     image_encoder = EfficientViTSamImageEncoder(backbone, neck)
     return build_efficientvit_sam(image_encoder, image_size)
 
 
-def efficientvit_sam_l3(image_size: int = 512, **kwargs) -> EfficientViTSam:
-    from efficientvit.models.efficientvit.backbone import efficientvit_backbone_l3
+def efficientvit_sam_xl0(image_size: int = 1024, **kwargs) -> EfficientViTSam:
+    from efficientvit.models.efficientvit.backbone import EfficientViTLargeBackbone
 
-    backbone = efficientvit_backbone_l3(**kwargs)
+    backbone = EfficientViTLargeBackbone(
+        width_list=[32, 64, 128, 256, 512, 1024],
+        depth_list=[0, 1, 1, 2, 3, 3],
+        block_list=["res", "fmb", "fmb", "fmb", "att@3", "att@3"],
+        expand_list=[1, 4, 4, 4, 4, 6],
+        fewer_norm_list=[False, False, False, False, True, True],
+        **build_kwargs_from_config(kwargs, EfficientViTLargeBackbone),
+    )
 
     neck = SamNeck(
-        fid_list=["stage4", "stage3", "stage2"],
+        fid_list=["stage5", "stage4", "stage3"],
         in_channel_list=[1024, 512, 256],
         head_width=256,
-        head_depth=16,
-        expand_ratio=1,
-        middle_op="fmbconv",
+        head_depth=6,
+        expand_ratio=4,
+        middle_op="fmb",
+    )
+
+    image_encoder = EfficientViTSamImageEncoder(backbone, neck)
+    return build_efficientvit_sam(image_encoder, image_size)
+
+
+def efficientvit_sam_xl1(image_size: int = 1024, **kwargs) -> EfficientViTSam:
+    from efficientvit.models.efficientvit.backbone import EfficientViTLargeBackbone
+
+    backbone = EfficientViTLargeBackbone(
+        width_list=[32, 64, 128, 256, 512, 1024],
+        depth_list=[1, 2, 2, 4, 6, 6],
+        block_list=["res", "fmb", "fmb", "fmb", "att@3", "att@3"],
+        expand_list=[1, 4, 4, 4, 4, 6],
+        fewer_norm_list=[False, False, False, False, True, True],
+        **build_kwargs_from_config(kwargs, EfficientViTLargeBackbone),
+    )
+
+    neck = SamNeck(
+        fid_list=["stage5", "stage4", "stage3"],
+        in_channel_list=[1024, 512, 256],
+        head_width=256,
+        head_depth=12,
+        expand_ratio=4,
+        middle_op="fmb",
     )
 
     image_encoder = EfficientViTSamImageEncoder(backbone, neck)

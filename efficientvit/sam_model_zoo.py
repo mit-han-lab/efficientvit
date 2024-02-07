@@ -7,7 +7,8 @@ from efficientvit.models.efficientvit import (
     efficientvit_sam_l0,
     efficientvit_sam_l1,
     efficientvit_sam_l2,
-    efficientvit_sam_l3,
+    efficientvit_sam_xl0,
+    efficientvit_sam_xl1,
 )
 from efficientvit.models.nn.norm import set_norm_eps
 from efficientvit.models.utils import load_state_dict_from_file
@@ -19,7 +20,8 @@ REGISTERED_SAM_MODEL: dict[str, str] = {
     "l0": "assets/checkpoints/sam/l0.pt",
     "l1": "assets/checkpoints/sam/l1.pt",
     "l2": "assets/checkpoints/sam/l2.pt",
-    "l3": "assets/checkpoints/sam/l3.pt",
+    "xl0": "assets/checkpoints/sam/xl0.pt",
+    "xl1": "assets/checkpoints/sam/xl1.pt",
 }
 
 
@@ -28,7 +30,8 @@ def create_sam_model(name: str, pretrained=True, weight_url: str or None = None,
         "l0": efficientvit_sam_l0,
         "l1": efficientvit_sam_l1,
         "l2": efficientvit_sam_l2,
-        "l3": efficientvit_sam_l3,
+        "xl0": efficientvit_sam_xl0,
+        "xl1": efficientvit_sam_xl1,
     }
 
     model_id = name.split("-")[0]

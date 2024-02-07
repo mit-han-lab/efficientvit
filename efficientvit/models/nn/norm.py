@@ -50,10 +50,9 @@ def reset_bn(
     import copy
 
     import torch.nn.functional as F
-    import torchpack.distributed as dist
     from tqdm import tqdm
 
-    from efficientvit.apps.utils import AverageMeter, sync_tensor
+    from efficientvit.apps.utils import AverageMeter, is_master, sync_tensor
     from efficientvit.models.utils import get_device, list_join
 
     bn_mean = {}
@@ -111,7 +110,7 @@ def reset_bn(
 
     tmp_model.eval()
     with torch.no_grad():
-        with tqdm(total=len(data_loader), desc="reset bn", disable=not progress_bar or not dist.is_master()) as t:
+        with tqdm(total=len(data_loader), desc="reset bn", disable=not progress_bar or not is_master()) as t:
             for images in data_loader:
                 images = images.to(get_device(tmp_model))
                 tmp_model(images)

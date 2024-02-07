@@ -9,11 +9,21 @@ from copy import deepcopy
 import torch.backends.cudnn
 import torch.distributed
 import torch.nn as nn
-from torchpack import distributed as dist
 
 from efficientvit.apps.data_provider import DataProvider
 from efficientvit.apps.trainer.run_config import RunConfig
-from efficientvit.apps.utils import dump_config, init_modules, load_config, partial_update_config, zero_last_gamma
+from efficientvit.apps.utils import (
+    dist_init,
+    dump_config,
+    get_dist_local_rank,
+    get_dist_rank,
+    get_dist_size,
+    init_modules,
+    is_master,
+    load_config,
+    partial_update_config,
+    zero_last_gamma,
+)
 from efficientvit.models.utils import build_kwargs_from_config, load_state_dict_from_file
 
 __all__ = [
@@ -28,7 +38,7 @@ __all__ = [
 
 
 def save_exp_config(exp_config: dict, path: str, name="config.yaml") -> None:
-    if not dist.is_master():
+    if not is_master():
         return
     dump_config(exp_config, os.path.join(path, name))
 
@@ -37,15 +47,15 @@ def setup_dist_env(gpu: str or None = None) -> None:
     if gpu is not None:
         os.environ["CUDA_VISIBLE_DEVICES"] = gpu
     if not torch.distributed.is_initialized():
-        dist.init()
+        dist_init()
     torch.backends.cudnn.benchmark = True
-    torch.cuda.set_device(dist.local_rank())
+    torch.cuda.set_device(get_dist_local_rank())
 
 
 def setup_seed(manual_seed: int, resume: bool) -> None:
     if resume:
         manual_seed = int(time.time())
-    manual_seed = dist.rank() + manual_seed
+    manual_seed = get_dist_rank() + manual_seed
     torch.manual_seed(manual_seed)
     torch.cuda.manual_seed_all(manual_seed)
 
@@ -80,8 +90,8 @@ def setup_data_provider(
     exp_config: dict, data_provider_classes: list[type[DataProvider]], is_distributed: bool = True
 ) -> DataProvider:
     dp_config = exp_config["data_provider"]
-    dp_config["num_replicas"] = dist.size() if is_distributed else None
-    dp_config["rank"] = dist.rank() if is_distributed else None
+    dp_config["num_replicas"] = get_dist_size() if is_distributed else None
+    dp_config["rank"] = get_dist_rank() if is_distributed else None
     dp_config["test_batch_size"] = dp_config.get("test_batch_size", None) or dp_config["base_batch_size"] * 2
     dp_config["batch_size"] = dp_config["train_batch_size"] = dp_config["base_batch_size"]
 
@@ -94,7 +104,7 @@ def setup_data_provider(
 
 
 def setup_run_config(exp_config: dict, run_config_cls: type[RunConfig]) -> RunConfig:
-    exp_config["run_config"]["init_lr"] = exp_config["run_config"]["base_lr"] * dist.size()
+    exp_config["run_config"]["init_lr"] = exp_config["run_config"]["base_lr"] * get_dist_size()
 
     run_config = run_config_cls(**exp_config["run_config"])
 

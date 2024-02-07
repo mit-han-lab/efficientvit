@@ -6,11 +6,10 @@ import os
 
 import torch
 import torch.nn as nn
-import torchpack.distributed as dist
 
 from efficientvit.apps.data_provider import DataProvider, parse_image_size
 from efficientvit.apps.trainer.run_config import RunConfig
-from efficientvit.apps.utils import EMA
+from efficientvit.apps.utils import EMA, dist_barrier, get_dist_local_rank, is_master
 from efficientvit.models.nn.norm import reset_bn
 from efficientvit.models.utils import is_parallel, load_state_dict_from_file
 
@@ -47,7 +46,7 @@ class Trainer:
         return model
 
     def write_log(self, log_str, prefix="valid", print_log=True, mode="a") -> None:
-        if dist.is_master():
+        if is_master():
             fout = open(os.path.join(self.logs_path, f"{prefix}.log"), mode)
             fout.write(log_str + "\n")
             fout.flush()
@@ -62,7 +61,7 @@ class Trainer:
         epoch=0,
         model_name=None,
     ) -> None:
-        if dist.is_master():
+        if is_master():
             if checkpoint is None:
                 if only_state_dict:
                     checkpoint = {"state_dict": self.network.state_dict()}
@@ -208,7 +207,7 @@ class Trainer:
         self.run_config = run_config
         self.model = nn.parallel.DistributedDataParallel(
             self.model.cuda(),
-            device_ids=[dist.local_rank()],
+            device_ids=[get_dist_local_rank()],
             static_graph=True,
         )
 
@@ -229,12 +228,12 @@ class Trainer:
     def sync_model(self):
         print("Sync model")
         self.save_model(model_name="sync.pt")
-        dist.barrier()
+        dist_barrier()
         checkpoint = torch.load(os.path.join(self.checkpoint_path, "sync.pt"), map_location="cpu")
-        dist.barrier()
-        if dist.is_master():
+        dist_barrier()
+        if is_master():
             os.remove(os.path.join(self.checkpoint_path, "sync.pt"))
-        dist.barrier()
+        dist_barrier()
 
         # load checkpoint
         self.network.load_state_dict(checkpoint["state_dict"], strict=False)

@@ -1,6 +1,9 @@
 *.DS_Store*
 .vscode
 __pycache__/
-assets/checkpoints/
 .dev/
 .exp/
+
+assets/checkpoints/
+assets/export_models/
+coco/

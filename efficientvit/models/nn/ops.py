@@ -460,6 +460,7 @@ class EfficientViTBlock(nn.Module):
         heads_ratio: float = 1.0,
         dim=32,
         expand_ratio: float = 4,
+        scales=(5,),
         norm="bn2d",
         act_func="hswish",
     ):
@@ -471,6 +472,7 @@ class EfficientViTBlock(nn.Module):
                 heads_ratio=heads_ratio,
                 dim=dim,
                 norm=(None, norm),
+                scales=scales,
             ),
             IdentityLayer(),
         )
