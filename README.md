@@ -65,6 +65,7 @@ Han Cai: <hancai@mit.edu>
 - [x] EfficientViT L series, designed for cloud
 - [x] EfficientViT for segment anything
 - [ ] EfficientViT for image generation
+- [ ] EfficientViT for CLIP
 - [ ] EfficientViT for super-resolution
 - [ ] Segmentation training code
 
