@@ -79,7 +79,7 @@ model = create_cls_model(
 
 Please run `eval_cls_model.py` to evaluate our models.
 
-Examples: [classification](assets/files/eval_cls_model.sh)
+Examples: [classification](../assets/files/eval_cls_model.sh)
 
 ## Export
 

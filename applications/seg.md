@@ -104,7 +104,7 @@ model = create_seg_model(
 
 Please run `eval_seg_model.py` to evaluate our models.
 
-Examples: [segmentation](assets/files/eval_seg_model.sh)
+Examples: [segmentation](../assets/files/eval_seg_model.sh)
 
 ## Visualization
 
