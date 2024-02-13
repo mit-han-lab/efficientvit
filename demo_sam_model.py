@@ -131,6 +131,11 @@ def main():
     parser.add_argument("--point", type=str, default=None)
     parser.add_argument("--box", type=str, default=None)
 
+    # EfficientViTSamAutomaticMaskGenerator args
+    parser.add_argument("--pred_iou_thresh", type=float, default=0.8)
+    parser.add_argument("--stability_score_thresh", type=float, default=0.85)
+    parser.add_argument("--min_mask_region_area", type=float, default=100)
+
     args, opt = parser.parse_known_args()
     opt = parse_unknown_args(opt)
 
@@ -138,7 +143,11 @@ def main():
     efficientvit_sam = create_sam_model(args.model, True, args.weight_url).cuda().eval()
     efficientvit_sam_predictor = EfficientViTSamPredictor(efficientvit_sam)
     efficientvit_mask_generator = EfficientViTSamAutomaticMaskGenerator(
-        efficientvit_sam, **build_kwargs_from_config(opt, EfficientViTSamAutomaticMaskGenerator)
+        efficientvit_sam,
+        pred_iou_thresh=args.pred_iou_thresh,
+        stability_score_thresh=args.stability_score_thresh,
+        min_mask_region_area=args.min_mask_region_area,
+        **build_kwargs_from_config(opt, EfficientViTSamAutomaticMaskGenerator),
     )
 
     # load image
