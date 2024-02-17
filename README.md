@@ -7,9 +7,6 @@
 - [2024/02/08] Tech report of EfficientViT-SAM is available: [arxiv](https://arxiv.org/abs/2402.05008).
 - [2024/02/07] We released EfficientViT-SAM, the first accelerated SAM model that matches/outperforms SAM-ViT-H's zero-shot performance, delivering the SOTA performance-efficiency trade-off.
 - [2023/11/20] EfficientViT is available in the [NVIDIA Jetson Generative AI Lab](https://www.jetson-ai-lab.com/tutorial_efficientvit.html).
-- [2023/11/20] We will soon release the second version of EfficientViT SAM models.
-- [2023/10/22] ImageNet training scripts for the EfficientViT L series have been released.
-- [2023/09/18] **EfficientViT for Segment Anything Model (SAM)** is released. EfficientViT SAM runs at 1009 images/s on A100 GPU, compared to ViT-H (12 images/s), mobileSAM (297 images/s), and nanoSAM (744 image/s, but much lower mIoU)
 - [2023/09/12] EfficientViT is highlighted by [MIT home page](https://www.mit.edu/archive/spotlight/efficient-computer-vision/) and [MIT News](https://news.mit.edu/2023/ai-model-high-resolution-computer-vision-0912).
 - [2023/07/18] EfficientViT is accepted by ICCV 2023.
 
