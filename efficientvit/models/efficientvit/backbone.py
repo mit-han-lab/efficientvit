@@ -49,7 +49,7 @@ class EfficientViTBackbone(nn.Module):
         # input stem
         self.input_stem = [
             ConvLayer(
-                in_channels=3,
+                in_channels=in_channels,
                 out_channels=width_list[0],
                 stride=2,
                 norm=norm,
