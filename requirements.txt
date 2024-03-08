@@ -1,8 +1,8 @@
-torch==2.0.1
-torchvision==0.15.2
+torch
+torchvision
 einops
 opencv-python
-timm==0.6.13
+timm
 tqdm
 torchprofile
 
