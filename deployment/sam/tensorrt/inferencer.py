@@ -245,7 +245,7 @@ class SAMEncoderInferencer(TRTInferencer):
 class SAMDecoderInferencer(TRTInferencer):
     """Implements inference for the EfficientViT-SAM Decoder TensorRT engine."""
 
-    def __init__(self, engine_path, num=None, batch_size=None):
+    def __init__(self, engine_path, mode="points", num=None, batch_size=None):
         """Initializes TensorRT objects needed for model inference.
 
         Args:
@@ -254,6 +254,8 @@ class SAMDecoderInferencer(TRTInferencer):
             num (int): number of points, 2x when the prompt is box
         """
         super().__init__(engine_path)
+        assert mode in ["points", "boxes"]
+        self.mode = mode
         self.max_batch_size = self.engine.max_batch_size
         self.execute_v2 = False
         self.context = None
@@ -264,11 +266,16 @@ class SAMDecoderInferencer(TRTInferencer):
         for binding in range(self.engine.num_bindings):
             # set binding_shape for dynamic input
             if self.engine.binding_is_input(binding):
+                if binding == 0:
+                    bs = batch_size # num images
+                else:
+                    bs = num # num points
                 _input_shape = list(self.engine.get_binding_shape(binding)[1:])
                 if binding != 0:
-                    _input_shape[0] = num
+                    _input_shape[0] = 1 if mode == "points" else 2
+                _input_shape = [bs] + _input_shape
                 self._input_shape.append(_input_shape)
-                self.context.set_binding_shape(binding, [batch_size] + _input_shape)
+                self.context.set_binding_shape(binding, _input_shape)
 
         self.max_batch_size = batch_size
         self.execute_v2 = True
@@ -277,10 +284,9 @@ class SAMDecoderInferencer(TRTInferencer):
         if self.context is None:
             self.context = self.engine.create_execution_context()
 
-        input_volumes = [trt.volume(shape) for shape in self._input_shape]
         dtypes = (float, float, float)
         self.numpy_array = [
-            np.zeros((self.max_batch_size, volume), dtype=dtype) for volume, dtype in zip(input_volumes, dtypes)
+            np.zeros(shape, dtype=dtype) for shape, dtype in zip(self._input_shape, dtypes)
         ]
 
     def infer(self, inputs):
@@ -294,7 +300,7 @@ class SAMDecoderInferencer(TRTInferencer):
 
         for idx, inp in enumerate(inputs):
             actual_batch_size = len(inp)
-            self.numpy_array[idx][:actual_batch_size] = inp.reshape(actual_batch_size, -1)
+            self.numpy_array[idx][:actual_batch_size] = inp
             np.copyto(self.inputs[idx].host, self.numpy_array[idx].ravel())
 
         results = do_inference(
