@@ -2,8 +2,7 @@ import argparse
 import os
 import sys
 import warnings
-from typing import Tuple, List
-from functools import partial
+from typing import Tuple
 
 import torch
 import torch.nn as nn
@@ -16,50 +15,6 @@ sys.path.append(ROOT_DIR)
 from efficientvit.models.efficientvit.sam import EfficientViTSam
 from efficientvit.sam_model_zoo import create_sam_model
 
-def sam_predict_masks_monkey_patch(
-        self,
-        image_embeddings: torch.Tensor,
-        image_pe: torch.Tensor,
-        sparse_prompt_embeddings: torch.Tensor,
-        dense_prompt_embeddings: torch.Tensor,
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
-    """
-    xuanlin: Seems that torch.repeat_interleave has issues in onnx -> tensorrt conversion, so I replaced it with torch.tile.
-    """
-    
-    # Concatenate output tokens
-    output_tokens = torch.cat([self.iou_token.weight, self.mask_tokens.weight], dim=0)
-    output_tokens = output_tokens.unsqueeze(0).expand(sparse_prompt_embeddings.size(0), -1, -1)
-    tokens = torch.cat((output_tokens, sparse_prompt_embeddings), dim=1)
-
-    # Expand per-image data in batch direction to be per-mask
-    # src = torch.repeat_interleave(image_embeddings, tokens.shape[0], dim=0)
-    src = torch.tile(image_embeddings, (tokens.shape[0], 1, 1, 1))
-    src = src + dense_prompt_embeddings
-    # pos_src = torch.repeat_interleave(image_pe, tokens.shape[0], dim=0)
-    pos_src = torch.tile(image_pe, (tokens.shape[0], 1, 1, 1))
-    b, c, h, w = src.shape
-
-    # Run the transformer
-    hs, src = self.transformer(src, pos_src, tokens)
-    iou_token_out = hs[:, 0, :]
-    mask_tokens_out = hs[:, 1 : (1 + self.num_mask_tokens), :]
-
-    # Upscale mask embeddings and predict masks using the mask tokens
-    src = src.transpose(1, 2).view(b, c, h, w)
-    upscaled_embedding = self.output_upscaling(src)
-    hyper_in_list: List[torch.Tensor] = []
-    for i in range(self.num_mask_tokens):
-        hyper_in_list.append(self.output_hypernetworks_mlps[i](mask_tokens_out[:, i, :]))
-    hyper_in = torch.stack(hyper_in_list, dim=1)
-    b, c, h, w = upscaled_embedding.shape
-    masks = (hyper_in @ upscaled_embedding.view(b, c, h * w)).view(b, -1, h, w)
-
-    # Generate mask quality predictions
-    iou_pred = self.iou_prediction_head(iou_token_out)
-
-    return masks, iou_pred
-
 
 class DecoderOnnxModel(nn.Module):
     """
@@ -69,7 +24,6 @@ class DecoderOnnxModel(nn.Module):
     def __init__(self, model: EfficientViTSam, return_single_mask: bool) -> None:
         super().__init__()
         self.model = model
-        self.model.mask_decoder.predict_masks = partial(sam_predict_masks_monkey_patch, self.model.mask_decoder)
         self.mask_decoder = model.mask_decoder
         self.img_size = model.image_size[0]
         self.return_single_mask = return_single_mask
