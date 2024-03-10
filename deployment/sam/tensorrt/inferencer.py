@@ -267,8 +267,10 @@ class SAMDecoderInferencer(TRTInferencer):
                 _input_shape = list(self.engine.get_binding_shape(binding)[1:])
                 if binding != 0:
                     _input_shape[0] = num
+                    self.context.set_binding_shape(binding, [batch_size] + _input_shape)
+                else:
+                    self.context.set_binding_shape(binding, [1] + _input_shape)
                 self._input_shape.append(_input_shape)
-                self.context.set_binding_shape(binding, [batch_size] + _input_shape)
 
         self.max_batch_size = batch_size
         self.execute_v2 = True
@@ -279,8 +281,9 @@ class SAMDecoderInferencer(TRTInferencer):
 
         input_volumes = [trt.volume(shape) for shape in self._input_shape]
         dtypes = (float, float, float)
+        batch_sizes = [1,] + [batch_size] * len(input_volumes[1:])
         self.numpy_array = [
-            np.zeros((self.max_batch_size, volume), dtype=dtype) for volume, dtype in zip(input_volumes, dtypes)
+            np.zeros((bs, volume), dtype=dtype) for bs, volume, dtype in zip(batch_sizes, input_volumes, dtypes)
         ]
 
     def infer(self, inputs):

@@ -186,16 +186,16 @@ if __name__ == "__main__":
 
         inputs = (image_embedding, point_coords, point_labels)
 
-        trt_decoder = SAMDecoderInferencer(args.decoder_engine, num=point.shape[1], batch_size=1)
+        trt_decoder = SAMDecoderInferencer(args.decoder_engine, num=point.shape[1], batch_size=point.shape[0])
         low_res_masks, _ = trt_decoder.infer(inputs)
-        low_res_masks = low_res_masks.reshape(1, 1, 256, 256)
+        low_res_masks = low_res_masks.reshape(1, -1, 256, 256)
 
-        masks = mask_postprocessing(low_res_masks, origin_image_size)
+        masks = mask_postprocessing(low_res_masks, origin_image_size)[0]
         masks = masks > 0.0
 
         plt.imshow(raw_img)
         for mask in masks:
-            show_mask(mask, plt.gca())
+            show_mask(mask, plt.gca(), random_color=len(masks)>1)
         show_points(orig_point_coords, orig_point_labels, plt.gca())
         plt.axis("off")
         plt.savefig(args.out_path, bbox_inches="tight", dpi=300, pad_inches=0.0)
@@ -212,16 +212,16 @@ if __name__ == "__main__":
 
         inputs = (image_embedding, point_coords, point_labels)
 
-        trt_decoder = SAMDecoderInferencer(args.decoder_engine, num=len(orig_boxes) * 2, batch_size=1)
+        trt_decoder = SAMDecoderInferencer(args.decoder_engine, num=2, batch_size=boxes.shape[0])
         low_res_masks, _ = trt_decoder.infer(inputs)
-        low_res_masks = low_res_masks.reshape(1, 1, 256, 256)
+        low_res_masks = low_res_masks.reshape(1, -1, 256, 256)
 
-        masks = mask_postprocessing(low_res_masks, origin_image_size)
+        masks = mask_postprocessing(low_res_masks, origin_image_size)[0]
         masks = masks > 0.0
 
         plt.imshow(raw_img)
         for mask in masks:
-            show_mask(mask, plt.gca())
+            show_mask(mask, plt.gca(), random_color=len(masks)>1)
         for box in orig_boxes:
             show_box(box, plt.gca())
         plt.axis("off")
