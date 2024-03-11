@@ -6,11 +6,12 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import onnxruntime as ort
+import tensorrt as trt
 import torch
 import torch.nn.functional as F
 import torchvision.transforms as transforms
 import yaml
-from inferencer import SAMDecoderInferencer, SAMEncoderInferencer
+from torch2trt import TRTModule
 from torchvision.transforms.functional import resize
 
 
@@ -76,11 +77,11 @@ def show_points(coords, labels, ax, marker_size=375):
     )
 
 
-def preprocess(x, img_size):
+def preprocess(x, img_size, device):
     pixel_mean = [123.675 / 255, 116.28 / 255, 103.53 / 255]
     pixel_std = [58.395 / 255, 57.12 / 255, 57.375 / 255]
 
-    x = torch.tensor(x)
+    x = torch.tensor(x).to(device)
     resize_transform = SamResize(img_size)
     x = resize_transform(x).float() / 255
     x = transforms.Normalize(mean=pixel_mean, std=pixel_std)(x)
@@ -88,7 +89,7 @@ def preprocess(x, img_size):
     h, w = x.shape[-2:]
     th, tw = img_size, img_size
     assert th >= h and tw >= w
-    x = F.pad(x, (0, tw - w, 0, th - h), value=0).unsqueeze(0).numpy()
+    x = F.pad(x, (0, tw - w, 0, th - h), value=0).unsqueeze(0)
 
     return x
 
@@ -158,19 +159,37 @@ if __name__ == "__main__":
     parser.add_argument("--boxes", type=str, default=None)
     args = parser.parse_args()
 
-    trt_encoder = SAMEncoderInferencer(args.encoder_engine, batch_size=1)
+    with trt.Logger() as logger, trt.Runtime(logger) as runtime:
+        with open(args.encoder_engine, 'rb') as f:
+            engine_bytes = f.read()
+        engine = runtime.deserialize_cuda_engine(engine_bytes)
+    trt_encoder = TRTModule(
+        engine,
+        input_names=["input_image"],
+        output_names=["image_embeddings"]
+    )
+
+    with trt.Logger() as logger, trt.Runtime(logger) as runtime:
+        with open(args.decoder_engine, 'rb') as f:
+            engine_bytes = f.read()
+        engine = runtime.deserialize_cuda_engine(engine_bytes)
+    trt_decoder = TRTModule(
+        engine,
+        input_names=["image_embeddings", "point_coords", "point_labels"],
+        output_names=["masks", "iou_predictions"]
+    )
 
     raw_img = cv2.cvtColor(cv2.imread(args.img_path), cv2.COLOR_BGR2RGB)
     origin_image_size = raw_img.shape[:2]
 
     if args.model in ["l0", "l1", "l2"]:
-        img = preprocess(raw_img, img_size=512)
+        img = preprocess(raw_img, img_size=512, device="cuda")
     elif args.model in ["xl0", "xl1"]:
-        img = preprocess(raw_img, img_size=1024)
+        img = preprocess(raw_img, img_size=1024, device="cuda")
     else:
         raise NotImplementedError
 
-    image_embedding = trt_encoder.infer(img)
+    image_embedding = trt_encoder(img)
     image_embedding = image_embedding[0].reshape(1, 256, 64, 64)
 
     input_size = get_preprocess_shape(*origin_image_size, long_side_length=1024)
@@ -184,14 +203,15 @@ if __name__ == "__main__":
         orig_point_labels = deepcopy(point_labels)
         point_coords = apply_coords(point_coords, origin_image_size, input_size).astype(np.float32)
 
-        inputs = (image_embedding, point_coords, point_labels)
+        inputs = (image_embedding, torch.from_numpy(point_coords).to("cuda"), torch.from_numpy(point_labels).to("cuda"))
+        assert all([x.dtype == torch.float32 for x in inputs])
 
-        trt_decoder = SAMDecoderInferencer(args.decoder_engine, num=point.shape[1], batch_size=point.shape[0])
-        low_res_masks, _ = trt_decoder.infer(inputs)
+        low_res_masks, _ = trt_decoder(*inputs)
         low_res_masks = low_res_masks.reshape(1, -1, 256, 256)
 
         masks = mask_postprocessing(low_res_masks, origin_image_size)[0]
         masks = masks > 0.0
+        masks = masks.cpu().numpy()
 
         plt.imshow(raw_img)
         for mask in masks:
@@ -210,14 +230,15 @@ if __name__ == "__main__":
         point_coords = boxes
         point_labels = box_label
 
-        inputs = (image_embedding, point_coords, point_labels)
+        inputs = (image_embedding, torch.from_numpy(point_coords).to("cuda"), torch.from_numpy(point_labels).to("cuda"))
+        assert all([x.dtype == torch.float32 for x in inputs])
 
-        trt_decoder = SAMDecoderInferencer(args.decoder_engine, num=2, batch_size=boxes.shape[0])
-        low_res_masks, _ = trt_decoder.infer(inputs)
+        low_res_masks, _ = trt_decoder(*inputs)
         low_res_masks = low_res_masks.reshape(1, -1, 256, 256)
 
         masks = mask_postprocessing(low_res_masks, origin_image_size)[0]
         masks = masks > 0.0
+        masks = masks.cpu().numpy()
 
         plt.imshow(raw_img)
         for mask in masks:
