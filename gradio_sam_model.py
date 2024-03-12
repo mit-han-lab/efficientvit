@@ -361,11 +361,11 @@ def segment_with_box(
         return plots
     return image
 
-img_s = gr.Image(label="Input SAM", type="pil")
+img_s = gr.Image(label="Input image", type="pil")
 img_p = gr.Image(label="Input with points", type="pil")
 img_b = gr.Image(label="Input with box", type="pil")
 
-with gr.Blocks(css=css, title="EfficientSAM") as demo:
+with gr.Blocks(css=css, title="EfficientViT-SAM: Accelerated Segment Anything Model Without Performance Loss") as demo:
     with gr.Row():
         with gr.Column(scale=1):
             # Title
