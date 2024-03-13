@@ -3,7 +3,6 @@
 import torch
 import gradio as gr
 from PIL import ImageDraw
-# from utils.tools_gradio import fast_process
 import copy
 import argparse
 import argparse
@@ -13,9 +12,7 @@ import time
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-import yaml
 from matplotlib.patches import Rectangle
-from PIL import Image
 
 from efficientvit.apps.utils import parse_unknown_args
 from efficientvit.models.efficientvit.sam import EfficientViTSamAutomaticMaskGenerator, EfficientViTSamPredictor
@@ -70,14 +67,7 @@ efficientvit_mask_generator = EfficientViTSamAutomaticMaskGenerator(
 
 
 examples = [
-    ["assets/fig/cat.jpg"],
-    ["assets/fig/1.jpeg"],
-    ["assets/fig/2.jpeg"],
-    ["assets/fig/3.jpeg"],
-    ["assets/fig/4.jpeg"],
-    ["assets/fig/5.jpeg"],
-    ["assets/fig/6.jpeg"],
-    ["assets/fig/7.jpeg"],
+    ["assets/fig/bear.jpeg"]
 ]
 
 # Description
@@ -196,34 +186,10 @@ def on_image_upload(image, input_size=1024):
     image = image.resize((new_w, new_h))
     global_image = copy.deepcopy(image)
     global_image_with_prompt = copy.deepcopy(image)
-    # print("Image changed")
     nd_image = np.array(global_image)
     efficientvit_sam_predictor.set_image(nd_image)
-
     return image
 
-def image_resize(image,input_size=1024):
-    global global_points
-    global global_point_label
-    global global_box
-    global global_image
-    global global_image_with_prompt
-    global_points = []
-    global_point_label = []
-    global_box = []
-
-    input_size = int(input_size)
-    w, h = image.size
-    scale = input_size / max(w, h)
-    new_w = int(w * scale)
-    new_h = int(h * scale)
-    image = image.resize((new_w, new_h))
-    global_image = copy.deepcopy(image)
-    global_image_with_prompt = copy.deepcopy(image)
-    # print("Image changed")
-    nd_image = np.array(global_image)
-
-    return image
 
 def convert_box(xyxy):
     min_x = min(xyxy[0][0], xyxy[1][0])
@@ -249,11 +215,6 @@ def segment_anything():
 def segment_with_points(
         label,
         evt: gr.SelectData,
-        input_size=1024,
-        better_quality=False,
-        withContours=True,
-        use_retina=True,
-        mask_random_color=False,
 ):
     global global_points
     global global_point_label
@@ -263,9 +224,6 @@ def segment_with_points(
     point_radius, point_color = 5, (97, 217, 54) if label == "Positive" else (237, 34, 13)
     global_points.append([x, y])
     global_point_label.append(1 if label == "Positive" else 0)
-
-    # print(f'global_points: {global_points}')
-    # print(f'global_point_label: {global_point_label}')
 
     draw = ImageDraw.Draw(global_image_with_prompt)
     draw.ellipse(
@@ -300,19 +258,13 @@ def segment_with_points(
 
 def segment_with_box(
         evt: gr.SelectData,
-        input_size=1024,
-        better_quality=False,
-        withContours=True,
-        use_retina=True,
-        mask_random_color=False,
 ):
     global global_box
     global global_image
     global global_image_with_prompt
 
     x, y = evt.index[0], evt.index[1]
-    point_radius, point_color, box_outline = 5, (97, 217, 54), 5
-    box_color = (0, 255, 0)
+    point_radius, point_color = 5, (97, 217, 54)
 
     if len(global_box) == 0:
         global_box.append([x, y])
@@ -322,7 +274,6 @@ def segment_with_box(
         global_image_with_prompt = copy.deepcopy(global_image)
         global_box = [[x, y]]
 
-    # print(f'global_box: {global_box}')
     draw = ImageDraw.Draw(global_image_with_prompt)
     draw.ellipse(
         [(x - point_radius, y - point_radius), (x + point_radius, y + point_radius)],
@@ -332,12 +283,6 @@ def segment_with_box(
 
     if len(global_box) == 2:
         global_box = convert_box(global_box)
-        # xy = (global_box[0][0], global_box[0][1], global_box[1][0], global_box[1][1])
-        # draw.rectangle(
-        #     xy,
-        #     outline=box_color,
-        #     width=box_outline
-        # )
         raw_image = np.array(image)
         global_box_np = np.array(global_box)
         global_box_np.reshape(1,-1)
@@ -450,10 +395,6 @@ with gr.Blocks(css=css, title="EfficientViT-SAM: Accelerated Segment Anything Mo
                     run_on_click=True
                 )
 
-    # with gr.Row():
-    #     with gr.Column(scale=1):
-    #         gr.Markdown(
-    #             "<center><img src='https://visitor-badge.laobi.icu/badge?page_id=chongzhou/EfficientSAM' alt='visitors'></center>")
     img_s.upload(on_image_upload, img_s, [img_s])
     reset_btn_s.click(reset, outputs=[img_s])
     sam_btn_s.click(segment_anything,outputs=[img_s])
