@@ -160,23 +160,19 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     with trt.Logger() as logger, trt.Runtime(logger) as runtime:
-        with open(args.encoder_engine, 'rb') as f:
+        with open(args.encoder_engine, "rb") as f:
             engine_bytes = f.read()
         engine = runtime.deserialize_cuda_engine(engine_bytes)
-    trt_encoder = TRTModule(
-        engine,
-        input_names=["input_image"],
-        output_names=["image_embeddings"]
-    )
+    trt_encoder = TRTModule(engine, input_names=["input_image"], output_names=["image_embeddings"])
 
     with trt.Logger() as logger, trt.Runtime(logger) as runtime:
-        with open(args.decoder_engine, 'rb') as f:
+        with open(args.decoder_engine, "rb") as f:
             engine_bytes = f.read()
         engine = runtime.deserialize_cuda_engine(engine_bytes)
     trt_decoder = TRTModule(
         engine,
         input_names=["image_embeddings", "point_coords", "point_labels"],
-        output_names=["masks", "iou_predictions"]
+        output_names=["masks", "iou_predictions"],
     )
 
     raw_img = cv2.cvtColor(cv2.imread(args.img_path), cv2.COLOR_BGR2RGB)
@@ -215,7 +211,7 @@ if __name__ == "__main__":
 
         plt.imshow(raw_img)
         for mask in masks:
-            show_mask(mask, plt.gca(), random_color=len(masks)>1)
+            show_mask(mask, plt.gca(), random_color=len(masks) > 1)
         show_points(orig_point_coords, orig_point_labels, plt.gca())
         plt.axis("off")
         plt.savefig(args.out_path, bbox_inches="tight", dpi=300, pad_inches=0.0)
@@ -242,7 +238,7 @@ if __name__ == "__main__":
 
         plt.imshow(raw_img)
         for mask in masks:
-            show_mask(mask, plt.gca(), random_color=len(masks)>1)
+            show_mask(mask, plt.gca(), random_color=len(masks) > 1)
         for box in orig_boxes:
             show_box(box, plt.gca())
         plt.axis("off")

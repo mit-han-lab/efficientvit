@@ -1,44 +1,32 @@
 # Code credit: [FastSAM Demo](https://huggingface.co/spaces/An-619/FastSAM).
 
-import torch
-import gradio as gr
-from PIL import ImageDraw
+import argparse
 import copy
-import argparse
-import argparse
 import os
 import time
 
 import cv2
+import gradio as gr
 import matplotlib.pyplot as plt
 import numpy as np
+import torch
 from matplotlib.patches import Rectangle
+from PIL import ImageDraw
 
+from demo_sam_model import cat_images, draw_bbox, draw_binary_mask, draw_scatter, load_image, show_anns
 from efficientvit.apps.utils import parse_unknown_args
 from efficientvit.models.efficientvit.sam import EfficientViTSamAutomaticMaskGenerator, EfficientViTSamPredictor
 from efficientvit.models.utils import build_kwargs_from_config
 from efficientvit.sam_model_zoo import create_sam_model
-from demo_sam_model import  draw_bbox ,draw_binary_mask,draw_scatter,load_image,cat_images,show_anns
 
-
-parser = argparse.ArgumentParser(
-    description="Host  EfficientViT-SAM as a local web service."
-)
+parser = argparse.ArgumentParser(description="Host  EfficientViT-SAM as a local web service.")
 
 parser.add_argument(
-    "--server-name",
-    default="127.0.0.1",
-    type=str,
-    help="The server address that this demo will be hosted on."
+    "--server-name", default="127.0.0.1", type=str, help="The server address that this demo will be hosted on."
 )
-parser.add_argument(
-    "--port",
-    default=8080,
-    type=int,
-    help="The port that this demo will be hosted on."
-)
+parser.add_argument("--port", default=8080, type=int, help="The port that this demo will be hosted on.")
 
-parser.add_argument("--model", default='xl1',type=str)
+parser.add_argument("--model", default="xl1", type=str)
 
 
 parser.add_argument("--weight_url", type=str, default=None)
@@ -66,9 +54,7 @@ efficientvit_mask_generator = EfficientViTSamAutomaticMaskGenerator(
 )
 
 
-examples = [
-    ["assets/fig/bear.jpeg"]
-]
+examples = [["assets/fig/bear.jpeg"]]
 
 # Description
 title = "<center><strong><font size='8'> EfficientViT-SAM<font></strong> <a href='https://github.com/mit-han-lab/efficientvit'><font size='6'>[GitHub]</font></a> </center>"
@@ -109,6 +95,7 @@ global_image = None
 global_image_with_prompt = None
 tmp_file = f".tmp_{time.time()}.png"
 
+
 def draw_mask(
     image: np.ndarray,
     mask,
@@ -126,6 +113,7 @@ def draw_mask(
     os.remove(tmp_name)
     plt.close()
     return image
+
 
 def reset():
     global global_points
@@ -152,7 +140,7 @@ def reset_all():
     global_box = []
     global_image = None
     global_image_with_prompt = None
-    return None, None,None
+    return None, None, None
 
 
 def clear():
@@ -208,13 +196,13 @@ def segment_anything():
     image = global_image_with_prompt
     raw_image = np.array(image)
     masks = efficientvit_mask_generator.generate(raw_image)
-    plots = draw_mask(raw_image,masks)
+    plots = draw_mask(raw_image, masks)
     return plots
 
 
 def segment_with_points(
-        label,
-        evt: gr.SelectData,
+    label,
+    evt: gr.SelectData,
 ):
     global global_points
     global global_point_label
@@ -240,7 +228,7 @@ def segment_with_points(
         point_labels=global_point_label_np,
         multimask_output=args.multimask,
     )
-    
+
     plots = [
         draw_scatter(
             draw_binary_mask(raw_image, binary_mask, (0, 0, 255)),
@@ -257,7 +245,7 @@ def segment_with_points(
 
 
 def segment_with_box(
-        evt: gr.SelectData,
+    evt: gr.SelectData,
 ):
     global global_box
     global global_image
@@ -285,14 +273,14 @@ def segment_with_box(
         global_box = convert_box(global_box)
         raw_image = np.array(image)
         global_box_np = np.array(global_box)
-        global_box_np.reshape(1,-1)
+        global_box_np.reshape(1, -1)
         masks, _, _ = efficientvit_sam_predictor.predict(
             point_coords=None,
             point_labels=None,
             box=global_box_np,
             multimask_output=args.multimask,
         )
-        global_box_np =[global_box_np[0][0],global_box_np[0][1],global_box_np[1][0],global_box_np[1][1]]
+        global_box_np = [global_box_np[0][0], global_box_np[0][1], global_box_np[1][0], global_box_np[1][1]]
         plots = [
             draw_bbox(
                 draw_binary_mask(raw_image, binary_mask, (0, 0, 255)),
@@ -305,6 +293,7 @@ def segment_with_box(
         plots = cat_images(plots, axis=1)
         return plots
     return image
+
 
 img_s = gr.Image(label="Input image", type="pil")
 img_p = gr.Image(label="Input with points", type="pil")
@@ -338,7 +327,7 @@ with gr.Blocks(css=css, title="EfficientViT-SAM: Accelerated Segment Anything Mo
                     outputs=[img_s],
                     examples_per_page=8,
                     fn=on_image_upload,
-                    run_on_click=True
+                    run_on_click=True,
                 )
 
     with gr.Tab("Point mode") as tab_p:
@@ -348,11 +337,7 @@ with gr.Blocks(css=css, title="EfficientViT-SAM: Accelerated Segment Anything Mo
                 img_p.render()
             with gr.Column(scale=1):
                 with gr.Row():
-                    add_or_remove = gr.Radio(
-                        ["Positive", "Negative"],
-                        value="Positive",
-                        label="Point Type"
-                    )
+                    add_or_remove = gr.Radio(["Positive", "Negative"], value="Positive", label="Point Type")
 
                     with gr.Column():
                         clear_btn_p = gr.Button("Clear", variant="secondary")
@@ -369,7 +354,7 @@ with gr.Blocks(css=css, title="EfficientViT-SAM: Accelerated Segment Anything Mo
                     outputs=[img_p],
                     examples_per_page=8,
                     fn=on_image_upload,
-                    run_on_click=True
+                    run_on_click=True,
                 )
 
     with gr.Tab("Box mode") as tab_b:
@@ -392,27 +377,27 @@ with gr.Blocks(css=css, title="EfficientViT-SAM: Accelerated Segment Anything Mo
                     outputs=[img_b],
                     examples_per_page=8,
                     fn=on_image_upload,
-                    run_on_click=True
+                    run_on_click=True,
                 )
 
     img_s.upload(on_image_upload, img_s, [img_s])
     reset_btn_s.click(reset, outputs=[img_s])
-    sam_btn_s.click(segment_anything,outputs=[img_s])
-    tab_s.select(fn=reset_all, outputs=[img_s,img_p, img_b])
+    sam_btn_s.click(segment_anything, outputs=[img_s])
+    tab_s.select(fn=reset_all, outputs=[img_s, img_p, img_b])
 
     img_p.upload(on_image_upload, img_p, [img_p])
     img_p.select(segment_with_points, [add_or_remove], img_p)
 
     clear_btn_p.click(clear, outputs=[img_p])
     reset_btn_p.click(reset, outputs=[img_p])
-    tab_p.select(fn=reset_all, outputs=[img_s,img_p, img_b])
+    tab_p.select(fn=reset_all, outputs=[img_s, img_p, img_b])
 
     img_b.upload(on_image_upload, img_b, [img_b])
     img_b.select(segment_with_box, outputs=[img_b])
 
     clear_btn_b.click(clear, outputs=[img_b])
     reset_btn_b.click(reset, outputs=[img_b])
-    tab_b.select(fn=reset_all, outputs=[img_s,img_p, img_b])
+    tab_b.select(fn=reset_all, outputs=[img_s, img_p, img_b])
 
 demo.queue()
 demo.launch(server_name=args.server_name, server_port=args.port)

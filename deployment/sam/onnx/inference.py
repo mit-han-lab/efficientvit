@@ -229,7 +229,7 @@ if __name__ == "__main__":
         plt.figure(figsize=(10, 10))
         plt.imshow(raw_img)
         for mask in masks:
-            show_mask(mask, plt.gca(), random_color=len(masks)>1)
+            show_mask(mask, plt.gca(), random_color=len(masks) > 1)
         show_points(point_coords, point_labels, plt.gca())
         plt.axis("off")
         plt.savefig(args.out_path, bbox_inches="tight", dpi=300, pad_inches=0.0)
@@ -245,7 +245,7 @@ if __name__ == "__main__":
         plt.figure(figsize=(10, 10))
         plt.imshow(raw_img)
         for mask in masks:
-            show_mask(mask, plt.gca(), random_color=len(masks)>1)
+            show_mask(mask, plt.gca(), random_color=len(masks) > 1)
         for box in boxes:
             show_box(box, plt.gca())
         plt.axis("off")

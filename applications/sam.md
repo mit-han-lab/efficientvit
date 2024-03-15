@@ -143,7 +143,7 @@ python demo_sam_model.py --model xl1 --mode box --box "[150,70,640,400]"
 
 ```
 
-## Web demo
+## Web Demo
 
 You can start an interactive web demo with the following command:
 
@@ -151,8 +151,6 @@ You can start an interactive web demo with the following command:
 python gradio_sam_model.py --model xl1  --server-name  "127.0.0.1"  --port 8000
 
 ```
-
-
 
 ## Deployment
 
