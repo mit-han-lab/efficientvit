@@ -143,15 +143,6 @@ python demo_sam_model.py --model xl1 --mode box --box "[150,70,640,400]"
 
 ```
 
-## Web Demo
-
-You can start an interactive web demo with the following command:
-
-```bash
-python gradio_sam_model.py --model xl1  --server-name  "127.0.0.1"  --port 8000
-
-```
-
 ## Deployment
 
 ### ONNX Export
@@ -168,7 +159,7 @@ python deployment/sam/onnx/export_decoder.py --model xl1 --weight_url assets/che
 
 ```python
 # ONNX Inference
-python deployment/sam/onnx/inference.py --model xl1 --encoder_model assets/export_models/sam/onnx/xl1_encoder.onnx --decoder_model assets/export_models/sam/onnx/xl1_decoder.onnx --mode point
+python -m deployment.sam.onnx.inference --model xl1 --encoder_model assets/export_models/sam/onnx/xl1_encoder.onnx --decoder_model assets/export_models/sam/onnx/xl1_decoder.onnx --mode point
 ```
 
 ### TensorRT Export
@@ -185,5 +176,5 @@ trtexec --onnx=assets/export_models/sam/onnx/xl1_decoder.onnx --minShapes=point_
 
 ```python
 # TensorRT Inference
-python deployment/sam/tensorrt/inference.py --model xl1 --encoder_engine assets/export_models/sam/tensorrt/xl1_encoder.engine --decoder_engine assets/export_models/sam/tensorrt/xl1_decoder.engine --mode point
+python -m deployment.sam.tensorrt.inference --model xl1 --encoder_engine assets/export_models/sam/tensorrt/xl1_encoder.engine --decoder_engine assets/export_models/sam/tensorrt/xl1_decoder.engine --mode point
 ```

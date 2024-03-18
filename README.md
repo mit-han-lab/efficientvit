@@ -37,7 +37,7 @@ pip install -r requirements.txt
 - [Use in Pytorch](applications/sam.md#usage)
 - [Evaluation](applications/sam.md#evaluation)
 - [Visualization](applications/sam.md#visualization)
-- [Web Demo](applications/sam.md#web-demo)
+- [Web Demo](demo/sam/README.md)
 - [Deployment using ONNX and TensorRT](applications/sam.md#deployment)
 
 <p align="left">
