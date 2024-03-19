@@ -58,3 +58,7 @@ For our box-prompted mode, each box goes towards segmenting a separate object.
 Our full image segmentation mode automatically generates segmentations over the full image.  The segmentation parameters in the slider will change the number and granularity of the final masks displayed.  Feel free to play around with these parameters and reset them to the defaults with the "reset segmentation parameters" button at the bottom.  The segmentation parameters are generally tuned towards our xl models.  When experimenting with our l-series models, you may get better full image segmentation results by changing the slider values.
 
 Either use the images shown in the example bar at the bottom of the demo by clicking on the image, uploading your own image, or clicking the webcam icon to take a picture. 
+
+### Contributor
+
+[Nicole C Stiles](https://github.com/ncstiles)
