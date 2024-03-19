@@ -10,7 +10,7 @@ import torch
 import torch.nn.functional as F
 import torchvision.transforms as transforms
 import yaml
-from export_encoder import SamResize
+from deployment.sam.onnx.export_encoder import SamResize
 
 
 def show_mask(mask, ax, random_color=False):

@@ -17,5 +17,8 @@ git+https://github.com/facebookresearch/segment-anything.git
 
 pycocotools
 
+# demo-specific packages
 gradio
-
+gradio-box-promptable-image
+gradio-point-promptable-image
+gradio-sbmp-promptable-image
