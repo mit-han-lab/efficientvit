@@ -19,6 +19,7 @@ pycocotools
 
 # demo-specific packages
 gradio
+gradio-clickable-arrow-dropdown
 gradio-box-promptable-image
 gradio-point-promptable-image
 gradio-sbmp-promptable-image

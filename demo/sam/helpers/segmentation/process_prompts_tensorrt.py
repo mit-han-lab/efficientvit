@@ -1,3 +1,5 @@
+import numpy as np
+
 from copy import deepcopy
 from demo.sam.helpers.utils import (
     TENSORRT,
@@ -36,8 +38,9 @@ def segment_using_points_tensorrt(prompt_dict, model_name):
     if len(points) == 0:
         return raw_image
 
+    original_points = deepcopy(points)
     point_coords = points[..., :2]
-    original_point_coords = deepcopy(point_coords)
+    point_labels = points[..., 2]
 
     origin_image_size = raw_image.shape[:2]
     input_size = SamResize.get_preprocess_shape(*origin_image_size, long_side_length=1024)
@@ -45,13 +48,14 @@ def segment_using_points_tensorrt(prompt_dict, model_name):
     effvit_sam_predictor = TRTEfficientViTSamPredictor(model_name, encoder_engine_path, decoder_engine_path)
     effvit_sam_predictor.set_image(raw_image)
     masks, _ = effvit_sam_predictor.predict_torch(
-        im_size = input_size,
-        point_coords = point_coords,
+        im_size=input_size,
+        point_coords=point_coords,
+        point_labels=point_labels,
         point_expansion_axis=0)
     
     masks = masks.cpu().numpy()
 
-    return draw_point_masks(raw_image, masks, original_point_coords)
+    return draw_point_masks(raw_image, masks, original_points)
 
 
 def segment_using_boxes_tensorrt(prompt_dict, model_name):
@@ -70,8 +74,8 @@ def segment_using_boxes_tensorrt(prompt_dict, model_name):
     effvit_sam_predictor = TRTEfficientViTSamPredictor(model_name, encoder_engine_path, decoder_engine_path)
     effvit_sam_predictor.set_image(raw_image)
     masks, _ = effvit_sam_predictor.predict_torch(
-        im_size = input_size,
-        boxes = boxes)
+        im_size=input_size,
+        boxes=boxes)
     
     masks = masks.cpu().numpy()
     
@@ -100,19 +104,21 @@ def segment_using_points_and_boxes_tensorrt(prompt_dict, model_name):
     input_size = SamResize.get_preprocess_shape(*origin_image_size, long_side_length=1024)
 
     point_coords = points[..., :2]
-    original_point_coords = deepcopy(point_coords)
+    point_labels = points[..., 2]
+    original_points = deepcopy(points)
 
     effvit_sam_predictor = TRTEfficientViTSamPredictor(model_name, encoder_engine_path, decoder_engine_path)
     effvit_sam_predictor.set_image(raw_image)
     masks, _ = effvit_sam_predictor.predict_torch(
-        im_size = input_size,
-        point_coords = point_coords,
-        point_expansion_axis = 0,
-        boxes = boxes)
+        im_size=input_size,
+        point_coords=point_coords,
+        point_labels=point_labels,
+        point_expansion_axis=0,
+        boxes=boxes)
     
     masks = masks.cpu().numpy()
 
-    return draw_point_and_box_masks(raw_image, masks, original_point_coords, original_boxes)
+    return draw_point_and_box_masks(raw_image, masks, original_points, original_boxes)
 
 
 def segment_full_img_tensorrt(raw_image, model_name, points_per_batch, pred_iou_thresh, stability_score_thresh, box_nms_thresh):
@@ -120,8 +126,8 @@ def segment_full_img_tensorrt(raw_image, model_name, points_per_batch, pred_iou_
     decoder_engine_path = get_full_img_decoder_path(model_name)
     
     effvit_mask_gen = DemoAccelEfficientViTSamAutomaticMaskGenerator(
-        mode = TENSORRT,
-        model_name = model_name,
+        mode=TENSORRT,
+        model_name=model_name,
         encoder_engine_path=encoder_engine_path,
         decoder_engine_path=decoder_engine_path,
     )

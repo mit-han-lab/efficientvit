@@ -1,8 +1,6 @@
 import numpy as np
 import torch
 
-from copy import deepcopy
-
 from demo.sam.helpers.utils import get_device
 from deployment.sam.onnx.inference import SamEncoder, SamDecoder, preprocess
 
@@ -52,6 +50,7 @@ class OnnxEfficientViTSamPredictor:
         self,
         im_size: tuple[int, int],
         point_coords: np.ndarray = None,
+        point_labels: np.ndarray = None,
         point_expansion_axis: int = 1,
         boxes: np.ndarray = None,
         return_logits: bool = False,
@@ -65,6 +64,9 @@ class OnnxEfficientViTSamPredictor:
           im_size (tuple[int, int]): size of the cropped image
           point_coords (np.ndarray or None): A Nx2 array of point prompts to the
             model. Each point is in (X,Y) in pixels.
+          point_labels (np.ndarray or None): A length N array of labels for the
+				point prompts. 1 indicates a foreground point and 0 indicates a
+				background point.
           point_expansion_axis (int): dimension to expand points along.  0 to move all
             points to the same batch.  1 to make each point a separate batch
           boxes (np.ndarray or None): A Nx4 array of boxes to the model.
@@ -80,14 +82,10 @@ class OnnxEfficientViTSamPredictor:
         if not self.is_image_set:
             raise RuntimeError("An image must be set with .set_image(...) before mask prediction.")
         
-        if point_coords is not None:
-            point_labels = np.ones(point_coords.shape[0])
-            
+        if point_coords is not None:            
             point_coords = np.expand_dims(point_coords, axis=point_expansion_axis).astype(np.float32)
             point_labels = np.expand_dims(point_labels, axis=point_expansion_axis).astype(np.float32)  
-        else:
-            point_labels = None
-            
+
         masks, iou_predictions, _ = self.decoder_model.run(
             img_embeddings=self.features,
             origin_image_size=im_size,
