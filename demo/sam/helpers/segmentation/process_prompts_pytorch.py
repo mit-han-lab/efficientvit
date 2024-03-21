@@ -47,8 +47,8 @@ def segment_using_points_pytorch(prompt_dict, model_name):
     if len(points) == 0:
         return raw_image
 
-    point_coords = [(x, y) for x, y, _ in points]
-    point_labels = [l for _, _, l in points]
+    point_coords = points[..., :2]
+    point_labels = points[..., 2]
 
     efficientvit_sam_predictor.set_image(raw_image)
     masks, _, _ = efficientvit_sam_predictor.predict(
@@ -57,7 +57,7 @@ def segment_using_points_pytorch(prompt_dict, model_name):
         multimask_output=MUTLIMASK,
     )
 
-    return draw_point_masks(raw_image, masks, point_coords)
+    return draw_point_masks(raw_image, masks, points)
 
 
 def segment_using_boxes_pytorch(prompt_dict, model_name):
@@ -93,8 +93,8 @@ def segment_using_points_and_boxes_pytorch(prompt_dict, model_name):
     elif len(points) == 0:
         return segment_using_boxes_pytorch(prompt_dict, model_name)
 
-    point_coords = np.array([(x, y) for x, y, _ in points])
-    point_labels = np.array([l for _, _, l in points])
+    point_coords = points[..., :2]
+    point_labels = points[..., 2]
     boxes = np.array(boxes)
 
     efficientvit_sam_predictor.set_image(raw_image)
@@ -105,7 +105,7 @@ def segment_using_points_and_boxes_pytorch(prompt_dict, model_name):
         multimask_output=MUTLIMASK,
     )
 
-    return draw_point_and_box_masks(raw_image, masks, point_coords, boxes)
+    return draw_point_and_box_masks(raw_image, masks, points, boxes)
 
 
 def segment_full_img_pytorch(raw_image, model_name, points_per_batch, pred_iou_thresh, stability_score_thresh, box_nms_thresh):

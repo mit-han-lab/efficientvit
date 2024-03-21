@@ -1,12 +1,13 @@
 import gradio as gr
 import argparse
 
+from gradio_clickable_arrow_dropdown import ClickableArrowDropdown
 from gradio_sbmp_promptable_image import SBMPPromptableImage # single box multiple point
 from gradio_point_promptable_image import PointPromptableImage
 from gradio_box_promptable_image import BoxPromptableImage
 
 from demo.sam.process_prompts import process_points, process_boxes, process_points_and_boxes, process_full_img
-from demo.sam.helpers.utils import MODEL_NAMES, POINTS_PER_BATCH, PRED_IOU_THRESH, STABILITY_SCORE_THRESH, BOX_NMS_THRESH
+from demo.sam.helpers.utils import get_available_models, POINTS_PER_BATCH, PRED_IOU_THRESH, STABILITY_SCORE_THRESH, BOX_NMS_THRESH
 
 
 examples = [[{'image': 'demo/sam/examples/cat.png', 'points': [[]]}],
@@ -17,6 +18,24 @@ examples = [[{'image': 'demo/sam/examples/cat.png', 'points': [[]]}],
 
 example_names = ["demo/sam/examples/cat.png", "demo/sam/examples/cars.png", "demo/sam/examples/lion.png", "demo/sam/examples/bears.png", "demo/sam/examples/buildings.png"]
 
+def build_model_dropdown(runtime):
+    available_models = get_available_models(runtime)
+
+    interactive = len(available_models) > 0
+    if len(available_models) == 0:
+        available_models.append(f"No valid models found for {runtime} runtime")
+    
+    default_model = available_models[0]
+
+    return ClickableArrowDropdown(
+        choices=available_models, 
+        value=default_model, 
+        interactive=interactive,
+        filterable=False,
+        label="Model", 
+        info="Listed in order of decreasing segmentation quality/increasing speed"
+    )
+
 def build_promptable_segmentation_tab(prompter, label, process, runtime):
     output_img = gr.Image()
     with gr.Blocks() as tab_layout:
@@ -24,12 +43,12 @@ def build_promptable_segmentation_tab(prompter, label, process, runtime):
             with gr.Column():
                 with gr.Column(variant="panel"):
                     input_image = prompter(label=label)
-                    model_dropdown_all_masks = gr.Dropdown(MODEL_NAMES, value="xl1", label="Model", info="Listed in order of decreasing segmentation quality/increasing speed")
+                    model_dropdown = build_model_dropdown(runtime)
                     
                     with gr.Row():
                         clear_btn = gr.ClearButton(components=[input_image])
                         submit_btn = gr.Button("Submit", variant="primary")
-                        submit_btn.click(lambda *args: process(*args, runtime=runtime), [input_image, model_dropdown_all_masks], output_img)
+                        submit_btn.click(lambda *args: process(*args, runtime=runtime), [input_image, model_dropdown], output_img)
                     
                 with gr.Column():
                     gr.Examples(examples=examples, inputs=[input_image])
@@ -42,7 +61,8 @@ def build_promptable_segmentation_tab(prompter, label, process, runtime):
 
 def build_automatic_segmentation_tab(runtime):
     output_image_all_masks = gr.Image(show_label=False, elem_id="output_image")
-    model_dropdown_all_masks = gr.Dropdown(MODEL_NAMES, value="xl1", label="Model", info="Listed in order of decreasing segmentation quality/increasing speed")
+    model_dropdown_all_masks = build_model_dropdown(runtime)
+
     points_per_batch = gr.Slider(
                     minimum=1,
                     maximum=128,
@@ -134,21 +154,24 @@ def build_demo(runtime):
         title_formatting = "<center><strong><font size='8'>EfficientViT-SAM</font></strong></center>"
         description = """
             This demo of EfficientViT-SAM can be prompted using points, boxes, a mix of a box and multiple points, as well as automatic full image segmentation.
-
-            ### Notes ###
-            1) The prompts you provide within point segmentation mode and mixed segmentation mode will go towards segmenting a single object, not one object per prompt.
             
             ### Instructions ###
             1) Provide an input to the image segmentation model - either select an image from the examples displayed below, upload your own, or use the webcam!
-            2) To add prompts, simply click to add points and/or click, hold, and release to add boxes.  Note that point mode will only allow for point prompts, 
-            the same being true for box mode.  Mixed segmentation mode allows for both prompt types.
+            2) To add prompts, simply click to add points and/or click, hold, and release to add boxes.  Point mode only registers point prompts, box mode
+            only registers box prompts.  Mixed segmentation mode allows for both prompt types.
             3) Experiment with efficiency differences between our different models by changing the model from the dropdown menu.
-            3) When experimenting with full image segmentation, feel free to play with the segmentation parameters! Hit the "reset segmentation parameters" button
+            4) When experimenting with full image segmentation, feel free to play with the segmentation parameters! Hit the "reset segmentation parameters" button
             at the bottom to return parameters to their default values.
+
+            ### Notes ###
+            1) The prompts you provide within point segmentation mode and mixed segmentation mode will go towards segmenting a single object, not one object per prompt.
+            2) Point prompt options
+                - Left click: add foreground/ positive point
+                - Right click (two-finger click on Mac trackpad): add background/negative point to exclude objects     
 
             [[GitHub](https://github.com/mit-han-lab/efficientvit)] 
             [[Models](https://github.com/mit-han-lab/efficientvit/blob/master/applications/sam.md#pretrained-models)]
-            [[Paper](https://arxiv.org/abs/2205.14756)]
+            [[Paper](https://arxiv.org/abs/2402.05008)]
             """
         
         gr.Markdown(title_formatting)

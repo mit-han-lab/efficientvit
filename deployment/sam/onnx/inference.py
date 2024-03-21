@@ -112,13 +112,19 @@ class SamDecoder:
         if point_coords is not None:
             point_coords = self.apply_coords(point_coords, origin_image_size, input_size).astype(np.float32)
 
+            prompts, labels = point_coords, point_labels
+
         if boxes is not None:
             boxes = self.apply_boxes(boxes, origin_image_size, input_size).astype(np.float32)
-            box_label = np.array([[2, 3] for _ in range(boxes.shape[0])], dtype=np.float32).reshape((-1, 2))
-            point_coords = boxes
-            point_labels = box_label
+            box_labels = np.array([[2, 3] for _ in range(boxes.shape[0])], dtype=np.float32).reshape((-1, 2))
+            
+            if point_coords is not None:
+                prompts = np.concatenate([prompts, boxes], axis=1)
+                labels = np.concatenate([labels, box_labels], axis=1)
+            else:
+                prompts, labels = boxes, box_labels
 
-        input_dict = {"image_embeddings": img_embeddings, "point_coords": point_coords, "point_labels": point_labels}
+        input_dict = {"image_embeddings": img_embeddings, "point_coords": prompts, "point_labels": labels}
         low_res_masks, iou_predictions = self.session.run(None, input_dict)
 
         masks = mask_postprocessing(low_res_masks, origin_image_size)

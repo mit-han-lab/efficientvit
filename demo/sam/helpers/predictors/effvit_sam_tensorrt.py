@@ -84,6 +84,7 @@ class TRTEfficientViTSamPredictor:
         self,
         im_size: tuple[int, int],
         point_coords: np.ndarray = None,
+        point_labels: np.ndarray = None,
         point_expansion_axis: int = 1,
         boxes: np.ndarray = None,
         return_logits: bool = False,
@@ -97,6 +98,9 @@ class TRTEfficientViTSamPredictor:
           im_size (tuple[int, int]): size of the cropped image
           point_coords (np.ndarray or None): A Nx2 array of point prompts to the
             model. Each point is in (X,Y) in pixels.
+          point_labels (np.ndarray or None): A length N array of labels for the
+				point prompts. 1 indicates a foreground point and 0 indicates a
+				background point.
           point_expansion_axis (int): dim across which to expand points.  1 to place each
             point in its own batch, 0 to place all points in the same batch
           boxes (np.ndarray or None): A Nx4 array of box prompts
@@ -113,10 +117,9 @@ class TRTEfficientViTSamPredictor:
             raise RuntimeError("An image must be set with .set_image(...) before mask prediction.")
 
         if point_coords is not None:
-            point_labels = np.ones(point_coords.shape[0], dtype=np.float32)
             point_coords = np.expand_dims(point_coords, axis=point_expansion_axis)
             point_coords = apply_coords(point_coords, self.original_size, im_size).astype(np.float32)
-            point_labels = np.expand_dims(point_labels, axis=point_expansion_axis)
+            point_labels = np.expand_dims(point_labels, axis=point_expansion_axis).astype(np.float32)
 
             prompts, labels = point_coords, point_labels
         

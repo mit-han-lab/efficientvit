@@ -4,10 +4,10 @@
 
 This demo is compatible with three runtimes: PyTorch, ONNX, and TensorRT.  The demo allows experimentation with all five versions of our model: l0, l1, l2, xl0, and xl1.  
 
-Please follow the [Getting Started](../README.md#getting-started) instructions, then follow the runtime-specific instructions below.
+Please follow the [Getting Started](../../README.md#getting-started) instructions, then follow the runtime-specific instructions below.
 
 ### PyTorch-specific installation instructions
-1. Please download the model checkpoint files listed [here](../applications/sam.md#pretrained-models) and save them to the `assets/checkpoints` directory.
+1. Please download the model checkpoint files listed [here](../../applications/sam.md#pretrained-models) and save them to the `assets/checkpoints` directory.
 
 ### ONNX-specific installation instructions
 1. Create ONNX models
@@ -22,7 +22,7 @@ Please follow the [Getting Started](../README.md#getting-started) instructions, 
 
 ### TensorRT-specific installation instructions
 
-1. Please ensure you have CUDA working properly and the packages below installed.
+1. Please ensure you have CUDA working properly and the following packages installed.
 
     a. [tensorrt](https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html)
 
@@ -51,14 +51,19 @@ For users with GPU access, we recommend using the PyTorch runtime to start and e
 
 We offer point-prompted, box-prompted, mixed prompt, and automatically generated image segmentation modes.
 
+A left click creates a positive foreground prompt.  A right click (two-fingered click using Mac trackpad) creates a negative background prompt that works to exclude objects from the segmentation.
+
 For our point-prompted mode and mixed prompt mode, all prompts will go towards segmenting a single object.  For example, if multiple points are added to the image, all points are assumed to be segmenting the same object.  In our mixed prompt mode, we enforce this by only taking into account the last drawn box prompt (with no restriction on the number of point prompts).
 
 For our box-prompted mode, each box goes towards segmenting a separate object.
 
 Our full image segmentation mode automatically generates segmentations over the full image.  The segmentation parameters in the slider will change the number and granularity of the final masks displayed.  Feel free to play around with these parameters and reset them to the defaults with the "reset segmentation parameters" button at the bottom.  The segmentation parameters are generally tuned towards our xl models.  When experimenting with our l-series models, you may get better full image segmentation results by changing the slider values.
 
+The models listed in the dropdown are based on the files you have stored in the default installation directories.  Please ensure you save your models using the instructions above.
+
 Either use the images shown in the example bar at the bottom of the demo by clicking on the image, uploading your own image, or clicking the webcam icon to take a picture. 
+
 
 ### Contributor
 
-[Nicole C Stiles](https://github.com/ncstiles)
+[Nicole Stiles](https://github.com/ncstiles)

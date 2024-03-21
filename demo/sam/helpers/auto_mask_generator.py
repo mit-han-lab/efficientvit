@@ -59,7 +59,12 @@ class DemoAccelEfficientViTSamAutomaticMaskGenerator(DemoEfficientViTSamAutomati
     ) -> MaskData:
         orig_h, orig_w = orig_size
 
-        masks, iou_preds = self.predictor.predict_torch(im_size=im_size, point_coords=points, return_logits=True)
+        point_labels = np.ones(points.shape[0], dtype=np.float32)
+        masks, iou_preds = self.predictor.predict_torch(
+            im_size=im_size, 
+            point_coords=points, 
+            point_labels=point_labels,
+            return_logits=True)
         
         # Serialize predictions and store in MaskData
         data = MaskData(

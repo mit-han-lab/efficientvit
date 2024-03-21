@@ -1,3 +1,5 @@
+import numpy as np
+
 from copy import deepcopy
 
 from demo.sam.helpers.predictors.effvit_sam_onnx import OnnxEfficientViTSamPredictor
@@ -23,19 +25,21 @@ def segment_using_points_onnx(prompt_dict, model_name):
     if len(points) == 0:
         return raw_img
     
+    original_points = deepcopy(points)
     point_coords = points[..., :2]
-    original_point_coords = deepcopy(point_coords)
+    point_labels = points[..., 2]
 
     effvit_sam_predictor.set_image(raw_img)
 
     masks, _ = effvit_sam_predictor.predict_torch(
         point_coords=point_coords,
+        point_labels=point_labels,
         point_expansion_axis=0,
         im_size = origin_image_size)    
 
     masks = masks.cpu().numpy()  
 
-    return draw_point_masks(raw_img, masks, original_point_coords)
+    return draw_point_masks(raw_img, masks, original_points)
 
 
 def segment_using_boxes_onnx(prompt_dict, model_name):
@@ -77,20 +81,22 @@ def segment_using_points_and_boxes_onnx(prompt_dict, model_name):
         return segment_using_boxes_onnx(prompt_dict, model_name)
     
     point_coords = points[..., :2]
+    point_labels = points[..., 2]
+    original_points = deepcopy(points)
     original_boxes = deepcopy(boxes)
-    original_point_coords = deepcopy(point_coords)
 
     effvit_sam_predictor.set_image(raw_img)
 
     masks, _ = effvit_sam_predictor.predict_torch(
         im_size=origin_image_size,
         point_coords=point_coords,
+        point_labels=point_labels,
         point_expansion_axis=0,
         boxes=boxes)
     
     masks = masks.cpu().numpy()
 
-    return draw_point_and_box_masks(raw_img, masks, original_point_coords, original_boxes)
+    return draw_point_and_box_masks(raw_img, masks, original_points, original_boxes)
 
 
 def segment_full_img_onnx(raw_image, model_name, points_per_batch, pred_iou_thresh, stability_score_thresh, box_nms_thresh):
