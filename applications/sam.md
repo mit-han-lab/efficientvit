@@ -178,3 +178,23 @@ trtexec --onnx=assets/export_models/sam/onnx/xl1_decoder.onnx --minShapes=point_
 # TensorRT Inference
 python -m deployment.sam.tensorrt.inference --model xl1 --encoder_engine assets/export_models/sam/tensorrt/xl1_encoder.engine --decoder_engine assets/export_models/sam/tensorrt/xl1_decoder.engine --mode point
 ```
+
+## Citation
+
+If EfficientViT or EfficientViT-SAM is useful or relevant to your research, please kindly recognize our contributions by citing our papers:
+
+```
+@article{cai2022efficientvit,
+  title={Efficientvit: Enhanced linear attention for high-resolution low-computation visual recognition},
+  author={Cai, Han and Gan, Chuang and Han, Song},
+  journal={arXiv preprint arXiv:2205.14756},
+  year={2022}
+}
+
+@article{zhang2024efficientvit,
+  title={EfficientViT-SAM: Accelerated Segment Anything Model Without Performance Loss},
+  author={Zhang, Zhuoyang and Cai, Han and Han, Song},
+  journal={arXiv preprint arXiv:2402.05008},
+  year={2024}
+}
+```

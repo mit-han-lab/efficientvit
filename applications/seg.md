@@ -135,3 +135,16 @@ Example:
 ```bash
 python tflite_export.py --export_path model.tflite --task seg --dataset ade20k --model b3 --resolution 512 512
 ```
+
+## Citation
+
+If EfficientViT is useful or relevant to your research, please kindly recognize our contributions by citing our paper:
+
+```
+@article{cai2022efficientvit,
+  title={Efficientvit: Enhanced linear attention for high-resolution low-computation visual recognition},
+  author={Cai, Han and Gan, Chuang and Han, Song},
+  journal={arXiv preprint arXiv:2205.14756},
+  year={2022}
+}
+```
