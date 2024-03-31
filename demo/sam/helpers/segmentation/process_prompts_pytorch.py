@@ -1,21 +1,21 @@
 import numpy as np
 import torch
 
-from demo.sam.helpers.predictors.effvit_sam_pytorch import PyTorchEfficientViTSamPredictor
-from efficientvit.sam_model_zoo import create_sam_model
 from demo.sam.helpers.auto_mask_generator import DemoEfficientViTSamAutomaticMaskGenerator
+from demo.sam.helpers.predictors.effvit_sam_pytorch import PyTorchEfficientViTSamPredictor
 from demo.sam.helpers.utils import (
     MUTLIMASK,
-    get_point_inputs, 
-    get_box_inputs, 
+    draw_all_masks,
+    draw_box_masks,
+    draw_point_and_box_masks,
     draw_point_masks,
-    draw_box_masks, 
-    draw_point_and_box_masks, 
-    draw_all_masks
+    get_box_inputs,
+    get_point_inputs,
 )
-
+from efficientvit.sam_model_zoo import create_sam_model
 
 get_weight_url = lambda model_name: f"assets/checkpoints/sam/{model_name}.pt"
+
 
 def get_predictor(model_name):
     weight_url = get_weight_url(model_name)
@@ -24,7 +24,7 @@ def get_predictor(model_name):
         efficientvit_sam = create_sam_model(model_name, True, weight_url).cuda().eval()
     else:
         efficientvit_sam = create_sam_model(model_name, True, weight_url).eval()
-    
+
     return PyTorchEfficientViTSamPredictor(efficientvit_sam)
 
 
@@ -35,13 +35,13 @@ def get_full_mask_generator(model_name):
         efficientvit_sam = create_sam_model(model_name, True, weight_url).cuda().eval()
     else:
         efficientvit_sam = create_sam_model(model_name, True, weight_url).eval()
-    
+
     return DemoEfficientViTSamAutomaticMaskGenerator(efficientvit_sam)
 
 
 def segment_using_points_pytorch(prompt_dict, model_name):
     efficientvit_sam_predictor = get_predictor(model_name)
-    raw_image, prompts = prompt_dict['image'], prompt_dict['points']
+    raw_image, prompts = prompt_dict["image"], prompt_dict["points"]
     points = get_point_inputs(prompts)
 
     if len(points) == 0:
@@ -62,7 +62,7 @@ def segment_using_points_pytorch(prompt_dict, model_name):
 
 def segment_using_boxes_pytorch(prompt_dict, model_name):
     efficientvit_sam_predictor = get_predictor(model_name)
-    raw_image, prompts = prompt_dict['image'], prompt_dict['points']
+    raw_image, prompts = prompt_dict["image"], prompt_dict["points"]
     boxes = np.array(get_box_inputs(prompts))
 
     if len(boxes) == 0:
@@ -81,8 +81,8 @@ def segment_using_boxes_pytorch(prompt_dict, model_name):
 
 def segment_using_points_and_boxes_pytorch(prompt_dict, model_name):
     efficientvit_sam_predictor = get_predictor(model_name)
-    raw_image, prompts = prompt_dict['image'], prompt_dict['points']
-    
+    raw_image, prompts = prompt_dict["image"], prompt_dict["points"]
+
     boxes = get_box_inputs(prompts)
     points = get_point_inputs(prompts)
 
@@ -108,7 +108,9 @@ def segment_using_points_and_boxes_pytorch(prompt_dict, model_name):
     return draw_point_and_box_masks(raw_image, masks, points, boxes)
 
 
-def segment_full_img_pytorch(raw_image, model_name, points_per_batch, pred_iou_thresh, stability_score_thresh, box_nms_thresh):
+def segment_full_img_pytorch(
+    raw_image, model_name, points_per_batch, pred_iou_thresh, stability_score_thresh, box_nms_thresh
+):
     effvit_mask_gen = get_full_mask_generator(model_name)
     effvit_mask_gen.set_points_per_batch(points_per_batch)
     effvit_mask_gen.set_pred_iou_thresh(pred_iou_thresh)

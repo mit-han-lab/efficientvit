@@ -2,12 +2,12 @@ import numpy as np
 import torch
 
 from demo.sam.helpers.utils import get_device
-from deployment.sam.onnx.inference import SamEncoder, SamDecoder, preprocess
-
+from deployment.sam.onnx.inference import SamDecoder, SamEncoder, preprocess
 
 DIR = "assets/export_models/sam/onnx"
 get_encoder_path = lambda model_name: f"{DIR}/{model_name}_encoder.onnx"
 get_decoder_path = lambda model_name: f"{DIR}/{model_name}_decoder.onnx"
+
 
 class OnnxEfficientViTSamPredictor:
     def __init__(self, model_type) -> None:
@@ -17,13 +17,11 @@ class OnnxEfficientViTSamPredictor:
         self.decoder_model = SamDecoder(get_decoder_path(model_type))
         self.reset_image()
 
-    
     def reset_image(self) -> None:
         self.is_image_set = False
         self.features = None
         self.original_size = None
         self.input_size = None
-
 
     def set_image(self, image: np.ndarray, image_format: str = "RGB") -> None:
         assert image_format in [
@@ -44,7 +42,6 @@ class OnnxEfficientViTSamPredictor:
 
         self.features = self.encoder_model(img)
         self.is_image_set = True
-        
 
     def predict_torch(
         self,
@@ -65,8 +62,8 @@ class OnnxEfficientViTSamPredictor:
           point_coords (np.ndarray or None): A Nx2 array of point prompts to the
             model. Each point is in (X,Y) in pixels.
           point_labels (np.ndarray or None): A length N array of labels for the
-				point prompts. 1 indicates a foreground point and 0 indicates a
-				background point.
+                                point prompts. 1 indicates a foreground point and 0 indicates a
+                                background point.
           point_expansion_axis (int): dimension to expand points along.  0 to move all
             points to the same batch.  1 to make each point a separate batch
           boxes (np.ndarray or None): A Nx4 array of boxes to the model.
@@ -81,10 +78,10 @@ class OnnxEfficientViTSamPredictor:
         """
         if not self.is_image_set:
             raise RuntimeError("An image must be set with .set_image(...) before mask prediction.")
-        
-        if point_coords is not None:            
+
+        if point_coords is not None:
             point_coords = np.expand_dims(point_coords, axis=point_expansion_axis).astype(np.float32)
-            point_labels = np.expand_dims(point_labels, axis=point_expansion_axis).astype(np.float32)  
+            point_labels = np.expand_dims(point_labels, axis=point_expansion_axis).astype(np.float32)
 
         masks, iou_predictions, _ = self.decoder_model.run(
             img_embeddings=self.features,
@@ -92,7 +89,7 @@ class OnnxEfficientViTSamPredictor:
             point_coords=point_coords,
             point_labels=point_labels,
             boxes=boxes,
-            return_logits=return_logits
+            return_logits=return_logits,
         )
 
         iou_predictions = torch.from_numpy(iou_predictions)

@@ -1,10 +1,10 @@
-import numpy as np
-import cv2
-import random
-import torch
 import os
+import random
 import re
 
+import cv2
+import numpy as np
+import torch
 from PIL import Image
 
 YELLOW = (255, 244, 79)
@@ -26,49 +26,49 @@ PYTORCH = "pytorch"
 ONNX = "onnx"
 TENSORRT = "tensorrt"
 
+
 def get_device():
     return "cuda" if torch.cuda.is_available() else "cpu"
 
 
 def get_available_models(runtime):
-    model_priority = {
-        "xl1": 1, 
-        "xl0": 2, 
-        "l2": 3, 
-        "l1": 4,
-        "l0": 5
-    }
+    model_priority = {"xl1": 1, "xl0": 2, "l2": 3, "l1": 4, "l0": 5}
 
     model_storage_loc = {
         PYTORCH: "assets/checkpoints/sam",
         ONNX: "assets/export_models/sam/onnx",
-        TENSORRT: "assets/export_models/sam/tensorrt"
+        TENSORRT: "assets/export_models/sam/tensorrt",
     }
 
     base_dir = os.path.dirname(os.path.abspath(__file__))
     root_dir = os.path.dirname(os.path.dirname(os.path.dirname(base_dir)))
     model_dir = os.path.join(root_dir, model_storage_loc[runtime])
-    
+
     # get runtime-specific model files
     model_files = []
     if os.path.exists(model_dir):
         model_files = os.listdir(model_dir)
 
     # extract all model types found, keep only known model types
-    model_types = [re.split(r'[_.]', file)[0] for file in model_files]
+    model_types = [re.split(r"[_.]", file)[0] for file in model_files]
     model_types = [model for model in model_types if model in model_priority.keys()]
 
     if runtime == PYTORCH:
         required_suffixes = [".pt"]
-    
+
     elif runtime == ONNX:
         required_suffixes = ["_encoder.onnx", "_decoder.onnx"]
-    
-    elif runtime == TENSORRT:
-        required_suffixes = ["_encoder.engine", "_point_decoder.engine", "_box_decoder.engine", "_full_img_decoder.engine"]
 
-    # ensure each model type has requisite set of runtime-specific model files needed for inference 
-    valid_model_type = lambda model : all([f"{model}{suffix}" in model_files for suffix in required_suffixes])
+    elif runtime == TENSORRT:
+        required_suffixes = [
+            "_encoder.engine",
+            "_point_decoder.engine",
+            "_box_decoder.engine",
+            "_full_img_decoder.engine",
+        ]
+
+    # ensure each model type has requisite set of runtime-specific model files needed for inference
+    valid_model_type = lambda model: all([f"{model}{suffix}" in model_files for suffix in required_suffixes])
     available_models = set([model for model in model_types if valid_model_type(model)])
 
     # models listed in decreasing accuracy order
@@ -98,7 +98,7 @@ def draw_point_masks(img, masks, coord_and_label):
 
     oh, ow = fine_grained_mask.shape
     img = draw_binary_mask(img, fine_grained_mask, mask_color=YELLOW)
-    
+
     point_radius = ow // 125
     border_thickness = point_radius // 3
 
@@ -106,7 +106,7 @@ def draw_point_masks(img, masks, coord_and_label):
         point_color = BLUE if l == 1 else PINK
         cv2.circle(img, (int(x), int(y)), point_radius + border_thickness, BLACK, -1)
         cv2.circle(img, (int(x), int(y)), point_radius, point_color, -1)
-    
+
     return img
 
 
@@ -115,7 +115,7 @@ def draw_box_masks(img, masks, boxes):
         fine_grained_mask = mask[-1]
         mask_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         img = draw_binary_mask(img, fine_grained_mask, mask_color)
-    
+
     for box in boxes:
         x1, y1, x2, y2 = int(box[0]), int(box[1]), int(box[2]), int(box[3])
         cv2.rectangle(img, (x1, y1), (x2, y2), RED, 2)
@@ -135,7 +135,6 @@ def draw_point_and_box_masks(img, masks, coord_and_label, boxes):
     fine_grained_mask = masks[-1]
     mask_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
     img = draw_binary_mask(img, fine_grained_mask, mask_color)
-
 
     for box in boxes:
         x1, y1, x2, y2 = int(box[0]), int(box[1]), int(box[2]), int(box[3])

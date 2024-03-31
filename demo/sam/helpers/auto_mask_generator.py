@@ -1,13 +1,7 @@
-import numpy as np
-import torch
-
 from typing import List, Tuple
 
-from efficientvit.models.efficientvit.sam import EfficientViTSam, EfficientViTSamAutomaticMaskGenerator
-from demo.sam.helpers.predictors.effvit_sam_tensorrt import TRTEfficientViTSamPredictor
-from demo.sam.helpers.predictors.effvit_sam_onnx import OnnxEfficientViTSamPredictor
-from demo.sam.helpers.utils import ONNX, TENSORRT
-
+import numpy as np
+import torch
 from segment_anything.utils.amg import (
     MaskData,
     batched_mask_to_box,
@@ -17,20 +11,25 @@ from segment_anything.utils.amg import (
     uncrop_masks,
 )
 
+from demo.sam.helpers.predictors.effvit_sam_onnx import OnnxEfficientViTSamPredictor
+from demo.sam.helpers.predictors.effvit_sam_tensorrt import TRTEfficientViTSamPredictor
+from demo.sam.helpers.utils import ONNX, TENSORRT
+from efficientvit.models.efficientvit.sam import EfficientViTSam, EfficientViTSamAutomaticMaskGenerator
+
 
 class DemoEfficientViTSamAutomaticMaskGenerator(EfficientViTSamAutomaticMaskGenerator):
-    def __init__(self, model: EfficientViTSam  = None) -> None: 
+    def __init__(self, model: EfficientViTSam = None) -> None:
         super().__init__(model)
 
     def set_points_per_batch(self, points_per_batch):
         self.points_per_batch = points_per_batch
-    
+
     def set_pred_iou_thresh(self, pred_iou_thresh):
         self.pred_iou_thresh = pred_iou_thresh
 
     def set_stability_score_thresh(self, stability_score_thresh):
         self.stability_score_thresh = stability_score_thresh
-    
+
     def set_box_nms_thresh(self, box_nms_thresh):
         self.box_nms_thresh = box_nms_thresh
 
@@ -41,12 +40,12 @@ class DemoAccelEfficientViTSamAutomaticMaskGenerator(DemoEfficientViTSamAutomati
 
         if mode == ONNX:
             self.predictor = OnnxEfficientViTSamPredictor(model_name)
-        
+
         elif mode == TENSORRT:
             encoder_engine_path = kwargs["encoder_engine_path"]
             decoder_engine_path = kwargs["decoder_engine_path"]
             self.predictor = TRTEfficientViTSamPredictor(model_name, encoder_engine_path, decoder_engine_path)
-        
+
         else:
             raise NotImplementedError
 
@@ -61,11 +60,9 @@ class DemoAccelEfficientViTSamAutomaticMaskGenerator(DemoEfficientViTSamAutomati
 
         point_labels = np.ones(points.shape[0], dtype=np.float32)
         masks, iou_preds = self.predictor.predict_torch(
-            im_size=im_size, 
-            point_coords=points, 
-            point_labels=point_labels,
-            return_logits=True)
-        
+            im_size=im_size, point_coords=points, point_labels=point_labels, return_logits=True
+        )
+
         # Serialize predictions and store in MaskData
         data = MaskData(
             masks=masks.flatten(0, 1),
@@ -80,9 +77,7 @@ class DemoAccelEfficientViTSamAutomaticMaskGenerator(DemoEfficientViTSamAutomati
             data.filter(keep_mask)
 
         # Calculate stability score
-        data["stability_score"] = calculate_stability_score(
-            data["masks"], 0.0 , self.stability_score_offset
-        )
+        data["stability_score"] = calculate_stability_score(data["masks"], 0.0, self.stability_score_offset)
 
         if self.stability_score_thresh > 0.0:
             keep_mask = data["stability_score"] >= self.stability_score_thresh

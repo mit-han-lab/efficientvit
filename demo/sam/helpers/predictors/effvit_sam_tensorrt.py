@@ -1,13 +1,15 @@
+from copy import deepcopy
+
 import numpy as np
 import torch
 
-from copy import deepcopy
 from efficientvit.models.utils import get_device
 
 try:
     import tensorrt as trt
     from torch2trt import TRTModule
-    from deployment.sam.tensorrt.inference import SamResize, preprocess, mask_postprocessing, apply_coords, apply_boxes
+
+    from deployment.sam.tensorrt.inference import SamResize, apply_boxes, apply_coords, mask_postprocessing, preprocess
 except Exception as e:
     print(f"Skipping tensorrt-runtime import error: {e}")
     print("If using a non-tensorrt runtime, ignore.  Otherwise, please ensure tensorrt and torch2trt are installed")
@@ -16,27 +18,23 @@ except Exception as e:
 
 def get_encoder_engine(encoder_engine_path):
     with trt.Logger() as logger, trt.Runtime(logger) as runtime:
-        with open(encoder_engine_path, 'rb') as f:
+        with open(encoder_engine_path, "rb") as f:
             engine_bytes = f.read()
         engine = runtime.deserialize_cuda_engine(engine_bytes)
 
-    return TRTModule(
-        engine,
-        input_names=["input_image"],
-        output_names=["image_embeddings"]
-    )
+    return TRTModule(engine, input_names=["input_image"], output_names=["image_embeddings"])
 
 
 def get_decoder_engine(decoder_engine_path):
     with trt.Logger() as logger, trt.Runtime(logger) as runtime:
-        with open(decoder_engine_path, 'rb') as f:
+        with open(decoder_engine_path, "rb") as f:
             engine_bytes = f.read()
         engine = runtime.deserialize_cuda_engine(engine_bytes)
 
     return TRTModule(
         engine,
         input_names=["image_embeddings", "point_coords", "point_labels"],
-        output_names=["masks", "iou_predictions"]
+        output_names=["masks", "iou_predictions"],
     )
 
 
@@ -50,7 +48,7 @@ class TRTEfficientViTSamPredictor:
     @property
     def device(self):
         return get_device(self.model)
-    
+
     def reset_image(self) -> None:
         self.is_image_set = False
         self.features = None
@@ -99,8 +97,8 @@ class TRTEfficientViTSamPredictor:
           point_coords (np.ndarray or None): A Nx2 array of point prompts to the
             model. Each point is in (X,Y) in pixels.
           point_labels (np.ndarray or None): A length N array of labels for the
-				point prompts. 1 indicates a foreground point and 0 indicates a
-				background point.
+                                point prompts. 1 indicates a foreground point and 0 indicates a
+                                background point.
           point_expansion_axis (int): dim across which to expand points.  1 to place each
             point in its own batch, 0 to place all points in the same batch
           boxes (np.ndarray or None): A Nx4 array of box prompts
@@ -122,9 +120,9 @@ class TRTEfficientViTSamPredictor:
             point_labels = np.expand_dims(point_labels, axis=point_expansion_axis).astype(np.float32)
 
             prompts, labels = point_coords, point_labels
-        
+
         if boxes is not None:
-            boxes = boxes.reshape((len(boxes), 1, 4)) 
+            boxes = boxes.reshape((len(boxes), 1, 4))
             boxes = apply_boxes(boxes, self.original_size, im_size).astype(np.float32)
             box_labels = np.array([[2, 3] for _ in range(boxes.shape[0])], dtype=np.float32).reshape((-1, 2))
 
@@ -133,10 +131,10 @@ class TRTEfficientViTSamPredictor:
                 labels = np.concatenate([labels, box_labels], axis=1)
             else:
                 prompts, labels = boxes, box_labels
-            
+
         prompts = torch.from_numpy(prompts).cuda()
         labels = torch.from_numpy(labels).cuda()
-        
+
         inputs = (self.features, prompts, labels)
         assert all([x.dtype == torch.float32 for x in inputs])
 
@@ -144,9 +142,8 @@ class TRTEfficientViTSamPredictor:
         low_res_masks = low_res_masks.reshape(-1, 1, 256, 256)
 
         masks = mask_postprocessing(low_res_masks, self.original_size)
-        
+
         if not return_logits:
             masks = masks > 0.0
 
         return masks, iou_predictions
-        
