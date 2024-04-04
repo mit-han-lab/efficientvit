@@ -408,11 +408,10 @@ class LiteMLA(nn.Module):
                 H * W,
             ),
         )
-        qkv = torch.transpose(qkv, -1, -2)
         q, k, v = (
-            qkv[..., 0 : self.dim],
-            qkv[..., self.dim : 2 * self.dim],
-            qkv[..., 2 * self.dim :],
+            qkv[:, :, 0 : self.dim],
+            qkv[:, :, self.dim : 2 * self.dim],
+            qkv[:, :, 2 * self.dim :],
         )
 
         # lightweight linear attention
@@ -422,12 +421,11 @@ class LiteMLA(nn.Module):
         # linear matmul
         trans_k = k.transpose(-1, -2)
 
-        v = F.pad(v, (0, 1), mode="constant", value=1)
-        kv = torch.matmul(trans_k, v)
-        out = torch.matmul(q, kv)
-        out = out[..., :-1] / (out[..., -1:] + self.eps)
+        v = F.pad(v, (0, 0, 0, 1), mode="constant", value=1)
+        vk = torch.matmul(v, trans_k)
+        out = torch.matmul(vk, q)
+        out = out[:, :, :-1] / (out[:, :, -1:] + self.eps)
 
-        out = torch.transpose(out, -1, -2)
         out = torch.reshape(out, (B, -1, H, W))
         return out
 
