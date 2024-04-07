@@ -4,6 +4,7 @@
 
 **If you are interested in getting updates, please join our mailing list [here](https://forms.gle/Z6DNkRidJ1ouxmUk9).**
 
+- [2024/04/06] EfficientViT-SAM is accepted by [eLVM@CVPR'24](https://sites.google.com/view/elvm/home?authuser=0).
 - [2024/03/19] Online demo of EfficientViT-SAM is available: [https://evitsam.hanlab.ai/](https://evitsam.hanlab.ai/). 
 - [2024/02/08] Tech report of EfficientViT-SAM is available: [arxiv](https://arxiv.org/abs/2402.05008).
 - [2024/02/07] We released EfficientViT-SAM, the first accelerated SAM model that matches/outperforms SAM-ViT-H's zero-shot performance, delivering the SOTA performance-efficiency trade-off.
