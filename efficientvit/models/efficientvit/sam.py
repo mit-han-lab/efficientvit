@@ -16,6 +16,7 @@ from segment_anything.modeling.prompt_encoder import PromptEncoder
 from segment_anything.utils.amg import build_all_layer_point_grids
 from segment_anything.utils.transforms import ResizeLongestSide
 from torchvision.transforms.functional import resize, to_pil_image
+from typing import Any, Dict, List
 
 from efficientvit.models.efficientvit.backbone import EfficientViTBackbone, EfficientViTLargeBackbone
 from efficientvit.models.nn import (
@@ -235,6 +236,42 @@ class EfficientViTSam(nn.Module):
         masks = masks[..., : input_size[0], : input_size[1]]
         masks = F.interpolate(masks, original_size, mode="bilinear", align_corners=False)
         return masks
+    
+    def forward(
+        self,
+        batched_input: List[Dict[str, Any]],
+        multimask_output: bool,
+    ):
+        input_images = torch.stack([x["image"] for x in batched_input], dim=0)
+
+        image_embeddings = self.image_encoder(input_images)
+
+        outputs = []
+        iou_outputs = []
+        for image_record, curr_embedding in zip(batched_input, image_embeddings):
+            if "point_coords" in image_record:
+                points = (image_record["point_coords"], image_record["point_labels"])
+            else:
+                points = None
+            sparse_embeddings, dense_embeddings = self.prompt_encoder(
+                points=points,
+                boxes=image_record.get("boxes", None),
+                masks=image_record.get("mask_inputs", None),
+            )
+            low_res_masks, iou_predictions = self.mask_decoder(
+                image_embeddings=curr_embedding.unsqueeze(0),
+                image_pe=self.prompt_encoder.get_dense_pe(),
+                sparse_prompt_embeddings=sparse_embeddings,
+                dense_prompt_embeddings=dense_embeddings,
+                multimask_output=multimask_output
+            )
+            outputs.append(low_res_masks)
+            iou_outputs.append(iou_predictions)
+
+        outputs = torch.stack([out for out in outputs], dim=0)
+        iou_outputs = torch.stack(iou_outputs, dim=0)
+
+        return outputs, iou_outputs
 
 
 class EfficientViTSamPredictor:

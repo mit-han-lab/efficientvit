@@ -2,7 +2,7 @@
 
 ## Datasets
 
-[COCO2017](https://cocodataset.org/#download) and [LVIS annotations](https://www.lvisdataset.org/dataset).
+[SA-1B](https://ai.meta.com/datasets/segment-anything-downloads/), [COCO2017](https://cocodataset.org/#download), and [LVIS annotations](https://www.lvisdataset.org/dataset).
 
 To conduct box-prompted instance segmentation, you must first obtain the *source_json_file* of detected bounding boxes. Follow the instructions of [ViTDet](https://github.com/facebookresearch/detectron2/tree/main/projects/ViTDet), [YOLOv8](https://github.com/ultralytics/ultralytics), and [GroundingDINO](https://github.com/IDEA-Research/GroundingDINO) to get the *source_json_file*. You can also download our [pre-generated files](https://huggingface.co/han-cai/efficientvit-sam/tree/main/source_json_file).
 
@@ -21,6 +21,10 @@ coco
 │   ├── coco_vitdet.json
 │   ├── coco_yolov8.json
 │   ├── lvis_vitdet.json
+sam
+├── images
+├── masks
+├── sa_images_ids.txt
 ```
 
 </details>
@@ -35,11 +39,11 @@ Latency/Throughput is measured on NVIDIA Jetson AGX Orin, and NVIDIA A100 GPU wi
 
 | Model         |  Resolution | COCO mAP | LVIS mAP | Params |  MACs | Jetson Orin Latency (bs1) | A100 Throughput (bs16) | Checkpoint |
 |----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:---------:|:------------:|:------------:|
-| EfficientViT-SAM-L0 | 512x512 | 45.7 | 41.8 | 34.8M  | 35G | 8.2ms  | 762 images/s | [link](https://huggingface.co/han-cai/efficientvit-sam/resolve/main/l0.pt) |
-| EfficientViT-SAM-L1 | 512x512 | 46.2 | 42.1 | 47.7M | 49G |  10.2ms | 638 images/s | [link](https://huggingface.co/han-cai/efficientvit-sam/resolve/main/l1.pt) |
-| EfficientViT-SAM-L2 | 512x512 | 46.6 | 42.7 | 61.3M | 69G |  12.9ms | 538 images/s  | [link](https://huggingface.co/han-cai/efficientvit-sam/resolve/main/l2.pt) |
-| EfficientViT-SAM-XL0 | 1024x1024 | 47.5 | 43.9 | 117.0M | 185G | 22.5ms  | 278 images/s | [link](https://huggingface.co/han-cai/efficientvit-sam/resolve/main/xl0.pt) |
-| EfficientViT-SAM-XL1 | 1024x1024 | 47.8 | 44.4 | 203.3M | 322G | 37.2ms  | 182 images/s | [link](https://huggingface.co/han-cai/efficientvit-sam/resolve/main/xl1.pt) |
+| EfficientViT-SAM-L0 | 512x512 | 45.7 | 41.8 | 34.8M  | 35G | 8.2ms  | 762 images/s | [link](https://huggingface.co/mit-han-lab/efficientvit-sam/blob/main/l0.pt) |
+| EfficientViT-SAM-L1 | 512x512 | 46.2 | 42.1 | 47.7M | 49G |  10.2ms | 638 images/s | [link](https://huggingface.co/mit-han-lab/efficientvit-sam/blob/main/l1.pt) |
+| EfficientViT-SAM-L2 | 512x512 | 46.6 | 42.7 | 61.3M | 69G |  12.9ms | 538 images/s  | [link](https://huggingface.co/mit-han-lab/efficientvit-sam/blob/main/l2.pt) |
+| EfficientViT-SAM-XL0 | 1024x1024 | 47.5 | 43.9 | 117.0M | 185G | 22.5ms  | 278 images/s | [link](https://huggingface.co/mit-han-lab/efficientvit-sam/blob/main/xl0.pt) |
+| EfficientViT-SAM-XL1 | 1024x1024 | 47.8 | 44.4 | 203.3M | 322G | 37.2ms  | 182 images/s | [link](https://huggingface.co/mit-han-lab/efficientvit-sam/blob/main/xl1.pt) |
 <p align="center">
 <b> Table1: Summary of All EfficientViT-SAM Variants.</b> COCO mAP and LVIS mAP are measured using ViTDet's predicted bounding boxes as the prompt. End-to-end Jetson Orin latency and A100 throughput are measured with TensorRT and fp16.
 </p>
@@ -178,6 +182,25 @@ trtexec --onnx=assets/export_models/sam/onnx/xl1_decoder.onnx --minShapes=point_
 # TensorRT Inference
 python -m deployment.sam.tensorrt.inference --model xl1 --encoder_engine assets/export_models/sam/tensorrt/xl1_encoder.engine --decoder_engine assets/export_models/sam/tensorrt/xl1_decoder.engine --mode point
 ```
+
+## Training
+
+Download the [distilled models](https://huggingface.co/mit-han-lab/efficientvit-sam/tree/main/distilled_model) and place them under `assets/distilled_checkpoints`.
+
+### Single-Node
+We make use of ```torchrun``` to launch distributed jobs.
+
+```python
+torchrun --nproc_per_node=8 train_sam_model.py configs/sam/xl1.yaml --path .exp/sam/efficientvit_sam_xl1 --resume
+```
+
+### SLURM
+
+```python
+bash slurm_run_sam.sh
+```
+
+Note: The training config matches with the slurm script.
 
 ## Citation
 

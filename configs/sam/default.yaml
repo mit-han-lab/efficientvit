@@ -1,0 +1,34 @@
+data_provider:
+  dataset: sam
+  root: /data/sam
+  sub_epochs_per_epoch: 40 # split one epoch into several sub epochs for validation and checkpointing convenience
+  num_masks: 64 # number of masks per image during training
+  train_batch_size: 4 # batch size per gpu device
+  base_batch_size: 4
+  test_batch_size: 4
+  n_worker: 16
+  image_size: 1024
+  drop_last: true
+
+run_config:
+  n_epochs: 80 # number of sub epochs; number of SA-1B epoch = n_epochs / sub_epochs_per_epoch
+  base_lr: 0.0000004 # learning rate per batch; global learning rate = base_lr * world_size
+  warmup_epochs: 0
+  warmup_lr: 0.0
+  lr_schedule_name: cosine
+  lr_schedule_param: {}
+  optimizer_name: adamw
+  optimizer_params:
+    eps: 1.0e-08
+    betas:
+    - 0.9
+    - 0.999
+  weight_decay: 0.1
+  no_wd_keys:
+  - norm
+  - bias
+  grad_clip: 2.0
+  reset_bn: null
+  reset_bn_size: null
+  reset_bn_batch_size: null
+  eval_image_size: null

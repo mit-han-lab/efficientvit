@@ -7,3 +7,4 @@ __pycache__/
 assets/checkpoints/
 assets/export_models/
 coco/
+wandb/

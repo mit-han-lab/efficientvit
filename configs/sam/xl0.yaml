@@ -1,0 +1,3 @@
+net_config:
+  name: xl0
+  ckpt: assets/distilled_checkpoints/xl0.pt
