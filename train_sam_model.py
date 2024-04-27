@@ -1,12 +1,13 @@
 import argparse
 import os
+
 import wandb
 
 from efficientvit.apps import setup
 from efficientvit.apps.utils import dump_config, parse_unknown_args
+from efficientvit.sam_model_zoo import create_sam_model
 from efficientvit.samcore.data_provider import SAMDataProvider
 from efficientvit.samcore.trainer import SAMRunConfig, SAMTrainer
-from efficientvit.sam_model_zoo import create_sam_model
 
 parser = argparse.ArgumentParser()
 parser.add_argument("config", metavar="FILE", help="config file")
@@ -59,8 +60,9 @@ def main():
         trainer.data_provider = setup.setup_data_provider(config, [SAMDataProvider], is_distributed=True)
     else:
         trainer.sync_model()
-    
+
     trainer.train()
+
 
 if __name__ == "__main__":
     main()

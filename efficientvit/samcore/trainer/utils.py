@@ -1,14 +1,15 @@
-import cv2
 import io
+from typing import List
+
+import cv2
 import numpy as np
 import torch
-
 from torch.nn import functional as F
-from typing import List
 
 """
     Some functions in this file are modified from https://github.com/SysCV/sam-hq/blob/main/train/utils/misc.py.
 """
+
 
 def point_sample(input, point_coords, **kwargs):
     """
@@ -80,9 +81,7 @@ def get_uncertain_point_coords_with_randomness(
     idx = torch.topk(point_uncertainties[:, 0, :], k=num_uncertain_points, dim=1)[1]
     shift = num_sampled * torch.arange(num_boxes, dtype=torch.long, device=coarse_logits.device)
     idx += shift[:, None]
-    point_coords = point_coords.view(-1, 2)[idx.view(-1), :].view(
-        num_boxes, num_uncertain_points, 2
-    )
+    point_coords = point_coords.view(-1, 2)[idx.view(-1), :].view(num_boxes, num_uncertain_points, 2)
     if num_random_points > 0:
         point_coords = cat(
             [
@@ -94,12 +93,7 @@ def get_uncertain_point_coords_with_randomness(
     return point_coords
 
 
-def dice_loss(
-        inputs: torch.Tensor,
-        targets: torch.Tensor,
-        num_masks: float,
-        mode: str
-    ):
+def dice_loss(inputs: torch.Tensor, targets: torch.Tensor, num_masks: float, mode: str):
     """
     Compute the DICE loss, similar to generalized IOU for masks
     Args:
@@ -120,17 +114,10 @@ def dice_loss(
         return loss.sum() / num_masks
 
 
-dice_loss_jit = torch.jit.script(
-    dice_loss
-)  # type: torch.jit.ScriptModule
+dice_loss_jit = torch.jit.script(dice_loss)  # type: torch.jit.ScriptModule
 
 
-def sigmoid_ce_loss(
-        inputs: torch.Tensor,
-        targets: torch.Tensor,
-        num_masks: float,
-        mode: str
-    ):
+def sigmoid_ce_loss(inputs: torch.Tensor, targets: torch.Tensor, num_masks: float, mode: str):
     """
     Args:
         inputs: A float tensor of arbitrary shape.
@@ -150,9 +137,7 @@ def sigmoid_ce_loss(
         return loss.mean(1).sum() / num_masks
 
 
-sigmoid_ce_loss_jit = torch.jit.script(
-    sigmoid_ce_loss
-)  # type: torch.jit.ScriptModule
+sigmoid_ce_loss_jit = torch.jit.script(sigmoid_ce_loss)  # type: torch.jit.ScriptModule
 
 
 def calculate_uncertainty(logits):
@@ -209,7 +194,7 @@ def loss_masks(src_masks, target_masks, num_masks, oversample_ratio=3.0, mode="m
     return loss_mask, loss_dice
 
 
-def mask_iou(pred_label,label):
+def mask_iou(pred_label, label):
     """
     calculate mask iou for pred_label and gt_label.
     """
@@ -223,8 +208,8 @@ def mask_iou(pred_label,label):
 
 
 def compute_iou(preds, target):
-    if(preds.shape[2] != target.shape[2] or preds.shape[3] != target.shape[3]):
-        postprocess_preds = F.interpolate(preds, size=target.size()[2:], mode='bilinear', align_corners=False)
+    if preds.shape[2] != target.shape[2] or preds.shape[3] != target.shape[3]:
+        postprocess_preds = F.interpolate(preds, size=target.size()[2:], mode="bilinear", align_corners=False)
     else:
         postprocess_preds = preds
     iou = 0
@@ -242,7 +227,7 @@ def mask_to_boundary(mask, dilation_ratio=0.02):
     """
 
     h, w = mask.shape
-    img_diag = np.sqrt(h ** 2 + w ** 2)
+    img_diag = np.sqrt(h**2 + w**2)
     dilation = int(round(dilation_ratio * img_diag))
     if dilation < 1:
         dilation = 1
@@ -277,8 +262,8 @@ def boundary_iou(gt, dt, dilation_ratio=0.02):
 
 
 def compute_boundary_iou(preds, target):
-    if(preds.shape[2] != target.shape[2] or preds.shape[3] != target.shape[3]):
-        postprocess_preds = F.interpolate(preds, size=target.size()[2:], mode='bilinear', align_corners=False)
+    if preds.shape[2] != target.shape[2] or preds.shape[3] != target.shape[3]:
+        postprocess_preds = F.interpolate(preds, size=target.size()[2:], mode="bilinear", align_corners=False)
     else:
         postprocess_preds = preds
     iou = 0
@@ -288,12 +273,11 @@ def compute_boundary_iou(preds, target):
 
 
 def masks_sample_points(masks, k=10):
-    """Sample points on mask
-    """
+    """Sample points on mask"""
 
     if masks.numel() == 0:
         return torch.zeros((0, 2), device=masks.device)
-    
+
     h, w = masks.shape[-2:]
 
     y = torch.arange(0, h, dtype=torch.float)
@@ -308,7 +292,7 @@ def masks_sample_points(masks, k=10):
         select_mask = masks[b_i].bool()
         x_idx = torch.masked_select(x, select_mask)
         y_idx = torch.masked_select(y, select_mask)
-        
+
         perm = torch.randperm(x_idx.size(0))
         idx = perm[:k]
         samples_x = x_idx[idx]
@@ -317,14 +301,14 @@ def masks_sample_points(masks, k=10):
         samples.append(samples_xy)
 
     samples = torch.stack(samples)
-    
+
     return samples
 
 
 def mask_iou_batch(pred_label, label):
-    '''
+    """
     calculate mask iou for pred_label and gt_label.
-    '''
+    """
 
     pred_label = (pred_label > 0).int()
     label = (label > 128).int()

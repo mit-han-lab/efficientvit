@@ -164,6 +164,7 @@ class _ResumeIteration:
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
 # This function generates an array of int32 as the seed for
 # `numpy.random`, in order to prevent state collision due to same
 # seed and algorithm for `numpy.random` and `random` modules.

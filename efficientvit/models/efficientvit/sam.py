@@ -3,6 +3,7 @@
 # International Conference on Computer Vision (ICCV), 2023
 
 import copy
+from typing import Any, Dict, List
 
 import numpy as np
 import torch
@@ -16,7 +17,6 @@ from segment_anything.modeling.prompt_encoder import PromptEncoder
 from segment_anything.utils.amg import build_all_layer_point_grids
 from segment_anything.utils.transforms import ResizeLongestSide
 from torchvision.transforms.functional import resize, to_pil_image
-from typing import Any, Dict, List
 
 from efficientvit.models.efficientvit.backbone import EfficientViTBackbone, EfficientViTLargeBackbone
 from efficientvit.models.nn import (
@@ -236,7 +236,7 @@ class EfficientViTSam(nn.Module):
         masks = masks[..., : input_size[0], : input_size[1]]
         masks = F.interpolate(masks, original_size, mode="bilinear", align_corners=False)
         return masks
-    
+
     def forward(
         self,
         batched_input: List[Dict[str, Any]],
@@ -263,7 +263,7 @@ class EfficientViTSam(nn.Module):
                 image_pe=self.prompt_encoder.get_dense_pe(),
                 sparse_prompt_embeddings=sparse_embeddings,
                 dense_prompt_embeddings=dense_embeddings,
-                multimask_output=multimask_output
+                multimask_output=multimask_output,
             )
             outputs.append(low_res_masks)
             iou_outputs.append(iou_predictions)

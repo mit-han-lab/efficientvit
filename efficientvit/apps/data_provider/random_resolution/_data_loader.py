@@ -541,7 +541,6 @@ class RRSDataLoader(Generic[T_co]):
         #        how many thread to create (eg. numpy, etc), then it is caller's responsibility to
         #        set those flags correctly.
         def _create_warning_msg(num_worker_suggest, num_worker_created, cpuset_checked):
-
             suggested_max_worker_msg = (
                 (
                     (
