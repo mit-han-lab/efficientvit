@@ -116,6 +116,16 @@ Example:
 python eval_seg_model.py --dataset cityscapes --crop_size 1024 --model b3 --save_path demo/cityscapes/b3/
 ```
 
+You can also use `demo_seg_model.py` to visualize the models.
+
+Example:
+
+```
+python demo_seg_model.py --image_path assets/fig/indoor.jpg --dataset ade20k --crop_size 512 --model l2
+
+python demo_seg_model.py --image_path assets/fig/city.png --dataset cityscapes --crop_size 1024 --model l2
+```
+
 ## Export
 
 ### Onnx
