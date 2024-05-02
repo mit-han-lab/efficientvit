@@ -1,10 +1,12 @@
 *.DS_Store*
 .vscode
+
 __pycache__/
+
 .dev/
 .exp/
+.slurm/
 
 assets/checkpoints/
 assets/export_models/
 coco/
-wandb/
