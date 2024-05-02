@@ -73,7 +73,7 @@ class Trainer:
                         "optimizer": self.optimizer.state_dict(),
                         "lr_scheduler": self.lr_scheduler.state_dict(),
                         "ema": self.ema.state_dict() if self.ema is not None else None,
-                        "scaler": self.scaler.state_dict() if self.fp16 else None,
+                        "scaler": self.scaler.state_dict() if self.enable_amp else None,
                     }
 
             model_name = model_name or "checkpoint.pt"
@@ -123,7 +123,7 @@ class Trainer:
         if "ema" in checkpoint and self.ema is not None:
             self.ema.load_state_dict(checkpoint["ema"])
             log.append("ema")
-        if "scaler" in checkpoint and self.fp16:
+        if "scaler" in checkpoint and self.enable_amp:
             self.scaler.load_state_dict(checkpoint["scaler"])
             log.append("scaler")
         self.write_log("Loaded: " + ", ".join(log))
@@ -203,7 +203,7 @@ class Trainer:
 
     """ training """
 
-    def prep_for_training(self, run_config: RunConfig, ema_decay: float or None = None, fp16=False) -> None:
+    def prep_for_training(self, run_config: RunConfig, ema_decay: float or None = None, amp="fp32") -> None:
         self.run_config = run_config
         self.model = nn.parallel.DistributedDataParallel(
             self.model.cuda(),
@@ -221,9 +221,22 @@ class Trainer:
         if ema_decay is not None:
             self.ema = EMA(self.network, ema_decay)
 
-        # fp16
-        self.fp16 = fp16
-        self.scaler = torch.cuda.amp.GradScaler(enabled=self.fp16)
+        # amp
+        self.amp = amp
+        self.scaler = torch.cuda.amp.GradScaler(enabled=self.enable_amp)
+    
+    @property
+    def enable_amp(self) -> bool:
+        return self.amp != "fp32"
+
+    @property
+    def amp_dtype(self) -> torch.dtype:
+        if self.amp == "fp16":
+            return torch.float16
+        elif self.amp == "bf16":
+            return torch.bfloat16
+        else:
+            return torch.float32
 
     def sync_model(self):
         print("Sync model")
@@ -243,7 +256,7 @@ class Trainer:
             self.lr_scheduler.load_state_dict(checkpoint["lr_scheduler"])
         if "ema" in checkpoint and self.ema is not None:
             self.ema.load_state_dict(checkpoint["ema"])
-        if "scaler" in checkpoint and self.fp16:
+        if "scaler" in checkpoint and self.enable_amp:
             self.scaler.load_state_dict(checkpoint["scaler"])
 
     def before_step(self, feed_dict: dict[str, any]) -> dict[str, any]:

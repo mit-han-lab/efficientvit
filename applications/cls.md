@@ -125,19 +125,19 @@ python train_cls_model.py configs/cls/imagenet/b1.yaml \
 
 ```bash
 torchpack dist-run -np 16 -H $server1:8,$server2:8 \
-python train_cls_model.py configs/cls/imagenet/l1.yaml --fp16 \
+python train_cls_model.py configs/cls/imagenet/l1.yaml --amp bf16 \
     --path .exp/cls/imagenet/l1_r224/
 ```
 
 ```bash
 torchpack dist-run -np 16 -H $server1:8,$server2:8 \
-python train_cls_model.py configs/cls/imagenet/l2.yaml --fp16 \
+python train_cls_model.py configs/cls/imagenet/l2.yaml --amp bf16 \
     --path .exp/cls/imagenet/l2_r224/
 ```
 
 ```bash
 torchpack dist-run -np 16 -H $server1:8,$server2:8 \
-python train_cls_model.py configs/cls/imagenet/l3.yaml --fp16 \
+python train_cls_model.py configs/cls/imagenet/l3.yaml --amp bf16 \
     --path .exp/cls/imagenet/l3_r224/
 ```
 

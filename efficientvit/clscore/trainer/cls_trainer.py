@@ -121,7 +121,7 @@ class ClsTrainer(Trainer):
         else:
             ema_output = None
 
-        with torch.autocast(device_type="cuda", dtype=torch.float16, enabled=self.fp16):
+        with torch.autocast(device_type="cuda", dtype=self.amp_dtype, enabled=self.enable_amp):
             output = self.model(images)
             loss = self.train_criterion(output, labels)
             # mesa loss

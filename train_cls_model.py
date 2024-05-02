@@ -18,7 +18,7 @@ parser.add_argument("--path", type=str, metavar="DIR", help="run directory")
 parser.add_argument("--gpu", type=str, default=None)  # used in single machine experiments
 parser.add_argument("--manual_seed", type=int, default=0)
 parser.add_argument("--resume", action="store_true")
-parser.add_argument("--fp16", action="store_true")
+parser.add_argument("--amp", type=str, choices=["fp32", "fp16", "bf16"], default="fp32")
 
 # initialization
 parser.add_argument("--rand_init", type=str, default="trunc_normal@0.02")
@@ -74,7 +74,7 @@ def main():
     )
 
     # prep for training
-    trainer.prep_for_training(run_config, config["ema_decay"], args.fp16)
+    trainer.prep_for_training(run_config, config["ema_decay"], args.amp)
 
     # resume
     if args.resume:

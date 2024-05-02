@@ -14,7 +14,7 @@ parser.add_argument("config", metavar="FILE", help="config file")
 parser.add_argument("--path", type=str, metavar="DIR", help="run directory")
 parser.add_argument("--manual_seed", type=int, default=0)
 parser.add_argument("--resume", action="store_true")
-parser.add_argument("--fp16", action="store_true")
+parser.add_argument("--amp", type=str, choices=["fp32", "fp16", "bf16"], default="fp32")
 parser.add_argument("--rand_init", type=str, default="trunc_normal@0.02")
 parser.add_argument("--last_gamma", type=float, default=0)
 
@@ -53,7 +53,7 @@ def main():
         last_gamma=args.last_gamma,
     )
 
-    trainer.prep_for_training(run_config, args.fp16)
+    trainer.prep_for_training(run_config, args.amp)
 
     if args.resume:
         trainer.load_model()

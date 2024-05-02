@@ -171,7 +171,7 @@ class SAMTrainer(Trainer):
 
             batched_input.append(dict_input)
 
-        with torch.autocast(device_type="cuda", dtype=torch.float16, enabled=self.fp16):
+        with torch.autocast(device_type="cuda", dtype=self.amp_dtype, enabled=self.enable_amp):
             if random.random() >= 0.5:
                 output, iou_predictions = self.model(batched_input, multimask_output=True)
             else:
@@ -282,7 +282,7 @@ class SAMTrainer(Trainer):
                 model_name=f"checkpoint_{epoch}_{sub_epoch}.pt",
             )
 
-    def prep_for_training(self, run_config: SAMRunConfig, fp16=False) -> None:
+    def prep_for_training(self, run_config: SAMRunConfig, amp="fp32") -> None:
         self.run_config = run_config
         self.model = nn.parallel.DistributedDataParallel(
             self.model.cuda(),
@@ -297,6 +297,6 @@ class SAMTrainer(Trainer):
         # build optimizer
         self.optimizer, self.lr_scheduler = self.run_config.build_optimizer(self.model)
 
-        # fp16
-        self.fp16 = fp16
-        self.scaler = torch.cuda.amp.GradScaler(enabled=self.fp16)
+        # amp
+        self.amp = amp
+        self.scaler = torch.cuda.amp.GradScaler(enabled=self.enable_amp)
