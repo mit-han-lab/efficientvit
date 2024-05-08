@@ -431,15 +431,52 @@ class LiteMLA(nn.Module):
         out = torch.reshape(out, (B, -1, H, W))
         return out
 
+    @autocast(enabled=False)
+    def relu_quadratic_att(self, qkv: torch.Tensor) -> torch.Tensor:
+        B, _, H, W = list(qkv.size())
+
+        qkv = torch.reshape(
+            qkv,
+            (
+                B,
+                -1,
+                3 * self.dim,
+                H * W,
+            ),
+        )
+        q, k, v = (
+            qkv[:, :, 0 : self.dim],
+            qkv[:, :, self.dim : 2 * self.dim],
+            qkv[:, :, 2 * self.dim :],
+        )
+
+        q = self.kernel_func(q)
+        k = self.kernel_func(k)
+
+        att_map = torch.matmul(k.transpose(-1, -2), q)  # b h n n
+        original_dtype = att_map.dtype
+        if original_dtype in [torch.float16, torch.bfloat16]:
+            att_map = att_map.float()
+        att_map = att_map / (torch.sum(att_map, dim=2, keepdim=True) + self.eps)  # b h n n
+        att_map = att_map.to(original_dtype)
+        out = torch.matmul(v, att_map)  # b h d n
+
+        out = torch.reshape(out, (B, -1, H, W))
+        return out
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # generate multi-scale q, k, v
         qkv = self.qkv(x)
         multi_scale_qkv = [qkv]
         for op in self.aggreg:
             multi_scale_qkv.append(op(qkv))
-        multi_scale_qkv = torch.cat(multi_scale_qkv, dim=1)
+        qkv = torch.cat(multi_scale_qkv, dim=1)
 
-        out = self.relu_linear_att(multi_scale_qkv)
+        H, W = list(qkv.size())[-2:]
+        if H * W > self.dim:
+            out = self.relu_linear_att(qkv)
+        else:
+            out = self.relu_quadratic_att(qkv)
         out = self.proj(out)
 
         return out
