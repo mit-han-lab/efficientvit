@@ -224,7 +224,7 @@ class Trainer:
         # amp
         self.amp = amp
         self.scaler = torch.cuda.amp.GradScaler(enabled=self.enable_amp)
-    
+
     @property
     def enable_amp(self) -> bool:
         return self.amp != "fp32"

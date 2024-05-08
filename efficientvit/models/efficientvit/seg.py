@@ -85,9 +85,11 @@ class SegHead(DAGBlock):
         outputs = {
             "segout": OpSequential(
                 [
-                    None
-                    if final_expand is None
-                    else ConvLayer(head_width, head_width * final_expand, 1, norm=norm, act_func=act_func),
+                    (
+                        None
+                        if final_expand is None
+                        else ConvLayer(head_width, head_width * final_expand, 1, norm=norm, act_func=act_func)
+                    ),
                     ConvLayer(
                         head_width * (final_expand or 1),
                         n_classes,
