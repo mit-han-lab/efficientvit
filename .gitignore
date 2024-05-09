@@ -10,3 +10,7 @@ __pycache__/
 assets/checkpoints/
 assets/export_models/
 coco/
+
+demo/gazesam/models/pytorch
+demo/gazesam/models/onnx
+demo/gazesam/models/tensorrt
