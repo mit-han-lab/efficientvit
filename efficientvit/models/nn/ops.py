@@ -399,6 +399,9 @@ class LiteMLA(nn.Module):
     def relu_linear_att(self, qkv: torch.Tensor) -> torch.Tensor:
         B, _, H, W = list(qkv.size())
 
+        if qkv.dtype == torch.float16:
+            qkv = qkv.float()
+
         qkv = torch.reshape(
             qkv,
             (
@@ -424,7 +427,7 @@ class LiteMLA(nn.Module):
         v = F.pad(v, (0, 0, 0, 1), mode="constant", value=1)
         vk = torch.matmul(v, trans_k)
         out = torch.matmul(vk, q)
-        if out.dtype in [torch.float16, torch.bfloat16]:
+        if out.dtype == torch.bfloat16:
             out = out.float()
         out = out[:, :, :-1] / (out[:, :, -1:] + self.eps)
 
