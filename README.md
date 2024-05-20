@@ -81,6 +81,12 @@ pip install -r requirements.txt
 
 ![demo](assets/demo/cityscapes_l1.gif)
 
+## Demo
+
+- GazeSAM: Combining EfficientViT-SAM with Gaze Estimation
+
+![GazeSAM demo](demo/gazesam/assets/gazesam_demo.gif)
+
 ## Contact
 
 Han Cai: <hancai@mit.edu>

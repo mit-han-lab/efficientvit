@@ -1,0 +1,12 @@
+PYTORCH = "pytorch"
+ONNX = "onnx"
+TENSORRT = "tensorrt"
+
+IOU_THRESH = 0.78
+
+MAUVE = (177, 156, 217)
+PURPLE = (217, 156, 177)
+TEAL = (255, 244, 79)
+YELLOW = (79, 244, 255)
+MUTED_BLUE = (159, 113, 59)
+GREY = (128, 128, 128)
