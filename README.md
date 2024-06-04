@@ -21,6 +21,7 @@ EfficientViT is a new family of ViT models for efficient high-resolution dense p
 - [NVIDIA Jetson Generative AI Lab](https://www.jetson-ai-lab.com/tutorial_efficientvit.html)
 - [timm](https://github.com/huggingface/pytorch-image-models): [link](https://github.com/huggingface/pytorch-image-models/blob/main/timm/models/efficientvit_mit.py)
 - [X-AnyLabeling](https://github.com/CVHub520/X-AnyLabeling): [link](https://github.com/CVHub520/X-AnyLabeling/blob/main/anylabeling/services/auto_labeling/efficientvit_sam.py)
+- [Grounding DINO 1.5 Edge](https://github.com/IDEA-Research/Grounding-DINO-1.5-API): [link](https://arxiv.org/pdf/2405.10300)
 
 ## Getting Started
 
