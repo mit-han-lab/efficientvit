@@ -131,7 +131,7 @@ def load_depth_model(mode, precision):
 
         encoder = "vitb"  # or 'vitb', 'vits'
         model = DepthAnything(model_configs[encoder])
-        model.load_state_dict(torch.load(f"{PYTORCH_MODEL_DIR}/depth_anything_{encoder}14.pth"))
+        model.load_state_dict(torch.load(f"{PYTORCH_MODEL_DIR}/depth_anything_{encoder}14.pth", weights_only=True))
         model = model.eval().cuda()
         return model
 
