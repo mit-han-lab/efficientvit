@@ -5,7 +5,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.cuda.amp import autocast
+from torch.amp import autocast
 
 from efficientvit.models.nn.act import build_act
 from efficientvit.models.nn.norm import build_norm
@@ -91,7 +91,7 @@ class UpSampleLayer(nn.Module):
         self.factor = None if self.size is not None else factor
         self.align_corners = align_corners
 
-    @autocast(enabled=False)
+    @autocast(device_type="cuda", enabled=False)
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         if (self.size is not None and tuple(x.shape[-2:]) == self.size) or self.factor == 1:
             return x
@@ -395,7 +395,7 @@ class LiteMLA(nn.Module):
             act_func=act_func[1],
         )
 
-    @autocast(enabled=False)
+    @autocast(device_type="cuda", enabled=False)
     def relu_linear_att(self, qkv: torch.Tensor) -> torch.Tensor:
         B, _, H, W = list(qkv.size())
 
@@ -434,7 +434,7 @@ class LiteMLA(nn.Module):
         out = torch.reshape(out, (B, -1, H, W))
         return out
 
-    @autocast(enabled=False)
+    @autocast(device_type="cuda", enabled=False)
     def relu_quadratic_att(self, qkv: torch.Tensor) -> torch.Tensor:
         B, _, H, W = list(qkv.size())
 
