@@ -171,7 +171,7 @@ class SAMTrainer(Trainer):
 
             batched_input.append(dict_input)
 
-        with torch.amp.autocast(device_type="cuda", dtype=self.amp_dtype, enabled=self.enable_amp):
+        with torch.autocast(device_type="cuda", dtype=self.amp_dtype, enabled=self.enable_amp):
             if random.random() >= 0.5:
                 output, iou_predictions = self.model(batched_input, multimask_output=True)
             else:
