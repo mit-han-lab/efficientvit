@@ -6,11 +6,15 @@ __pycache__/
 .dev/
 .exp/
 .slurm/
+.demo/
+
+wandb/
+tmp/
 
 assets/checkpoints/
+assets/data/
 assets/export_models/
-coco/
 
-demo/gazesam/models/pytorch
-demo/gazesam/models/onnx
-demo/gazesam/models/tensorrt
+applications/efficientvit_gazesam/models/pytorch
+applications/efficientvit_gazesam/models/onnx
+applications/efficientvit_gazesam/models/tensorrt

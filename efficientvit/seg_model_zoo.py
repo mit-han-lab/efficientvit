@@ -1,6 +1,5 @@
-# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
-# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
-# International Conference on Computer Vision (ICCV), 2023
+from functools import partial
+from typing import Callable, Optional
 
 from efficientvit.models.efficientvit import (
     EfficientViTSeg,
@@ -14,54 +13,85 @@ from efficientvit.models.efficientvit import (
 from efficientvit.models.nn.norm import set_norm_eps
 from efficientvit.models.utils import load_state_dict_from_file
 
-__all__ = ["create_seg_model"]
+__all__ = ["create_efficientvit_seg_model"]
 
 
-REGISTERED_SEG_MODEL: dict[str, dict[str, str]] = {
-    "cityscapes": {
-        "b0": "assets/checkpoints/seg/cityscapes/b0.pt",
-        "b1": "assets/checkpoints/seg/cityscapes/b1.pt",
-        "b2": "assets/checkpoints/seg/cityscapes/b2.pt",
-        "b3": "assets/checkpoints/seg/cityscapes/b3.pt",
-        ################################################
-        "l1": "assets/checkpoints/seg/cityscapes/l1.pt",
-        "l2": "assets/checkpoints/seg/cityscapes/l2.pt",
-    },
-    "ade20k": {
-        "b1": "assets/checkpoints/seg/ade20k/b1.pt",
-        "b2": "assets/checkpoints/seg/ade20k/b2.pt",
-        "b3": "assets/checkpoints/seg/ade20k/b3.pt",
-        ################################################
-        "l1": "assets/checkpoints/seg/ade20k/l1.pt",
-        "l2": "assets/checkpoints/seg/ade20k/l2.pt",
-    },
+REGISTERED_EFFICIENTVIT_SEG_MODEL: dict[str, tuple[Callable, float, str]] = {
+    "efficientvit-seg-b0-cityscapes": (
+        partial(efficientvit_seg_b0, dataset="cityscapes"),
+        1e-5,
+        "assets/checkpoints/efficientvit_seg/efficientvit_seg_b0_cityscapes.pt",
+    ),
+    "efficientvit-seg-b1-cityscapes": (
+        partial(efficientvit_seg_b1, dataset="cityscapes"),
+        1e-5,
+        "assets/checkpoints/efficientvit_seg/efficientvit_seg_b1_cityscapes.pt",
+    ),
+    "efficientvit-seg-b2-cityscapes": (
+        partial(efficientvit_seg_b2, dataset="cityscapes"),
+        1e-5,
+        "assets/checkpoints/efficientvit_seg/efficientvit_seg_b2_cityscapes.pt",
+    ),
+    "efficientvit-seg-b3-cityscapes": (
+        partial(efficientvit_seg_b3, dataset="cityscapes"),
+        1e-5,
+        "assets/checkpoints/efficientvit_seg/efficientvit_seg_b3_cityscapes.pt",
+    ),
+    ############################################################################
+    "efficientvit-seg-l1-cityscapes": (
+        partial(efficientvit_seg_l1, dataset="cityscapes"),
+        1e-7,
+        "assets/checkpoints/efficientvit_seg/efficientvit_seg_l1_cityscapes.pt",
+    ),
+    "efficientvit-seg-l2-cityscapes": (
+        partial(efficientvit_seg_l2, dataset="cityscapes"),
+        1e-7,
+        "assets/checkpoints/efficientvit_seg/efficientvit_seg_l2_cityscapes.pt",
+    ),
+    ############################################################################
+    "efficientvit-seg-b1-ade20k": (
+        partial(efficientvit_seg_b1, dataset="ade20k"),
+        1e-5,
+        "assets/checkpoints/efficientvit_seg/efficientvit_seg_b1_ade20k.pt",
+    ),
+    "efficientvit-seg-b2-ade20k": (
+        partial(efficientvit_seg_b2, dataset="ade20k"),
+        1e-5,
+        "assets/checkpoints/efficientvit_seg/efficientvit_seg_b2_ade20k.pt",
+    ),
+    "efficientvit-seg-b3-ade20k": (
+        partial(efficientvit_seg_b3, dataset="ade20k"),
+        1e-5,
+        "assets/checkpoints/efficientvit_seg/efficientvit_seg_b3_ade20k.pt",
+    ),
+    ############################################################################
+    "efficientvit-seg-l1-ade20k": (
+        partial(efficientvit_seg_l1, dataset="ade20k"),
+        1e-7,
+        "assets/checkpoints/efficientvit_seg/efficientvit_seg_l1_ade20k.pt",
+    ),
+    "efficientvit-seg-l2-ade20k": (
+        partial(efficientvit_seg_l2, dataset="ade20k"),
+        1e-7,
+        "assets/checkpoints/efficientvit_seg/efficientvit_seg_l2_ade20k.pt",
+    ),
 }
 
 
-def create_seg_model(
-    name: str, dataset: str, pretrained=True, weight_url: str or None = None, **kwargs
+def create_efficientvit_seg_model(
+    name: str, pretrained=True, weight_url: Optional[str] = None, **kwargs
 ) -> EfficientViTSeg:
-    model_dict = {
-        "b0": efficientvit_seg_b0,
-        "b1": efficientvit_seg_b1,
-        "b2": efficientvit_seg_b2,
-        "b3": efficientvit_seg_b3,
-        #########################
-        "l1": efficientvit_seg_l1,
-        "l2": efficientvit_seg_l2,
-    }
-
-    model_id = name.split("-")[0]
-    if model_id not in model_dict:
-        raise ValueError(f"Do not find {name} in the model zoo. List of models: {list(model_dict.keys())}")
+    if name not in REGISTERED_EFFICIENTVIT_SEG_MODEL:
+        raise ValueError(
+            f"Do not find {name} in the model zoo. List of models: {list(REGISTERED_EFFICIENTVIT_SEG_MODEL.keys())}"
+        )
     else:
-        model = model_dict[model_id](dataset=dataset, **kwargs)
-
-    if model_id in ["l1", "l2"]:
-        set_norm_eps(model, 1e-7)
+        model_cls, norm_eps, default_pt = REGISTERED_EFFICIENTVIT_SEG_MODEL[name]
+        model = model_cls(**kwargs)
+        set_norm_eps(model, norm_eps)
+        weight_url = default_pt if weight_url is None else weight_url
 
     if pretrained:
-        weight_url = weight_url or REGISTERED_SEG_MODEL[dataset].get(name, None)
         if weight_url is None:
             raise ValueError(f"Do not find the pretrained weight of {name}.")
         else:

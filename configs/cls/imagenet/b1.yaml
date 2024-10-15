@@ -1,7 +1,0 @@
-data_provider:
-  rrc_config:
-    test_crop_ratio: 0.95
-
-net_config:
-  name: b1
-  dropout: 0

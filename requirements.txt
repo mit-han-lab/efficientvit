@@ -1,22 +1,33 @@
-torch==2.0.1
-torchvision==0.15.2
+torch==2.4.1
+torchvision==0.19.1
+torchmetrics==1.4.2
+numpy<2
+
+timm
 einops
 opencv-python
-timm==0.6.13
 tqdm
 torchprofile
+scipy
+torch-fidelity
+diffusers
+omegaconf
+ipdb
+wandb
 
 matplotlib
-git+https://github.com/zhijian-liu/torchpack.git@3a5a9f7ac665444e1eb45942ee3f8fc7ffbd84e5
+huggingface-hub
 transformers
 onnx
 onnxsim
 onnxruntime
-git+https://github.com/alibaba/TinyNeuralNetwork.git
-git+https://github.com/facebookresearch/segment-anything.git
 
 pycocotools
 lvis
+scikit-image
+
+git+https://github.com/alibaba/TinyNeuralNetwork.git
+git+https://github.com/facebookresearch/segment-anything.git
 
 # demo-specific packages
 gradio

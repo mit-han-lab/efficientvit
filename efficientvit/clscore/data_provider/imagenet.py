@@ -1,10 +1,7 @@
-# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
-# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
-# International Conference on Computer Vision (ICCV), 2023
-
 import copy
 import math
 import os
+from typing import Any, Optional
 
 import torchvision.transforms as transforms
 from torchvision.datasets import ImageFolder
@@ -31,24 +28,24 @@ class ImageNetDataProvider(DataProvider):
 
     def __init__(
         self,
-        data_dir: str or None = None,
-        rrc_config: dict or None = None,
-        data_aug: dict or list[dict] or None = None,
+        data_dir: Optional[str] = None,
+        rrc_config: Optional[dict] = None,
+        data_aug: Optional[dict | list[dict]] = None,
         ###########################################
         train_batch_size=128,
         test_batch_size=128,
-        valid_size: int or float or None = None,
+        valid_size: Optional[int | float] = None,
         n_worker=8,
-        image_size: int or list[int] = 224,
-        num_replicas: int or None = None,
-        rank: int or None = None,
-        train_ratio: float or None = None,
+        image_size: int | list[int] = 224,
+        num_replicas: Optional[int] = None,
+        rank: Optional[int] = None,
+        train_ratio: Optional[float] = None,
         drop_last: bool = False,
     ):
-        self.data_dir = data_dir or self.data_dir
+        self.data_dir = self.data_dir if data_dir is None else data_dir
         self.rrc_config = partial_update_config(
             copy.deepcopy(self._DEFAULT_RRC_CONFIG),
-            rrc_config or {},
+            {} if rrc_config is None else rrc_config,
         )
         self.data_aug = data_aug
 
@@ -64,8 +61,8 @@ class ImageNetDataProvider(DataProvider):
             drop_last,
         )
 
-    def build_valid_transform(self, image_size: tuple[int, int] or None = None) -> any:
-        image_size = (image_size or self.active_image_size)[0]
+    def build_valid_transform(self, image_size: Optional[tuple[int, int]] = None) -> Any:
+        image_size = (self.active_image_size if image_size is None else image_size)[0]
         crop_size = int(math.ceil(image_size / self.rrc_config["test_crop_ratio"]))
         return transforms.Compose(
             [
@@ -79,8 +76,8 @@ class ImageNetDataProvider(DataProvider):
             ]
         )
 
-    def build_train_transform(self, image_size: tuple[int, int] or None = None) -> any:
-        image_size = image_size or self.image_size
+    def build_train_transform(self, image_size: Optional[tuple[int, int]] = None) -> Any:
+        image_size = self.image_size if image_size is None else image_size
 
         # random_resize_crop -> random_horizontal_flip
         train_transforms = [
@@ -112,7 +109,7 @@ class ImageNetDataProvider(DataProvider):
         ]
         return transforms.Compose(train_transforms)
 
-    def build_datasets(self) -> tuple[any, any, any]:
+    def build_datasets(self) -> tuple[Any, Any, Any]:
         train_transform = self.build_train_transform()
         valid_transform = self.build_valid_transform()
 

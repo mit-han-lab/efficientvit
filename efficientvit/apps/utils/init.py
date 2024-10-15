@@ -1,7 +1,3 @@
-# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
-# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
-# International Conference on Computer Vision (ICCV), 2023
-
 import torch
 import torch.nn as nn
 from torch.nn.modules.batchnorm import _BatchNorm
@@ -9,7 +5,7 @@ from torch.nn.modules.batchnorm import _BatchNorm
 __all__ = ["init_modules", "zero_last_gamma"]
 
 
-def init_modules(model: nn.Module or list[nn.Module], init_type="trunc_normal") -> None:
+def init_modules(model: nn.Module | list[nn.Module], init_type="trunc_normal") -> None:
     _DEFAULT_INIT_PARAM = {"trunc_normal": 0.02}
 
     if isinstance(model, list):
@@ -21,7 +17,7 @@ def init_modules(model: nn.Module or list[nn.Module], init_type="trunc_normal") 
 
         if init_type.startswith("trunc_normal"):
             init_func = lambda param: nn.init.trunc_normal_(
-                param, std=(init_params or _DEFAULT_INIT_PARAM["trunc_normal"])
+                param, std=(_DEFAULT_INIT_PARAM["trunc_normal"] if init_params is None else init_params)
             )
         else:
             raise NotImplementedError

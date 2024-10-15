@@ -1,7 +1,3 @@
-# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
-# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
-# International Conference on Computer Vision (ICCV), 2023
-
 import torch
 
 from efficientvit.apps.utils.dist import sync_tensor
@@ -17,14 +13,14 @@ class AverageMeter:
         self.sum = 0
         self.count = 0
 
-    def _sync(self, val: torch.Tensor or int or float) -> torch.Tensor or int or float:
+    def _sync(self, val: torch.Tensor | int | float) -> torch.Tensor | int | float:
         return sync_tensor(val, reduce="sum") if self.is_distributed else val
 
-    def update(self, val: torch.Tensor or int or float, delta_n=1):
+    def update(self, val: torch.Tensor | int | float, delta_n=1):
         self.count += self._sync(delta_n)
         self.sum += self._sync(val * delta_n)
 
-    def get_count(self) -> torch.Tensor or int or float:
+    def get_count(self) -> torch.Tensor | int | float:
         return self.count.item() if isinstance(self.count, torch.Tensor) and self.count.numel() == 1 else self.count
 
     @property

@@ -1,6 +1,3 @@
-import io
-from typing import List
-
 import cv2
 import numpy as np
 import torch
@@ -9,6 +6,23 @@ from torch.nn import functional as F
 """
     Some functions in this file are modified from https://github.com/SysCV/sam-hq/blob/main/train/utils/misc.py.
 """
+
+__all__ = [
+    "point_sample",
+    "cat",
+    "get_uncertain_point_coords_with_randomness",
+    "dice_loss",
+    "sigmoid_ce_loss",
+    "calculate_uncertainty",
+    "loss_masks",
+    "mask_iou",
+    "compute_iou",
+    "mask_to_boundary",
+    "boundary_iou",
+    "compute_boundary_iou",
+    "masks_sample_points",
+    "mask_iou_batch",
+]
 
 
 def point_sample(input, point_coords, **kwargs):
@@ -36,7 +50,7 @@ def point_sample(input, point_coords, **kwargs):
     return output
 
 
-def cat(tensors: List[torch.Tensor], dim: int = 0):
+def cat(tensors: list[torch.Tensor], dim: int = 0):
     """
     Efficient version of torch.cat that avoids a copy if there is only a single element in a list.
     """

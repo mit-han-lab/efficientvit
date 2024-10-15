@@ -1,3 +1,0 @@
-onnx2torch
-git+https://github.com/edavalosanaya/L2CS-Net.git@main
-super-gradients

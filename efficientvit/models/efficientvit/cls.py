@@ -1,7 +1,3 @@
-# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
-# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
-# International Conference on Computer Vision (ICCV), 2023
-
 import torch
 import torch.nn as nn
 
@@ -50,7 +46,7 @@ class ClsHead(OpSequential):
 
 
 class EfficientViTCls(nn.Module):
-    def __init__(self, backbone: EfficientViTBackbone or EfficientViTLargeBackbone, head: ClsHead) -> None:
+    def __init__(self, backbone: EfficientViTBackbone | EfficientViTLargeBackbone, head: ClsHead) -> None:
         super().__init__()
         self.backbone = backbone
         self.head = head

@@ -1,6 +1,4 @@
-# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
-# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
-# International Conference on Computer Vision (ICCV), 2023
+from typing import Any, Optional
 
 __all__ = [
     "list_sum",
@@ -13,15 +11,15 @@ __all__ = [
 ]
 
 
-def list_sum(x: list) -> any:
+def list_sum(x: list) -> Any:
     return x[0] if len(x) == 1 else x[0] + list_sum(x[1:])
 
 
-def list_mean(x: list) -> any:
+def list_mean(x: list) -> Any:
     return list_sum(x) / len(x)
 
 
-def weighted_list_sum(x: list, weights: list) -> any:
+def weighted_list_sum(x: list, weights: list) -> Any:
     assert len(x) == len(weights)
     return x[0] * weights[0] if len(x) == 1 else x[0] * weights[0] + weighted_list_sum(x[1:], weights[1:])
 
@@ -30,13 +28,13 @@ def list_join(x: list, sep="\t", format_str="%s") -> str:
     return sep.join([format_str % val for val in x])
 
 
-def val2list(x: list or tuple or any, repeat_time=1) -> list:
+def val2list(x: list | tuple | Any, repeat_time=1) -> list:
     if isinstance(x, (list, tuple)):
         return list(x)
     return [x for _ in range(repeat_time)]
 
 
-def val2tuple(x: list or tuple or any, min_len: int = 1, idx_repeat: int = -1) -> tuple:
+def val2tuple(x: list | tuple | Any, min_len: int = 1, idx_repeat: int = -1) -> tuple:
     x = val2list(x)
 
     # repeat elements if necessary
@@ -46,7 +44,7 @@ def val2tuple(x: list or tuple or any, min_len: int = 1, idx_repeat: int = -1) -
     return tuple(x)
 
 
-def squeeze_list(x: list or None) -> list or any:
+def squeeze_list(x: Optional[list]) -> list | Any:
     if x is not None and len(x) == 1:
         return x[0]
     else:

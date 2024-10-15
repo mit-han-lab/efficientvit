@@ -1,11 +1,77 @@
-# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction ([paper](https://arxiv.org/abs/2205.14756), [poster](assets/files/efficientvit_poster.pdf))
+# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction [[paper](https://arxiv.org/abs/2205.14756)]
+
+**Efficient vision foundation models for high-resolution generation and perception.**
+
+## Content
+
+### Deep Compression Autoencoder for Efficient High-Resolution Diffusion Models [[paper](https://arxiv.org/abs/2410.10733)] [[readme](applications/dc_ae/README.md)]
+
+![demo](assets/dc_ae_demo.gif)
+<p align="center">
+<b> Figure 1: We address the reconstruction accuracy drop of high spatial-compression autoencoders.
+</p>
+
+![demo](assets/dc_ae_diffusion_demo.gif)
+<p align="center">
+<b> Figure 2: DC-AE delivers significant training and inference speedup without performance drop.
+</p>
+
+- [Usage of Deep Compression Autoencoder](applications/dc_ae/README.md#deep-compression-autoencoder)
+- [Usage of DC-AE-Diffusion](applications/dc_ae/README.md#efficient-diffusion-models-with-dc-ae)
+- [Evaluate Deep Compression Autoencoder](applications/dc_ae/README.md#evaluate-deep-compression-autoencoder)
+- [Demo DC-AE-Diffusion Models](applications/dc_ae/README.md#demo-dc-ae-diffusion-models)
+- [Evaluate DC-AE-Diffusion Models](applications/dc_ae/README.md#evaluate-dc-ae-diffusion-models)
+- [Train DC-AE-Diffusion Models](applications/dc_ae/README.md#train-dc-ae-diffusion-models)
+- [Reference](applications/dc_ae/README.md#reference)
+
+### EfficientViT-SAM: Accelerated Segment Anything Model Without Accuracy Loss [[paper](https://arxiv.org/abs/2402.05008)] [[online demo](https://evitsam.hanlab.ai/)] [[readme](applications/efficientvit_sam/README.md)]
+
+<p align="left">
+<img src="assets/sam_zero_shot_coco_mAP.png"  width="500">
+</p>
+
+- [Pretrained EfficientViT-SAM Models](applications/efficientvit_sam/README.md#pretrained-efficientvit-sam-models)
+- [Usage of EfficientViT-SAM](applications/efficientvit_sam/README.md#usage)
+- [Evaluate EfficientViT-SAM](applications/efficientvit_sam/README.md#evaluation)
+- [Visualize EfficientViT-SAM](applications/efficientvit_sam/README.md#visualization)
+- [Deploy EfficientViT-SAM](applications/efficientvit_sam/README.md#deployment)
+- [Train EfficientViT-SAM](applications/efficientvit_sam/README.md#training)
+- [Reference](applications/efficientvit_sam/README.md#reference)
+
+### EfficientViT-Classification [[paper](https://arxiv.org/abs/2205.14756)] [[readme](applications/efficientvit_cls/README.md)]
+
+<p align="left">
+<img src="assets/efficientvit_cls_results.png"  width="600">
+</p>
+
+- [Pretrained EfficientViT Classification Models](applications/efficientvit_cls/README.md#pretrained-efficientvit-classification-models)
+- [Usage of EfficientViT Classification Models](applications/efficientvit_cls/README.md#usage)
+- [Evaluate EfficientViT Classification Models](applications/efficientvit_cls/README.md#evaluation)
+- [Export EfficientViT Classification Models](applications/efficientvit_cls/README.md#export)
+- [Train EfficientViT Classification Models](applications/efficientvit_cls/README.md#training)
+- [Reference](applications/efficientvit_cls/README.md#reference)
+
+### EfficientViT-Segmentation [[paper](https://arxiv.org/abs/2205.14756)] [[readme](applications/efficientvit_seg/README.md)]
+
+![demo](assets/cityscapes_l1.gif)
+
+- [Pretrained EfficientViT Segmentation Models](applications/efficientvit_seg/README.md#pretrained-efficientvit-segmentation-models)
+- [Usage of EfficientViT Segmentation Models](applications/efficientvit_seg/README.md#usage)
+- [Evaluate EfficientViT Segmentation Models](applications/efficientvit_seg/README.md#evaluation)
+- [Visualize EfficientViT Segmentation Models](applications/efficientvit_seg/README.md#visualization)
+- [Export EfficientViT Segmentation Models](applications/efficientvit_seg/README.md#export)
+- [Reference](applications/efficientvit_seg/README.md#reference)
+
+### EfficientViT-GazeSAM [[readme](applications/efficientvit_gazesam/README.md)]
+
+![GazeSAM demo](assets/efficientvit_gazesam_demo.gif)
 
 ## News
 
 **If you are interested in getting updates, please join our mailing list [here](https://forms.gle/Z6DNkRidJ1ouxmUk9).**
 
-- [2024/10/14] We release [Deep Compression Autoencoder (DC-AE)](https://arxiv.org/abs/2410.10733) for efficient high-resolution diffusion models. The code and pretrained models will be released in the following days.
-- [2024/07/10] EfficientViT is used as the backbone in [Grounding DINO 1.5 Edge](https://arxiv.org/pdf/2405.10300) for efficient open-set object detection. 
+- [2024/10/15] We released **Deep Compression Autoencoder (DC-AE)**: [link](#deep-compression-autoencoder-for-efficient-high-resolution-diffusion-models-paper-readme)!
+- [2024/07/10] EfficientViT is used as the backbone in [Grounding DINO 1.5 Edge](https://arxiv.org/pdf/2405.10300) for efficient open-set object detection.
 - [2024/07/10] EfficientViT-SAM is used in [MedficientSAM](https://github.com/hieplpvip/medficientsam), the 1st place model in [CVPR 2024 Segment Anything In Medical Images On Laptop Challenge](https://www.codabench.org/competitions/1847/).
 - [2024/07/10] An FPGA-based accelerator for EfficientViT: [link](https://arxiv.org/abs/2403.20230).
 - [2024/04/23] We released the training code of EfficientViT-SAM.
@@ -16,9 +82,13 @@
 - [2023/09/12] EfficientViT is highlighted by [MIT home page](https://www.mit.edu/archive/spotlight/efficient-computer-vision/) and [MIT News](https://news.mit.edu/2023/ai-model-high-resolution-computer-vision-0912).
 - [2023/07/18] EfficientViT is accepted by ICCV 2023.
 
-## About EfficientViT Models
+## Getting Started
 
-EfficientViT is a new family of ViT models for efficient high-resolution dense prediction vision tasks. The core building block of EfficientViT is a lightweight, multi-scale linear attention module that achieves global receptive field and multi-scale learning with only hardware-efficient operations, making EfficientViT TensorRT-friendly and suitable for GPU deployment.
+```bash
+conda create -n efficientvit python=3.10
+conda activate efficientvit
+pip install -r requirements.txt
+```
 
 ## Third-Party Implementation/Integration
 
@@ -27,96 +97,38 @@ EfficientViT is a new family of ViT models for efficient high-resolution dense p
 - [X-AnyLabeling](https://github.com/CVHub520/X-AnyLabeling): [link](https://github.com/CVHub520/X-AnyLabeling/blob/main/anylabeling/services/auto_labeling/efficientvit_sam.py)
 - [Grounding DINO 1.5 Edge](https://github.com/IDEA-Research/Grounding-DINO-1.5-API): [link](https://arxiv.org/pdf/2405.10300)
 
-## Getting Started
-
-```bash
-conda create -n efficientvit python=3.10
-conda activate efficientvit
-conda install -c conda-forge mpi4py openmpi
-pip install -r requirements.txt
-```
-
-## EfficientViT Applications
-
-### [Segment Anything](applications/sam.md)
-- [Datasets](applications/sam.md#datasets)
-- [Pretrained Models](applications/sam.md#pretrained-models)
-- [Use in Pytorch](applications/sam.md#usage)
-- [Evaluation](applications/sam.md#evaluation)
-- [Visualization](applications/sam.md#visualization)
-- [Web Demo](demo/sam/README.md)
-- [Deployment using ONNX and TensorRT](applications/sam.md#deployment)
-- [Training](applications/sam.md#training)
-
-<p align="left">
-<img src="assets/files/sam_zero_shot_coco_mAP.png"  width="450">
-</p>
-
-| Model         |  Resolution | COCO mAP | LVIS mAP | Params |  MACs | Jetson Orin Latency (bs1) | A100 Throughput (bs16) | Checkpoint |
-|----------------------|:----------:|:----------:|:---------:|:------------:|:---------:|:---------:|:------------:|:------------:|
-| EfficientViT-SAM-L0 | 512x512 | 45.7 | 41.8 | 34.8M  | 35G | 8.2ms  | 762 images/s | [link](https://huggingface.co/han-cai/efficientvit-sam/resolve/main/l0.pt) |
-| EfficientViT-SAM-L1 | 512x512 | 46.2 | 42.1 | 47.7M | 49G |  10.2ms | 638 images/s | [link](https://huggingface.co/han-cai/efficientvit-sam/resolve/main/l1.pt) |
-| EfficientViT-SAM-L2 | 512x512 | 46.6 | 42.7 | 61.3M | 69G |  12.9ms | 538 images/s  | [link](https://huggingface.co/han-cai/efficientvit-sam/resolve/main/l2.pt) |
-| EfficientViT-SAM-XL0 | 1024x1024 | 47.5 | 43.9 | 117.0M | 185G | 22.5ms  | 278 images/s | [link](https://huggingface.co/han-cai/efficientvit-sam/resolve/main/xl0.pt) |
-| EfficientViT-SAM-XL1 | 1024x1024 | 47.8 | 44.4 | 203.3M | 322G | 37.2ms  | 182 images/s | [link](https://huggingface.co/han-cai/efficientvit-sam/resolve/main/xl1.pt) |
-<p align="center">
-<b> Table1: Summary of All EfficientViT-SAM Variants.</b> COCO mAP and LVIS mAP are measured using ViTDet's predicted bounding boxes as the prompt. End-to-end Jetson Orin latency and A100 throughput are measured with TensorRT and fp16.
-</p>
-
-
-### [Image Classification](applications/cls.md)
-- [Datasets](applications/cls.md#datasets)
-- [Pretrained Models](applications/cls.md#pretrained-models)
-- [Use in Pytorch](applications/cls.md#usage)
-- [Evaluation](applications/cls.md#evaluation)
-- [Deployment](applications/cls.md#export)
-- [Training](applications/cls.md#training)
-
-<p align="left">
-<img src="assets/files/cls_results.png"  width="450">
-</p>
-
-### [Semantic Segmentation](applications/seg.md)
-- [Datasets](applications/seg.md#datasets)
-- [Pretrained Models](applications/seg.md#pretrained-models)
-- [Use in Pytorch](applications/seg.md#usage)
-- [Evaluation](applications/seg.md#evaluation)
-- [Visualization](applications/seg.md#visualization)
-- [Deployment](applications/seg.md#export)
-
-![demo](assets/demo/cityscapes_l1.gif)
-
-## Demo
-
-- GazeSAM: Combining EfficientViT-SAM with Gaze Estimation
-
-![GazeSAM demo](demo/gazesam/assets/gazesam_demo.gif)
-
 ## Contact
 
-Han Cai: <hancai@mit.edu>
+[Han Cai](http://hancai.ai/)
 
-## TODO
+## Reference
 
-- [x] ImageNet Pretrained models
-- [x] Segmentation Pretrained models
-- [x] ImageNet training code
-- [x] EfficientViT L series, designed for cloud
-- [x] EfficientViT for segment anything
-- [ ] EfficientViT for image generation
-- [ ] EfficientViT for CLIP
-- [ ] EfficientViT for super-resolution
-- [ ] Segmentation training code
-
-## Citation
-
-If EfficientViT is useful or relevant to your research, please kindly recognize our contributions by citing our paper:
+If EfficientViT or EfficientViT-SAM or DC-AE is useful or relevant to your research, please kindly recognize our contributions by citing our paper:
 
 ```
-@article{cai2022efficientvit,
-  title={Efficientvit: Enhanced linear attention for high-resolution low-computation visual recognition},
-  author={Cai, Han and Gan, Chuang and Han, Song},
-  journal={arXiv preprint arXiv:2205.14756},
-  year={2022}
+@inproceedings{cai2023efficientvit,
+  title={Efficientvit: Lightweight multi-scale attention for high-resolution dense prediction},
+  author={Cai, Han and Li, Junyan and Hu, Muyan and Gan, Chuang and Han, Song},
+  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages={17302--17313},
+  year={2023}
+}
+```
+
+```
+@article{zhang2024efficientvit,
+  title={EfficientViT-SAM: Accelerated Segment Anything Model Without Performance Loss},
+  author={Zhang, Zhuoyang and Cai, Han and Han, Song},
+  journal={arXiv preprint arXiv:2402.05008},
+  year={2024}
+}
+```
+
+```
+@article{chen2024deep,
+  title={Deep Compression Autoencoder for Efficient High-Resolution Diffusion Models},
+  author={Chen, Junyu and Cai, Han and Chen, Junsong and Xie, Enze and Yang, Shang and Tang, Haotian and Li, Muyang and Lu, Yao and Han, Song},
+  journal={arXiv preprint arXiv:2410.10733},
+  year={2024}
 }
 ```

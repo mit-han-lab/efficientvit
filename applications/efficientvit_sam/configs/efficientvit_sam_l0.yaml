@@ -1,0 +1,9 @@
+net_config:
+  name: efficientvit-sam-l0
+  ckpt: assets/checkpoints/efficientvit_sam/distilled_model/efficientvit-sam-l0.pt
+
+data_provider:
+  image_size: 512
+
+run_config:
+  base_lr: 0.0000008

@@ -1,9 +1,5 @@
-# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
-# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
-# International Conference on Computer Vision (ICCV), 2023
-
 import copy
-from typing import Any, Dict, List
+from typing import Any, Optional
 
 import numpy as np
 import torch
@@ -175,7 +171,7 @@ class SamNeck(DAGBlock):
 
 
 class EfficientViTSamImageEncoder(nn.Module):
-    def __init__(self, backbone: EfficientViTBackbone or EfficientViTLargeBackbone, neck: SamNeck):
+    def __init__(self, backbone: EfficientViTBackbone | EfficientViTLargeBackbone, neck: SamNeck):
         super().__init__()
         self.backbone = backbone
         self.neck = neck
@@ -239,7 +235,7 @@ class EfficientViTSam(nn.Module):
 
     def forward(
         self,
-        batched_input: List[Dict[str, Any]],
+        batched_input: list[dict[str, Any]],
         multimask_output: bool,
     ):
         input_images = torch.stack([x["image"] for x in batched_input], dim=0)
@@ -327,10 +323,10 @@ class EfficientViTSamPredictor:
 
     def predict(
         self,
-        point_coords: np.ndarray or None = None,
-        point_labels: np.ndarray or None = None,
-        box: np.ndarray or None = None,
-        mask_input: np.ndarray or None = None,
+        point_coords: Optional[np.ndarray] = None,
+        point_labels: Optional[np.ndarray] = None,
+        box: Optional[np.ndarray] = None,
+        mask_input: Optional[np.ndarray] = None,
         multimask_output: bool = True,
         return_logits: bool = False,
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
@@ -403,10 +399,10 @@ class EfficientViTSamPredictor:
     @torch.inference_mode()
     def predict_torch(
         self,
-        point_coords: torch.Tensor or None = None,
-        point_labels: torch.Tensor or None = None,
-        boxes: torch.Tensor or None = None,
-        mask_input: torch.Tensor or None = None,
+        point_coords: Optional[torch.Tensor] = None,
+        point_labels: Optional[torch.Tensor] = None,
+        boxes: Optional[torch.Tensor] = None,
+        mask_input: Optional[torch.Tensor] = None,
         multimask_output: bool = True,
         return_logits: bool = False,
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
@@ -482,7 +478,7 @@ class EfficientViTSamAutomaticMaskGenerator(SamAutomaticMaskGenerator):
     def __init__(
         self,
         model: EfficientViTSam,
-        points_per_side: int or None = 32,
+        points_per_side: Optional[int] = 32,
         points_per_batch: int = 64,
         pred_iou_thresh: float = 0.88,
         stability_score_thresh: float = 0.95,
@@ -492,7 +488,7 @@ class EfficientViTSamAutomaticMaskGenerator(SamAutomaticMaskGenerator):
         crop_nms_thresh: float = 0.7,
         crop_overlap_ratio: float = 512 / 1500,
         crop_n_points_downscale_factor: int = 1,
-        point_grids: list[np.ndarray] or None = None,
+        point_grids: Optional[list[np.ndarray]] = None,
         min_mask_region_area: int = 0,
         output_mode: str = "binary_mask",
     ) -> None:
@@ -515,11 +511,6 @@ class EfficientViTSamAutomaticMaskGenerator(SamAutomaticMaskGenerator):
             "uncompressed_rle",
             "coco_rle",
         ], f"Unknown output_mode {output_mode}."
-        if output_mode == "coco_rle":
-            from pycocotools import mask as mask_utils  # type: ignore # noqa: F401
-
-        if min_mask_region_area > 0:
-            import cv2  # type: ignore # noqa: F401
 
         self.predictor = EfficientViTSamPredictor(model)
         self.points_per_batch = points_per_batch

@@ -1,8 +1,5 @@
-# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
-# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
-# International Conference on Computer Vision (ICCV), 2023
-
 from functools import partial
+from typing import Optional
 
 import torch.nn as nn
 
@@ -21,7 +18,7 @@ REGISTERED_ACT_DICT: dict[str, type] = {
 }
 
 
-def build_act(name: str, **kwargs) -> nn.Module or None:
+def build_act(name: str, **kwargs) -> Optional[nn.Module]:
     if name in REGISTERED_ACT_DICT:
         act_cls = REGISTERED_ACT_DICT[name]
         args = build_kwargs_from_config(kwargs, act_cls)

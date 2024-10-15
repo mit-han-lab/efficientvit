@@ -1,10 +1,7 @@
-# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
-# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
-# International Conference on Computer Vision (ICCV), 2023
-
 import os
 import time
 from copy import deepcopy
+from typing import Optional
 
 import torch.backends.cudnn
 import torch.distributed
@@ -43,7 +40,7 @@ def save_exp_config(exp_config: dict, path: str, name="config.yaml") -> None:
     dump_config(exp_config, os.path.join(path, name))
 
 
-def setup_dist_env(gpu: str or None = None) -> None:
+def setup_dist_env(gpu: Optional[str] = None) -> None:
     if gpu is not None:
         os.environ["CUDA_VISIBLE_DEVICES"] = gpu
     if not torch.distributed.is_initialized():
@@ -60,7 +57,7 @@ def setup_seed(manual_seed: int, resume: bool) -> None:
     torch.cuda.manual_seed_all(manual_seed)
 
 
-def setup_exp_config(config_path: str, recursive=True, opt_args: dict or None = None) -> dict:
+def setup_exp_config(config_path: str, recursive=True, opt_args: Optional[dict] = None) -> dict:
     # load config
     if not os.path.isfile(config_path):
         raise ValueError(config_path)
@@ -92,7 +89,10 @@ def setup_data_provider(
     dp_config = exp_config["data_provider"]
     dp_config["num_replicas"] = get_dist_size() if is_distributed else None
     dp_config["rank"] = get_dist_rank() if is_distributed else None
-    dp_config["test_batch_size"] = dp_config.get("test_batch_size", None) or dp_config["base_batch_size"] * 2
+    dp_config["test_batch_size"] = dp_config.get("test_batch_size", None)
+    dp_config["test_batch_size"] = (
+        dp_config["base_batch_size"] * 2 if dp_config["test_batch_size"] is None else dp_config["test_batch_size"]
+    )
     dp_config["batch_size"] = dp_config["train_batch_size"] = dp_config["base_batch_size"]
 
     data_provider_lookup = {provider.name: provider for provider in data_provider_classes}
@@ -113,8 +113,8 @@ def setup_run_config(exp_config: dict, run_config_cls: type[RunConfig]) -> RunCo
 
 def init_model(
     network: nn.Module,
-    init_from: str or None = None,
-    backbone_init_from: str or None = None,
+    init_from: Optional[str] = None,
+    backbone_init_from: Optional[str] = None,
     rand_init="trunc_normal",
     last_gamma=None,
 ) -> None:

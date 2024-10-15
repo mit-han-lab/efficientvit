@@ -1,12 +1,15 @@
+import math
 import random
 from copy import deepcopy
-from typing import Optional, Tuple
+from typing import Optional
 
 import torch
 import torch.nn.functional as F
 import torchvision.transforms as transforms
 from torch.utils.data import Dataset
 from torch.utils.data.distributed import DistributedSampler
+
+__all__ = ["SAMDistributedSampler", "RandomHFlip", "ResizeLongestSide", "Normalize_and_Pad"]
 
 
 class SAMDistributedSampler(DistributedSampler):
@@ -116,11 +119,11 @@ class ResizeLongestSide(object):
     def __init__(self, target_length: int) -> None:
         self.target_length = target_length
 
-    def apply_image(self, image: torch.Tensor, original_size: Tuple[int, ...]) -> torch.Tensor:
+    def apply_image(self, image: torch.Tensor, original_size: tuple[int, ...]) -> torch.Tensor:
         target_size = self.get_preprocess_shape(original_size[0], original_size[1], self.target_length)
         return F.interpolate(image, target_size, mode="bilinear", align_corners=False, antialias=True)
 
-    def apply_boxes(self, boxes: torch.Tensor, original_size: Tuple[int, ...]) -> torch.Tensor:
+    def apply_boxes(self, boxes: torch.Tensor, original_size: tuple[int, ...]) -> torch.Tensor:
         """
         Expects a torch tensor with shape Bx4. Requires the original image
         size in (H, W) format.
@@ -128,7 +131,7 @@ class ResizeLongestSide(object):
         boxes = self.apply_coords(boxes.reshape(-1, 2, 2), original_size)
         return boxes.reshape(-1, 4)
 
-    def apply_coords(self, coords: torch.Tensor, original_size: Tuple[int, ...]) -> torch.Tensor:
+    def apply_coords(self, coords: torch.Tensor, original_size: tuple[int, ...]) -> torch.Tensor:
         """
         Expects a torch tensor with length 2 in the last dimension. Requires the
         original image size in (H, W) format.
@@ -141,7 +144,7 @@ class ResizeLongestSide(object):
         return coords
 
     @staticmethod
-    def get_preprocess_shape(oldh: int, oldw: int, long_side_length: int) -> Tuple[int, int]:
+    def get_preprocess_shape(oldh: int, oldw: int, long_side_length: int) -> tuple[int, int]:
         """
         Compute the output size given input size and target long side length.
         """

@@ -1,9 +1,6 @@
-# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
-# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
-# International Conference on Computer Vision (ICCV), 2023
-
 import copy
 import warnings
+from typing import Any, Optional
 
 import torch.utils.data
 from torch.utils.data.distributed import DistributedSampler
@@ -14,7 +11,7 @@ from efficientvit.models.utils import val2tuple
 __all__ = ["parse_image_size", "random_drop_data", "DataProvider"]
 
 
-def parse_image_size(size: int or str) -> tuple[int, int]:
+def parse_image_size(size: int | str) -> tuple[int, int]:
     if isinstance(size, str):
         size = [int(val) for val in size.split("-")]
         return size[0], size[1]
@@ -48,13 +45,13 @@ class DataProvider:
     def __init__(
         self,
         train_batch_size: int,
-        test_batch_size: int or None,
-        valid_size: int or float or None,
+        test_batch_size: Optional[int],
+        valid_size: Optional[int | float],
         n_worker: int,
-        image_size: int or list[int] or str or list[str],
-        num_replicas: int or None = None,
-        rank: int or None = None,
-        train_ratio: float or None = None,
+        image_size: int | list[int] | str | list[str],
+        num_replicas: Optional[int] = None,
+        rank: Optional[int] = None,
+        train_ratio: Optional[float] = None,
         drop_last: bool = False,
     ):
         warnings.filterwarnings("ignore")
@@ -62,7 +59,7 @@ class DataProvider:
 
         # batch_size & valid_size
         self.train_batch_size = train_batch_size
-        self.test_batch_size = test_batch_size or self.train_batch_size
+        self.test_batch_size = self.train_batch_size if test_batch_size is None else test_batch_size
         self.valid_size = valid_size
 
         # image size
@@ -104,16 +101,16 @@ class DataProvider:
     def data_shape(self) -> tuple[int, ...]:
         return 3, self.active_image_size[0], self.active_image_size[1]
 
-    def build_valid_transform(self, image_size: tuple[int, int] or None = None) -> any:
+    def build_valid_transform(self, image_size: Optional[tuple[int, int]] = None) -> Any:
         raise NotImplementedError
 
-    def build_train_transform(self, image_size: tuple[int, int] or None = None) -> any:
+    def build_train_transform(self, image_size: Optional[tuple[int, int]] = None) -> Any:
         raise NotImplementedError
 
-    def build_datasets(self) -> tuple[any, any, any]:
+    def build_datasets(self) -> tuple[Any, Any, Any]:
         raise NotImplementedError
 
-    def build_dataloader(self, dataset: any or None, batch_size: int, n_worker: int, drop_last: bool, train: bool):
+    def build_dataloader(self, dataset: Optional[Any], batch_size: int, n_worker: int, drop_last: bool, train: bool):
         if dataset is None:
             return None
         if isinstance(self.image_size, list) and train:
@@ -147,13 +144,13 @@ class DataProvider:
         if isinstance(self.train.sampler, DistributedSampler):
             self.train.sampler.set_epoch(epoch)
 
-    def assign_active_image_size(self, new_size: int or tuple[int, int]) -> None:
+    def assign_active_image_size(self, new_size: int | tuple[int, int]) -> None:
         self.active_image_size = val2tuple(new_size, 2)
         new_transform = self.build_valid_transform(self.active_image_size)
         # change the transform of the valid and test set
         self.valid.dataset.transform = self.test.dataset.transform = new_transform
 
-    def sample_val_dataset(self, train_dataset, valid_transform) -> tuple[any, any]:
+    def sample_val_dataset(self, train_dataset, valid_transform) -> tuple[Any, Any]:
         if self.valid_size is not None:
             if 0 < self.valid_size < 1:
                 valid_size = int(self.valid_size * len(train_dataset))
@@ -171,7 +168,7 @@ class DataProvider:
             val_dataset = None
         return train_dataset, val_dataset
 
-    def build_sub_train_loader(self, n_samples: int, batch_size: int) -> any:
+    def build_sub_train_loader(self, n_samples: int, batch_size: int) -> Any:
         # used for resetting BN running statistics
         if self.sub_train is None:
             self.sub_train = {}

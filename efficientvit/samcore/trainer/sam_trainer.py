@@ -1,11 +1,11 @@
 import random
 import sys
+from typing import Any
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import wandb
-from PIL import Image
 from tqdm import tqdm
 
 from efficientvit.apps.trainer import Trainer
@@ -13,13 +13,7 @@ from efficientvit.apps.utils import AverageMeter, get_dist_local_rank, get_dist_
 from efficientvit.models.utils import list_join
 from efficientvit.samcore.data_provider import SAMDataProvider
 from efficientvit.samcore.trainer import SAMRunConfig
-from efficientvit.samcore.trainer.utils import (
-    compute_boundary_iou,
-    compute_iou,
-    loss_masks,
-    mask_iou_batch,
-    masks_sample_points,
-)
+from efficientvit.samcore.trainer.utils import compute_boundary_iou, compute_iou, loss_masks, masks_sample_points
 
 __all__ = ["SAMTrainer"]
 
@@ -40,7 +34,7 @@ class SAMTrainer(Trainer):
         if is_master():
             self.wandb_log = wandb.init(project="efficientvit-sam")
 
-    def _validate(self, model, data_loader, epoch: int, sub_epoch: int) -> dict[str, any]:
+    def _validate(self, model, data_loader, epoch: int, sub_epoch: int) -> dict[str, Any]:
         val_loss = AverageMeter()
         val_iou = AverageMeter()
         val_iou_boundary = AverageMeter()
@@ -52,11 +46,11 @@ class SAMTrainer(Trainer):
                 disable=not is_master(),
                 file=sys.stdout,
             ) as t:
-                for i, data in enumerate(data_loader):
+                for _, data in enumerate(data_loader):
                     image = data["image"].cuda()
                     masks = data["masks"].cuda()
                     bboxs = data["bboxs"].cuda() * 2 if image.shape[2] == 512 else data["bboxs"].cuda()
-                    points = data["points"].cuda() * 2 if image.shape[2] == 512 else data["points"].cuda()
+                    # points = data["points"].cuda() * 2 if image.shape[2] == 512 else data["points"].cuda()
 
                     bboxs[..., 2] = bboxs[..., 0] + bboxs[..., 2]
                     bboxs[..., 3] = bboxs[..., 1] + bboxs[..., 3]
@@ -72,7 +66,7 @@ class SAMTrainer(Trainer):
 
                     output, iou_predictions = model(batched_input, True)
 
-                    B, M, N, H, W = output.shape
+                    _, M, _, _, _ = output.shape
                     output = torch.stack(
                         [
                             output[k][torch.arange(M), iou_predictions[k].argmax(-1).squeeze()]
@@ -122,15 +116,15 @@ class SAMTrainer(Trainer):
             "val_boundary_iou": val_iou_boundary.avg,
         }
 
-    def validate(self, model=None, data_loader=None, epoch=0, sub_epoch=0) -> dict[str, any]:
-        model = model or self.eval_network
+    def validate(self, model=None, data_loader=None, epoch=0, sub_epoch=0) -> dict[str, Any]:
+        model = self.eval_network if model is None else model
         if data_loader is None:
             data_loader = self.data_provider.valid
 
         model.eval()
         return self._validate(model, data_loader, epoch, sub_epoch)
 
-    def before_step(self, feed_dict: dict[str, any]) -> dict[str, any]:
+    def before_step(self, feed_dict: dict[str, Any]) -> dict[str, Any]:
         image = feed_dict["image"].cuda()
         masks = feed_dict["masks"].cuda()
         bboxs = feed_dict["bboxs"].cuda() * 2 if image.shape[2] == 512 else feed_dict["bboxs"].cuda()
@@ -146,7 +140,7 @@ class SAMTrainer(Trainer):
             "bboxs": bboxs,
         }
 
-    def run_step(self, feed_dict: dict[str, any]) -> dict[str, any]:
+    def run_step(self, feed_dict: dict[str, Any]) -> dict[str, Any]:
         image = feed_dict["image"]
         masks = feed_dict["masks"]
         bboxs = feed_dict["bboxs"]
@@ -173,9 +167,9 @@ class SAMTrainer(Trainer):
 
         with torch.autocast(device_type="cuda", dtype=self.amp_dtype, enabled=self.enable_amp):
             if random.random() >= 0.5:
-                output, iou_predictions = self.model(batched_input, multimask_output=True)
+                output, _ = self.model(batched_input, multimask_output=True)
             else:
-                output, iou_predictions = self.model(batched_input, multimask_output=False)
+                output, _ = self.model(batched_input, multimask_output=False)
 
             masks = masks.reshape(-1, image.shape[2], image.shape[3]).unsqueeze(1)
 
@@ -201,7 +195,7 @@ class SAMTrainer(Trainer):
 
         return {"loss": loss, "output": output}
 
-    def _train_one_sub_epoch(self, epoch: int, sub_epoch: int) -> dict[str, any]:
+    def _train_one_sub_epoch(self, epoch: int, sub_epoch: int) -> dict[str, Any]:
         train_loss = AverageMeter()
 
         with tqdm(
@@ -210,7 +204,7 @@ class SAMTrainer(Trainer):
             disable=not is_master(),
             file=sys.stdout,
         ) as t:
-            for i, data in enumerate(self.data_provider.train):
+            for _, data in enumerate(self.data_provider.train):
                 feed_dict = data
 
                 # preprocessing
@@ -255,7 +249,7 @@ class SAMTrainer(Trainer):
             "train_loss": train_loss.avg,
         }
 
-    def train_one_sub_epoch(self, epoch: int, sub_epoch: int) -> dict[str, any]:
+    def train_one_sub_epoch(self, epoch: int, sub_epoch: int) -> dict[str, Any]:
         self.model.train()
 
         self.data_provider.set_epoch_and_sub_epoch(epoch, sub_epoch)
@@ -268,12 +262,11 @@ class SAMTrainer(Trainer):
         for sub_epoch in range(self.start_epoch, self.run_config.n_epochs):
             epoch = sub_epoch // self.data_provider.sub_epochs_per_epoch
 
-            train_info_dict = self.train_one_sub_epoch(epoch, sub_epoch)
+            self.train_one_sub_epoch(epoch, sub_epoch)
 
             val_info_dict = self.validate(epoch=epoch, sub_epoch=sub_epoch)
 
             val_iou = val_info_dict["val_iou"]
-            is_best = val_iou > self.best_val
             self.best_val = max(val_iou, self.best_val)
 
             self.save_model(

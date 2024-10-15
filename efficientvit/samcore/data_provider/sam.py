@@ -1,4 +1,5 @@
 import json
+from typing import Any, Optional
 
 import numpy as np
 import torch
@@ -99,12 +100,12 @@ class SAMDataProvider(DataProvider):
         num_masks: int,
         train_batch_size: int,
         test_batch_size: int,
-        valid_size: int or float or None = None,
+        valid_size: Optional[int | float] = None,
         n_worker=8,
         image_size: int = 1024,
-        num_replicas: int or None = None,
-        rank: int or None = None,
-        train_ratio: float or None = None,
+        num_replicas: Optional[int] = None,
+        rank: Optional[int] = None,
+        train_ratio: Optional[float] = None,
         drop_last: bool = False,
     ):
         self.root = root
@@ -140,7 +141,7 @@ class SAMDataProvider(DataProvider):
 
         return transforms.Compose(valid_transforms)
 
-    def build_datasets(self) -> tuple[any, any, any]:
+    def build_datasets(self) -> tuple[Any, Any, Any]:
         train_transform = self.build_train_transform()
         valid_transform = self.build_valid_transform()
 
@@ -152,7 +153,7 @@ class SAMDataProvider(DataProvider):
 
         return train_dataset, val_dataset, test_dataset
 
-    def build_dataloader(self, dataset: any or None, batch_size: int, n_worker: int, drop_last: bool, train: bool):
+    def build_dataloader(self, dataset: Optional[Any], batch_size: int, n_worker: int, drop_last: bool, train: bool):
         if dataset is None:
             return None
         if train:

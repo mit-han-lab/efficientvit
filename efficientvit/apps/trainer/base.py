@@ -1,8 +1,5 @@
-# EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
-# Han Cai, Junyan Li, Muyan Hu, Chuang Gan, Song Han
-# International Conference on Computer Vision (ICCV), 2023
-
 import os
+from typing import Any, Optional
 
 import torch
 import torch.nn as nn
@@ -76,7 +73,7 @@ class Trainer:
                         "scaler": self.scaler.state_dict() if self.enable_amp else None,
                     }
 
-            model_name = model_name or "checkpoint.pt"
+            model_name = "checkpoint.pt" if model_name is None else model_name
 
             latest_fname = os.path.join(self.checkpoint_path, "latest.txt")
             model_path = os.path.join(self.checkpoint_path, model_name)
@@ -132,13 +129,13 @@ class Trainer:
 
     def reset_bn(
         self,
-        network: nn.Module or None = None,
+        network: Optional[nn.Module] = None,
         subset_size: int = 16000,
         subset_batch_size: int = 100,
         data_loader=None,
         progress_bar=False,
     ) -> None:
-        network = network or self.network
+        network = self.network if network is None else network
         if data_loader is None:
             data_loader = []
             for data in self.data_provider.build_sub_train_loader(subset_size, subset_batch_size):
@@ -159,11 +156,11 @@ class Trainer:
             progress_bar=progress_bar,
         )
 
-    def _validate(self, model, data_loader, epoch) -> dict[str, any]:
+    def _validate(self, model, data_loader, epoch) -> dict[str, Any]:
         raise NotImplementedError
 
-    def validate(self, model=None, data_loader=None, is_test=True, epoch=0) -> dict[str, any]:
-        model = model or self.eval_network
+    def validate(self, model=None, data_loader=None, is_test=True, epoch=0) -> dict[str, Any]:
+        model = self.eval_network if model is None else model
         if data_loader is None:
             if is_test:
                 data_loader = self.data_provider.test
@@ -180,10 +177,10 @@ class Trainer:
         is_test=True,
         epoch=0,
         eval_image_size=None,
-    ) -> dict[str, dict[str, any]]:
-        eval_image_size = eval_image_size or self.run_config.eval_image_size
-        eval_image_size = eval_image_size or self.data_provider.image_size
-        model = model or self.eval_network
+    ) -> dict[str, dict[str, Any]]:
+        eval_image_size = self.run_config.eval_image_size if eval_image_size is None else eval_image_size
+        eval_image_size = self.data_provider.image_size if eval_image_size is None else eval_image_size
+        model = self.eval_network if model is None else model
 
         if not isinstance(eval_image_size, list):
             eval_image_size = [eval_image_size]
@@ -203,7 +200,7 @@ class Trainer:
 
     """ training """
 
-    def prep_for_training(self, run_config: RunConfig, ema_decay: float or None = None, amp="fp32") -> None:
+    def prep_for_training(self, run_config: RunConfig, ema_decay: Optional[float] = None, amp="fp32") -> None:
         self.run_config = run_config
         self.model = nn.parallel.DistributedDataParallel(
             self.model.cuda(),
@@ -259,13 +256,13 @@ class Trainer:
         if "scaler" in checkpoint and self.enable_amp:
             self.scaler.load_state_dict(checkpoint["scaler"])
 
-    def before_step(self, feed_dict: dict[str, any]) -> dict[str, any]:
+    def before_step(self, feed_dict: dict[str, Any]) -> dict[str, Any]:
         for key in feed_dict:
             if isinstance(feed_dict[key], torch.Tensor):
                 feed_dict[key] = feed_dict[key].cuda()
         return feed_dict
 
-    def run_step(self, feed_dict: dict[str, any]) -> dict[str, any]:
+    def run_step(self, feed_dict: dict[str, Any]) -> dict[str, Any]:
         raise NotImplementedError
 
     def after_step(self) -> None:
@@ -283,10 +280,10 @@ class Trainer:
         if self.ema is not None:
             self.ema.step(self.network, self.run_config.global_step)
 
-    def _train_one_epoch(self, epoch: int) -> dict[str, any]:
+    def _train_one_epoch(self, epoch: int) -> dict[str, Any]:
         raise NotImplementedError
 
-    def train_one_epoch(self, epoch: int) -> dict[str, any]:
+    def train_one_epoch(self, epoch: int) -> dict[str, Any]:
         self.model.train()
 
         self.data_provider.set_epoch(epoch)

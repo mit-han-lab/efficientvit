@@ -1,0 +1,3 @@
+net_config:
+  name: efficientvit-sam-xl1
+  ckpt: assets/checkpoints/efficientvit_sam/distilled_model/efficientvit-sam-xl1.pt
