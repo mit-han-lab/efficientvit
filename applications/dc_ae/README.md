@@ -207,7 +207,7 @@ torchrun --nnodes 1 --nproc_per_node=8 -m applications.dc_ae.train_dc_ae_diffusi
 
 If DC-AE is useful or relevant to your research, please kindly recognize our contributions by citing our papers:
 
-```
+```bibtex
 @article{chen2024deep,
   title={Deep Compression Autoencoder for Efficient High-Resolution Diffusion Models},
   author={Chen, Junyu and Cai, Han and Chen, Junsong and Xie, Enze and Yang, Shang and Tang, Haotian and Li, Muyang and Lu, Yao and Han, Song},
