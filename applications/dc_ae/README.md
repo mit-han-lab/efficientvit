@@ -7,7 +7,7 @@
 <b> Figure 1: We address the reconstruction accuracy drop of high spatial-compression autoencoders.
 </p>
 
-<iframe width="1200" height="400" src="https://www.youtube.com/embed/kb65gOF9pcI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="1200" height="400" src="https://www.youtube.com/embed/kb65gOF9pcI?si=_7eUKnh5QLlcf5lf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 <p align="center">
 <b> Figure 2: DC-AE delivers significant training and inference speedup without performance drop.
