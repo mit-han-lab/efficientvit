@@ -7,12 +7,15 @@
 <b> Figure 1: We address the reconstruction accuracy drop of high spatial-compression autoencoders.
 </p>
 
-![demo](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0/resolve/main/assets/dc_ae_diffusion_demo.gif)
+<iframe width="1200" height="400" src="https://www.youtube.com/embed/kb65gOF9pcI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 <p align="center">
 <b> Figure 2: DC-AE delivers significant training and inference speedup without performance drop.
 </p>
 
-![demo](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0/resolve/main/assets/Sana-0.6B-laptop.gif)
+<p align="left">
+<img src="../../assets/Sana-0.6B-laptop.png"  width="1200">
+</p>
 
 <p align="center">
 <img src="../../assets/dc_ae_sana.jpg"  width="1200">
