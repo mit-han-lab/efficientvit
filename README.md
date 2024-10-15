@@ -16,6 +16,16 @@
 <b> Figure 2: DC-AE delivers significant training and inference speedup without performance drop.
 </p>
 
+![demo](assets/Sana-0.6B-laptop.gif)
+
+<p align="center">
+<img src="assets/dc_ae_sana.jpg"  width="1200">
+</p>
+
+<p align="center">
+<b> Figure 3: DC-AE enables efficient text-to-image generation on the laptop.
+</p>
+
 - [Usage of Deep Compression Autoencoder](applications/dc_ae/README.md#deep-compression-autoencoder)
 - [Usage of DC-AE-Diffusion](applications/dc_ae/README.md#efficient-diffusion-models-with-dc-ae)
 - [Evaluate Deep Compression Autoencoder](applications/dc_ae/README.md#evaluate-deep-compression-autoencoder)

@@ -12,7 +12,7 @@
 <b> Figure 2: DC-AE delivers significant training and inference speedup without performance drop.
 </p>
 
-[![Watch the video](../../assets/Sana-0.6B-laptop.png)](../../assets/Sana-0.6B-laptop.mp4)
+![demo](../../assets/Sana-0.6B-laptop.gif)
 
 <p align="center">
 <img src="../../assets/dc_ae_sana.jpg"  width="1200">
@@ -21,7 +21,6 @@
 <p align="center">
 <b> Figure 3: DC-AE enables efficient text-to-image generation on the laptop.
 </p>
-
 
 ## Abstract
 
