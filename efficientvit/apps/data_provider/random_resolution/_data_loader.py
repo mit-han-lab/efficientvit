@@ -455,7 +455,7 @@ class RRSDataLoader(Generic[T_co]):
     # since '_BaseDataLoaderIter' references 'DataLoader'.
     def __iter__(self) -> "_BaseDataLoaderIter":
         # When using a single worker the returned iterator should be
-        # created everytime to avoid reseting its state
+        # created everytime to avoid resetting its state
         # However, in the case of a multiple workers iterator
         # the iterator is only created once in the lifetime of the
         # DataLoader object so that workers can be reused
