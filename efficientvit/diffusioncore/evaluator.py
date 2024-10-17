@@ -71,9 +71,6 @@ class Evaluator:
         self.setup_dist_env()
         self.setup_seed()
 
-        if self.cfg.compute_fid:
-            assert os.path.exists(self.cfg.fid.ref_path), f"fid ref {self.cfg.fid.ref_path} not existed"
-
         # data provider
         if cfg.evaluate_dataset == "sample_class":
             self.evaluate_data_provider = SampleClassDataProvider(cfg.sample_class)
