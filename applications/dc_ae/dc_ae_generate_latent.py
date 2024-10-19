@@ -13,7 +13,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(os.path.dirname(BASE_DIR))
 sys.path.append(ROOT_DIR)
 
-from efficientvit.ae_model_zoo import DCAE_HF
+from efficientvit.ae_model_zoo import REGISTERED_DCAE_MODEL, DCAE_HF, AutoencoderKL
 from efficientvit.apps.data_provider.sampler import DistributedRangedSampler
 from efficientvit.apps.utils.dist import (
     dist_barrier,
@@ -36,7 +36,7 @@ class GenerateLatentConfig:
 
     model_name: str = MISSING
     dtype: str = "fp32"
-    scaling_factor: float = MISSING
+    scaling_factor: Optional[float] = None
 
     batch_size: int = 64
     num_workers: int = 8
@@ -67,7 +67,14 @@ def main():
 
     device = torch.device("cuda")
     dtype = get_dtype_from_str(cfg.dtype)
-    model = DCAE_HF.from_pretrained(f"mit-han-lab/{cfg.model_name}").to(device=device, dtype=dtype)
+    if cfg.model_name in REGISTERED_DCAE_MODEL:
+        model = DCAE_HF.from_pretrained(f"mit-han-lab/{cfg.model_name}").to(device=device, dtype=dtype)
+        assert cfg.scaling_factor is not None
+    elif cfg.model_name in ["stabilityai/sd-vae-ft-ema", "flux-vae"]:
+        model = AutoencoderKL(cfg.model_name).to(device=device, dtype=dtype)
+        cfg.scaling_factor = model.model.config.scaling_factor
+    else:
+        raise ValueError(f"{cfg.model} is not supported for generating latent")
 
     transform = transforms.Compose(
         [

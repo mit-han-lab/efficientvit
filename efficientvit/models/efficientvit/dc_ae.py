@@ -362,9 +362,9 @@ class Decoder(nn.Module):
                     block_type=block_type,
                     norm=norm,
                     act=act,
-                    input_width=width
-                    if cfg.upsample_match_channel
-                    else cfg.width_list[min(stage_id + 1, num_stages - 1)],
+                    input_width=(
+                        width if cfg.upsample_match_channel else cfg.width_list[min(stage_id + 1, num_stages - 1)]
+                    ),
                 )
             )
             self.stages.insert(0, OpSequential(stage))

@@ -9,7 +9,7 @@ from omegaconf import MISSING
 from PIL import Image
 from tqdm import tqdm
 
-from efficientvit.ae_model_zoo import DCAE_HF
+from efficientvit.ae_model_zoo import REGISTERED_DCAE_MODEL, DCAE_HF, AutoencoderKL
 from efficientvit.apps.metrics.fid.fid import FIDStats, FIDStatsConfig
 from efficientvit.apps.metrics.inception_score.inception_score import InceptionScoreStats, InceptionScoreStatsConfig
 from efficientvit.apps.utils.dist import (
@@ -51,7 +51,7 @@ class EvaluatorConfig:
     # autoencoder
     autoencoder: Optional[str] = None
     autoencoder_dtype: str = "fp32"
-    scaling_factor: float = MISSING
+    scaling_factor: Optional[float] = None
 
     # model
     model: str = "uvit"
@@ -81,7 +81,16 @@ class Evaluator:
         if cfg.autoencoder is not None:
             device = torch.device("cuda")
             dtype = get_dtype_from_str(cfg.autoencoder_dtype)
-            self.autoencoder = DCAE_HF.from_pretrained(f"mit-han-lab/{cfg.autoencoder}").to(device=device, dtype=dtype)
+            if cfg.autoencoder in REGISTERED_DCAE_MODEL:
+                self.autoencoder = DCAE_HF.from_pretrained(f"mit-han-lab/{cfg.autoencoder}").to(
+                    device=device, dtype=dtype
+                )
+                assert cfg.scaling_factor is not None
+            elif cfg.autoencoder in ["stabilityai/sd-vae-ft-ema", "flux-vae"]:
+                self.autoencoder = AutoencoderKL(cfg.autoencoder).to(device=device, dtype=dtype)
+                cfg.scaling_factor = self.autoencoder.model.config.scaling_factor
+            else:
+                raise ValueError(f"{cfg.model} is not supported for evaluating and training")
 
         # model
         if cfg.model == "dit":

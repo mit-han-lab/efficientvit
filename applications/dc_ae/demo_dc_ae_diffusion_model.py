@@ -43,7 +43,9 @@ def main():
     torch.cuda.manual_seed_all(0)
     eval_generator = torch.Generator(device=device)
     eval_generator.manual_seed(0)
-    inputs = torch.tensor([279, 333, 979, 936, 933, 145, 497, 1, 248, 360, 793, 12, 387, 437, 938, 978], dtype=torch.int, device=device)
+    inputs = torch.tensor(
+        [279, 333, 979, 936, 933, 145, 497, 1, 248, 360, 793, 12, 387, 437, 938, 978], dtype=torch.int, device=device
+    )
     num_samples = inputs.shape[0]
     inputs_null = 1000 * torch.ones((num_samples,), dtype=torch.int, device=device)
     latent_samples = dc_ae_diffusion.diffusion_model.generate(inputs, inputs_null, cfg.cfg_scale, eval_generator)
