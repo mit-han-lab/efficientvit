@@ -9,7 +9,7 @@ from omegaconf import MISSING
 from PIL import Image
 from tqdm import tqdm
 
-from efficientvit.ae_model_zoo import REGISTERED_DCAE_MODEL, DCAE_HF, AutoencoderKL
+from efficientvit.ae_model_zoo import DCAE_HF, REGISTERED_DCAE_MODEL, AutoencoderKL
 from efficientvit.apps.metrics.fid.fid import FIDStats, FIDStatsConfig
 from efficientvit.apps.metrics.inception_score.inception_score import InceptionScoreStats, InceptionScoreStatsConfig
 from efficientvit.apps.utils.dist import (

@@ -13,7 +13,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(os.path.dirname(BASE_DIR))
 sys.path.append(ROOT_DIR)
 
-from efficientvit.ae_model_zoo import REGISTERED_DCAE_MODEL, DCAE_HF, AutoencoderKL
+from efficientvit.ae_model_zoo import DCAE_HF, REGISTERED_DCAE_MODEL, AutoencoderKL
 from efficientvit.apps.data_provider.sampler import DistributedRangedSampler
 from efficientvit.apps.utils.dist import (
     dist_barrier,

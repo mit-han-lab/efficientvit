@@ -1,10 +1,9 @@
-import torch
-from torch import nn
-import diffusers
-
 from typing import Callable, Optional
 
+import diffusers
+import torch
 from huggingface_hub import PyTorchModelHubMixin
+from torch import nn
 
 from efficientvit.models.efficientvit.dc_ae import DCAE, DCAEConfig, dc_ae_f32c32, dc_ae_f64c128, dc_ae_f128c512
 
