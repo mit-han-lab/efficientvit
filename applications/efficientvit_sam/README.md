@@ -198,7 +198,7 @@ torchrun --nproc_per_node=8 applications/efficientvit_sam/train_efficientvit_sam
 
 If EfficientViT or EfficientViT-SAM is useful or relevant to your research, please kindly recognize our contributions by citing our papers:
 
-```
+```bibtex
 @inproceedings{cai2023efficientvit,
   title={Efficientvit: Lightweight multi-scale attention for high-resolution dense prediction},
   author={Cai, Han and Li, Junyan and Hu, Muyan and Gan, Chuang and Han, Song},

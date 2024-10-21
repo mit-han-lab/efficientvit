@@ -26,7 +26,7 @@
 </p>
 
 <p align="center">
-<b> Figure 3: DC-AE enables efficient text-to-image generation on the laptop.
+<b> Figure 3: DC-AE enables efficient text-to-image generation on the laptop. For more details, please check our text-to-image diffusion model <a href="https://nvlabs.github.io/Sana/">SANA</a>.
 </p>
 
 ## Abstract
