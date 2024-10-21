@@ -2,7 +2,7 @@
 
 [[paper](https://arxiv.org/abs/2410.10733)]
 
-![demo](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0/resolve/main/assets/dc_ae_demo.gif)
+![demo](../../assets/dc_ae_demo.gif)
 <p align="center">
 <b> Figure 1: We address the reconstruction accuracy drop of high spatial-compression autoencoders.
 </p>
@@ -14,7 +14,7 @@
 </div>
 
 <p align="center">
-<b> Figure 2 (Video): DC-AE delivers significant training and inference speedup without performance drop.
+<b> Figure 2: DC-AE speeds up latent diffusion models.
 </p>
 
 <p align="left">

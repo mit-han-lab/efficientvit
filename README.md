@@ -8,7 +8,7 @@
 
 **Deep Compression Autoencoder (DC-AE) is a new family of high-spatial compression autoencoders with a spatial compression ratio of up to 128 while maintaining reconstruction quality. It accelerates all latent diffusion models regardless of the diffusion model architecture.**
 
-![demo](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0/resolve/main/assets/dc_ae_demo.gif)
+![demo](assets/dc_ae_demo.gif)
 <p align="center">
 <b> Figure 1: We address the reconstruction accuracy drop of high spatial-compression autoencoders.
 </p>
@@ -20,7 +20,7 @@
 </div>
 
 <p align="center">
-<b> Figure 2 (Video): DC-AE delivers significant training and inference speedup without performance drop.
+<b> Figure 2: DC-AE speeds up latent diffusion models.
 </p>
 
 <p align="left">
@@ -97,7 +97,7 @@
 
 **If you are interested in getting updates, please join our mailing list [here](https://forms.gle/Z6DNkRidJ1ouxmUk9).**
 
-- [2024/10/21] DC-AE and EfficientViT block are used in our latest text-to-image diffusion models SANA! Check the [project page](https://nvlabs.github.io/Sana/) for more details.
+- [2024/10/21] DC-AE and EfficientViT block are used in our latest text-to-image diffusion model SANA! Check the [project page](https://nvlabs.github.io/Sana/) for more details.
 - [2024/10/15] We released **Deep Compression Autoencoder (DC-AE)**: [link](#deep-compression-autoencoder-for-efficient-high-resolution-diffusion-models-paper-readme)!
 - [2024/07/10] EfficientViT is used as the backbone in [Grounding DINO 1.5 Edge](https://arxiv.org/pdf/2405.10300) for efficient open-set object detection.
 - [2024/07/10] EfficientViT-SAM is used in [MedficientSAM](https://github.com/hieplpvip/medficientsam), the 1st place model in [CVPR 2024 Segment Anything In Medical Images On Laptop Challenge](https://www.codabench.org/competitions/1847/).
