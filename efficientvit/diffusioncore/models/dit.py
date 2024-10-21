@@ -277,7 +277,7 @@ class DiT(nn.Module):
         return nn.ModuleDict({"dit": self})
 
     def load_model(self):
-        checkpoint = torch.load(self.cfg.pretrained_path, map_location="cpu", weights_only=False)
+        checkpoint = torch.load(self.cfg.pretrained_path, map_location="cpu", weights_only=True)
         if self.cfg.pretrained_source == "dit":
             if "ema" in checkpoint:
                 checkpoint = checkpoint["ema"]

@@ -374,7 +374,7 @@ class UViT(nn.Module):
         return nn.ModuleDict({"uvit": self})
 
     def load_model(self):
-        checkpoint = torch.load(self.cfg.pretrained_path, map_location="cpu")
+        checkpoint = torch.load(self.cfg.pretrained_path, map_location="cpu", weights_only=True)
         if self.cfg.pretrained_source == "uvit":
             if "ema" in checkpoint:
                 checkpoint = checkpoint["ema"]

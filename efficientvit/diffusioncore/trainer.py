@@ -238,7 +238,7 @@ class Trainer(Evaluator):
 
     def resume_from_checkpoint(self, checkpoint_path: str):
         self.print_and_f_log(f"loading checkpoint {checkpoint_path}\n")
-        checkpoint = torch.load(checkpoint_path, map_location="cpu")
+        checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
 
         # load checkpoint
         self.network.get_trainable_modules().load_state_dict(checkpoint["state_dict"], strict=False)
