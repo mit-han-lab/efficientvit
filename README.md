@@ -6,7 +6,7 @@
 
 ### Deep Compression Autoencoder for Efficient High-Resolution Diffusion Models [[paper](https://arxiv.org/abs/2410.10733)] [[readme](applications/dc_ae/README.md)]
 
-Deep Compression Autoencoder (DC-AE) is a new family of high-spatial compression autoencoders with a spatial compression ratio of up to 128 while maintaining reconstruction quality. It accelerates all latent diffusion models regardless of the diffusion model architecture.
+**Deep Compression Autoencoder (DC-AE) is a new family of high-spatial compression autoencoders with a spatial compression ratio of up to 128 while maintaining reconstruction quality. It accelerates all latent diffusion models regardless of the diffusion model architecture.**
 
 ![demo](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0/resolve/main/assets/dc_ae_demo.gif)
 <p align="center">
@@ -45,7 +45,7 @@ Deep Compression Autoencoder (DC-AE) is a new family of high-spatial compression
 
 ### EfficientViT-SAM: Accelerated Segment Anything Model Without Accuracy Loss [[paper](https://arxiv.org/abs/2402.05008)] [[online demo](https://evitsam.hanlab.ai/)] [[readme](applications/efficientvit_sam/README.md)]
 
-EfficientViT-SAM is a new family of accelerated segment anything models by replacing SAM's heavy image encoder with EfficientViT. It delivers a 48.9x measured TensorRT speedup on A100 GPU over SAM-ViT-H without sacrificing accuracy.
+**EfficientViT-SAM is a new family of accelerated segment anything models by replacing SAM's heavy image encoder with EfficientViT. It delivers a 48.9x measured TensorRT speedup on A100 GPU over SAM-ViT-H without sacrificing accuracy.**
 
 <p align="left">
 <img src="assets/sam_zero_shot_coco_mAP.png"  width="500">
@@ -61,7 +61,7 @@ EfficientViT-SAM is a new family of accelerated segment anything models by repla
 
 ### EfficientViT-Classification [[paper](https://arxiv.org/abs/2205.14756)] [[readme](applications/efficientvit_cls/README.md)]
 
-Efficient ImageNet classification models with EfficientViT backbones.
+**Efficient image classification models with EfficientViT backbones.**
 
 <p align="left">
 <img src="assets/efficientvit_cls_results.png"  width="600">
@@ -76,7 +76,7 @@ Efficient ImageNet classification models with EfficientViT backbones.
 
 ### EfficientViT-Segmentation [[paper](https://arxiv.org/abs/2205.14756)] [[readme](applications/efficientvit_seg/README.md)]
 
-Efficient semantic segmantation models with EfficientViT backbones.
+**Efficient semantic segmantation models with EfficientViT backbones.**
 
 ![demo](assets/cityscapes_l1.gif)
 
@@ -89,7 +89,7 @@ Efficient semantic segmantation models with EfficientViT backbones.
 
 ### EfficientViT-GazeSAM [[readme](applications/efficientvit_gazesam/README.md)]
 
-Gaze-prompted image segmentation models capable of running in real time with TensorRT on an NVIDIA RTX 4070.
+**Gaze-prompted image segmentation models capable of running in real time with TensorRT on an NVIDIA RTX 4070.**
 
 ![GazeSAM demo](assets/efficientvit_gazesam_demo.gif)
 
@@ -97,7 +97,7 @@ Gaze-prompted image segmentation models capable of running in real time with Ten
 
 **If you are interested in getting updates, please join our mailing list [here](https://forms.gle/Z6DNkRidJ1ouxmUk9).**
 
-- [2024/10/21] DC-AE and EfficientViT block are used in our latest text-to-image diffusion models SANA! Check the [project page]() for more details.
+- [2024/10/21] DC-AE and EfficientViT block are used in our latest text-to-image diffusion models SANA! Check the [project page](https://nvlabs.github.io/Sana/) for more details.
 - [2024/10/15] We released **Deep Compression Autoencoder (DC-AE)**: [link](#deep-compression-autoencoder-for-efficient-high-resolution-diffusion-models-paper-readme)!
 - [2024/07/10] EfficientViT is used as the backbone in [Grounding DINO 1.5 Edge](https://arxiv.org/pdf/2405.10300) for efficient open-set object detection.
 - [2024/07/10] EfficientViT-SAM is used in [MedficientSAM](https://github.com/hieplpvip/medficientsam), the 1st place model in [CVPR 2024 Segment Anything In Medical Images On Laptop Challenge](https://www.codabench.org/competitions/1847/).
