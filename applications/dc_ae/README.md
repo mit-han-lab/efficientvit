@@ -7,12 +7,7 @@
 <b> Figure 1: We address the reconstruction accuracy drop of high spatial-compression autoencoders.
 </p>
 
-<div align="center">
-      <a href="https://www.youtube.com/watch?v=kb65gOF9pcI">
-         <img src="../../assets/dc_ae_diffusion_demo.png" style="width:100%;">
-      </a>
-</div>
-
+![demo](../../assets/dc_ae_diffusion_demo.gif)
 <p align="center">
 <b> Figure 2: DC-AE speeds up latent diffusion models.
 </p>
