@@ -14,6 +14,7 @@ from efficientvit.models.nn.ops import (
     ConvPixelUnshuffleDownSampleLayer,
     EfficientViTBlock,
     IdentityLayer,
+    InterpolateConvUpSampleLayer,
     OpSequential,
     PixelUnshuffleChannelAveragingDownSampleLayer,
     ResBlock,
@@ -92,6 +93,9 @@ def build_block(
     elif block_type == "EViT_GLU":
         assert in_channels == out_channels
         block = EfficientViTBlock(in_channels, norm=norm, act_func=act, local_module="GLUMBConv", scales=())
+    elif block_type == "EViTS5_GLU":
+        assert in_channels == out_channels
+        block = EfficientViTBlock(in_channels, norm=norm, act_func=act, local_module="GLUMBConv", scales=(5,))
     else:
         raise ValueError(f"block_type {block_type} is not supported")
     return block
@@ -124,7 +128,7 @@ def build_downsample_block(block_type: str, in_channels: int, out_channels: int,
             stride=2,
             use_bias=True,
             norm=None,
-            act=None,
+            act_func=None,
         )
     elif block_type == "ConvPixelUnshuffle":
         block = ConvPixelUnshuffleDownSampleLayer(
@@ -147,6 +151,10 @@ def build_downsample_block(block_type: str, in_channels: int, out_channels: int,
 def build_upsample_block(block_type: str, in_channels: int, out_channels: int, shortcut: Optional[str]) -> nn.Module:
     if block_type == "ConvPixelShuffle":
         block = ConvPixelShuffleUpSampleLayer(
+            in_channels=in_channels, out_channels=out_channels, kernel_size=3, factor=2
+        )
+    elif block_type == "InterpolateConv":
+        block = InterpolateConvUpSampleLayer(
             in_channels=in_channels, out_channels=out_channels, kernel_size=3, factor=2
         )
     else:
@@ -433,6 +441,17 @@ def dc_ae_f32c32(name: str, pretrained_path: str) -> DCAEConfig:
             "decoder.block_type=[ResBlock,ResBlock,ResBlock,EViT_GLU,EViT_GLU,EViT_GLU] "
             "decoder.width_list=[128,256,512,512,1024,1024] decoder.depth_list=[0,5,10,2,2,2] "
             "decoder.norm=[bn2d,bn2d,bn2d,trms2d,trms2d,trms2d] decoder.act=[relu,relu,relu,silu,silu,silu]"
+        )
+    elif name in ["dc-ae-f32c32-sana-1.0"]:
+        cfg_str = (
+            "latent_channels=32 "
+            "encoder.block_type=[ResBlock,ResBlock,ResBlock,EViTS5_GLU,EViTS5_GLU,EViTS5_GLU] "
+            "encoder.width_list=[128,256,512,512,1024,1024] encoder.depth_list=[2,2,2,3,3,3] "
+            "encoder.downsample_block_type=Conv "
+            "decoder.block_type=[ResBlock,ResBlock,ResBlock,EViTS5_GLU,EViTS5_GLU,EViTS5_GLU] "
+            "decoder.width_list=[128,256,512,512,1024,1024] decoder.depth_list=[3,3,3,3,3,3] "
+            "decoder.upsample_block_type=InterpolateConv "
+            "decoder.norm=trms2d decoder.act=silu"
         )
     else:
         raise NotImplementedError

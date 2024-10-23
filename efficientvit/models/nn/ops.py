@@ -177,6 +177,33 @@ class ConvPixelShuffleUpSampleLayer(nn.Module):
         return x
 
 
+class InterpolateConvUpSampleLayer(nn.Module):
+    def __init__(
+        self,
+        in_channels: int,
+        out_channels: int,
+        kernel_size: int,
+        factor: int,
+        mode: str = "nearest",
+    ) -> None:
+        super().__init__()
+        self.factor = factor
+        self.mode = mode
+        self.conv = ConvLayer(
+            in_channels=in_channels,
+            out_channels=out_channels,
+            kernel_size=kernel_size,
+            use_bias=True,
+            norm=None,
+            act_func=None,
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = torch.nn.functional.interpolate(x, scale_factor=self.factor, mode=self.mode)
+        x = self.conv(x)
+        return x
+
+
 class ChannelDuplicatingPixelUnshuffleUpSampleLayer(nn.Module):
     def __init__(
         self,
