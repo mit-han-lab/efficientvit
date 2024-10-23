@@ -74,6 +74,8 @@ class DCAEConfig:
     pretrained_path: Optional[str] = None
     pretrained_source: str = "dc-ae"
 
+    scaling_factor: Optional[float] = None
+
 
 def build_block(
     block_type: str, in_channels: int, out_channels: int, norm: Optional[str], act: Optional[str]
@@ -451,7 +453,8 @@ def dc_ae_f32c32(name: str, pretrained_path: str) -> DCAEConfig:
             "decoder.block_type=[ResBlock,ResBlock,ResBlock,EViTS5_GLU,EViTS5_GLU,EViTS5_GLU] "
             "decoder.width_list=[128,256,512,512,1024,1024] decoder.depth_list=[3,3,3,3,3,3] "
             "decoder.upsample_block_type=InterpolateConv "
-            "decoder.norm=trms2d decoder.act=silu"
+            "decoder.norm=trms2d decoder.act=silu "
+            "scaling_factor=0.41407"
         )
     else:
         raise NotImplementedError
