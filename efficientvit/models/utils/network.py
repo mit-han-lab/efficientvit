@@ -70,7 +70,7 @@ def build_kwargs_from_config(config: dict, target_func: Callable) -> dict[str, A
 
 def load_state_dict_from_file(file: str, only_state_dict=True) -> dict[str, torch.Tensor]:
     file = os.path.realpath(os.path.expanduser(file))
-    checkpoint = torch.load(file, map_location="cpu")
+    checkpoint = torch.load(file, map_location="cpu", weights_only=True)
     if only_state_dict and "state_dict" in checkpoint:
         checkpoint = checkpoint["state_dict"]
     return checkpoint

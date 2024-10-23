@@ -142,7 +142,7 @@ python assets/tflite_export.py --export_path assets/export_models/efficientvit_s
 
 If EfficientViT is useful or relevant to your research, please kindly recognize our contributions by citing our paper:
 
-```
+```bibtex
 @inproceedings{cai2023efficientvit,
   title={Efficientvit: Lightweight multi-scale attention for high-resolution dense prediction},
   author={Cai, Han and Li, Junyan and Hu, Muyan and Gan, Chuang and Han, Song},

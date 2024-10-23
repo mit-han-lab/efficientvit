@@ -2,19 +2,14 @@
 
 [[paper](https://arxiv.org/abs/2410.10733)]
 
-![demo](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0/resolve/main/assets/dc_ae_demo.gif)
+![demo](../../assets/dc_ae_demo.gif)
 <p align="center">
 <b> Figure 1: We address the reconstruction accuracy drop of high spatial-compression autoencoders.
 </p>
 
-<div align="center">
-      <a href="https://www.youtube.com/watch?v=kb65gOF9pcI">
-         <img src="../../assets/dc_ae_diffusion_demo.png" style="width:100%;">
-      </a>
-</div>
-
+![demo](../../assets/dc_ae_diffusion_demo.gif)
 <p align="center">
-<b> Figure 2 (Video): DC-AE delivers significant training and inference speedup without performance drop.
+<b> Figure 2: DC-AE speeds up latent diffusion models.
 </p>
 
 <p align="left">
@@ -26,7 +21,7 @@
 </p>
 
 <p align="center">
-<b> Figure 3: DC-AE enables efficient text-to-image generation on the laptop.
+<b> Figure 3: DC-AE enables efficient text-to-image generation on the laptop. For more details, please check our text-to-image diffusion model <a href="https://nvlabs.github.io/Sana/">SANA</a>.
 </p>
 
 ## Abstract
