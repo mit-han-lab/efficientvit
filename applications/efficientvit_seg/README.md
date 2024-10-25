@@ -3,11 +3,11 @@
 ![demo](https://huggingface.co/han-cai/efficientvit-seg/resolve/main/cityscapes_l1.gif)
 
 <p align="left">
-<img src="../../assets/city_results.png"  width="600">
+<img src="https://huggingface.co/han-cai/efficientvit-seg/resolve/main/city_results.png"  width="600">
 </p>
 
 <p align="left">
-<img src="../../assets/ade_results.png"  width="600">
+<img src="https://huggingface.co/han-cai/efficientvit-seg/resolve/main/ade_results.png"  width="600">
 </p>
 
 ## Datasets

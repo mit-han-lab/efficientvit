@@ -1,7 +1,7 @@
 # EfficientViT Classification
 
 <p align="left">
-<img src="../../assets/efficientvit_cls_results.png"  width="600">
+<img src="https://huggingface.co/han-cai/efficientvit-cls/resolve/main/efficientvit_cls_results.png"  width="600">
 </p>
 
 ## Datasets

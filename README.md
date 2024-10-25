@@ -19,11 +19,11 @@
 </p>
 
 <p align="left">
-<img src="assets/Sana-0.6B-laptop.png"  width="1200">
+<img src="https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0/resolve/main/assets/Sana-0.6B-laptop.png"  width="1200">
 </p>
 
 <p align="center">
-<img src="assets/dc_ae_sana.jpg"  width="1200">
+<img src="https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0/resolve/main/assets/dc_ae_sana.jpg"  width="1200">
 </p>
 
 <p align="center">
@@ -43,7 +43,7 @@
 **EfficientViT-SAM is a new family of accelerated segment anything models by replacing SAM's heavy image encoder with EfficientViT. It delivers a 48.9x measured TensorRT speedup on A100 GPU over SAM-ViT-H without sacrificing accuracy.**
 
 <p align="left">
-<img src="assets/sam_zero_shot_coco_mAP.png"  width="500">
+<img src="https://huggingface.co/mit-han-lab/efficientvit-sam/resolve/main/sam_zero_shot_coco_mAP.png"  width="500">
 </p>
 
 - [Pretrained EfficientViT-SAM Models](applications/efficientvit_sam/README.md#pretrained-efficientvit-sam-models)
@@ -59,7 +59,7 @@
 **Efficient image classification models with EfficientViT backbones.**
 
 <p align="left">
-<img src="assets/efficientvit_cls_results.png"  width="600">
+<img src="https://huggingface.co/han-cai/efficientvit-cls/resolve/main/efficientvit_cls_results.png"  width="600">
 </p>
 
 - [Pretrained EfficientViT Classification Models](applications/efficientvit_cls/README.md#pretrained-efficientvit-classification-models)

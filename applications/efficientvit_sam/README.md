@@ -3,7 +3,7 @@
 [[paper](https://arxiv.org/abs/2402.05008)] [[online demo](https://evitsam.hanlab.ai/)]
 
 <p align="left">
-<img src="../../assets/sam_zero_shot_coco_mAP.png"  width="500">
+<img src="https://huggingface.co/mit-han-lab/efficientvit-sam/resolve/main/sam_zero_shot_coco_mAP.png"  width="500">
 </p>
 
 ## Abstract
