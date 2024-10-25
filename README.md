@@ -13,7 +13,7 @@
 <b> Figure 1: We address the reconstruction accuracy drop of high spatial-compression autoencoders.
 </p>
 
-![demo](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0/resolve/main/assets/dc_ae_diffusion_demo.gif)
+![demo](assets/dc_ae_diffusion_demo.gif)
 <p align="center">
 <b> Figure 2: DC-AE speeds up latent diffusion models.
 </p>
@@ -73,7 +73,7 @@
 
 **Efficient semantic segmantation models with EfficientViT backbones.**
 
-![demo](https://huggingface.co/han-cai/efficientvit-seg/resolve/main/cityscapes_l1.gif)
+![demo](assets/cityscapes_l1.gif)
 
 - [Pretrained EfficientViT Segmentation Models](applications/efficientvit_seg/README.md#pretrained-efficientvit-segmentation-models)
 - [Usage of EfficientViT Segmentation Models](applications/efficientvit_seg/README.md#usage)
