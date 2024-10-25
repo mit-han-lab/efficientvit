@@ -2,12 +2,12 @@
 
 [[paper](https://arxiv.org/abs/2410.10733)]
 
-![demo](../../assets/dc_ae_demo.gif)
+![demo](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0/resolve/main/assets/dc_ae_demo.gif)
 <p align="center">
 <b> Figure 1: We address the reconstruction accuracy drop of high spatial-compression autoencoders.
 </p>
 
-![demo](../../assets/dc_ae_diffusion_demo.gif)
+![demo](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0/resolve/main/assets/dc_ae_diffusion_demo.gif)
 <p align="center">
 <b> Figure 2: DC-AE speeds up latent diffusion models.
 </p>

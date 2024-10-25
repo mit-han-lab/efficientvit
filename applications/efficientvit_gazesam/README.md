@@ -2,7 +2,7 @@
 
 EfficientViT-GazeSAM is a gaze-prompted image segmentation model capable of running in real time with TensorRT on an NVIDIA RTX 4070.  GazeSAM is comprised of a face detection component (ProxylessGaze), gaze detection component (L2CS-Net), an object detection component (YOLO-NAS), a depth estimation component (Depth-Anything), and an image segmentation component (EfficientViT).
 
-![GazeSAM demo](../../assets/efficientvit_gazesam_demo.gif)
+![GazeSAM demo](https://huggingface.co/mit-han-lab/efficientvit-sam/resolve/main/gazesam/efficientvit_gazesam_demo.gif)
 
 ## Installation and Setup
 

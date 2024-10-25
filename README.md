@@ -8,12 +8,12 @@
 
 **Deep Compression Autoencoder (DC-AE) is a new family of high-spatial compression autoencoders with a spatial compression ratio of up to 128 while maintaining reconstruction quality. It accelerates all latent diffusion models regardless of the diffusion model architecture.**
 
-![demo](assets/dc_ae_demo.gif)
+![demo](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0/resolve/main/assets/dc_ae_demo.gif)
 <p align="center">
 <b> Figure 1: We address the reconstruction accuracy drop of high spatial-compression autoencoders.
 </p>
 
-![demo](assets/dc_ae_diffusion_demo.gif)
+![demo](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0/resolve/main/assets/dc_ae_diffusion_demo.gif)
 <p align="center">
 <b> Figure 2: DC-AE speeds up latent diffusion models.
 </p>
@@ -73,7 +73,7 @@
 
 **Efficient semantic segmantation models with EfficientViT backbones.**
 
-![demo](assets/cityscapes_l1.gif)
+![demo](https://huggingface.co/han-cai/efficientvit-seg/resolve/main/cityscapes_l1.gif)
 
 - [Pretrained EfficientViT Segmentation Models](applications/efficientvit_seg/README.md#pretrained-efficientvit-segmentation-models)
 - [Usage of EfficientViT Segmentation Models](applications/efficientvit_seg/README.md#usage)
@@ -86,7 +86,7 @@
 
 **Gaze-prompted image segmentation models capable of running in real time with TensorRT on an NVIDIA RTX 4070.**
 
-![GazeSAM demo](assets/efficientvit_gazesam_demo.gif)
+![GazeSAM demo](https://huggingface.co/mit-han-lab/efficientvit-sam/resolve/main/gazesam/efficientvit_gazesam_demo.gif)
 
 ## News
 

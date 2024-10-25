@@ -1,6 +1,6 @@
 # EfficientViT Segmentation
 
-![demo](../../assets/cityscapes_l1.gif)
+![demo](https://huggingface.co/han-cai/efficientvit-seg/resolve/main/cityscapes_l1.gif)
 
 <p align="left">
 <img src="../../assets/city_results.png"  width="600">
