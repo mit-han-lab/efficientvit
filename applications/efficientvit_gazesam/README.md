@@ -57,7 +57,7 @@ GazeSAM can process webcam and video file inputs. To run with webcam, run `pytho
 
  By default, we run with TensorRT (use the `runtime` flag to change this, but note that only TensorRT mode will produce results in real-time).  Results are saved by default to the `output_videos` directory (modifiable via the `output-dir` flag).
 
- If you generated engines using the optimized script, set `--precision-mode optimized`.  Modes described [here](models/README.md).
+ If you generated engines using the optimized script, set `--precision-mode optimized`.  Modes described [here](models/README.md). You can download the example video [here](https://huggingface.co/mit-han-lab/efficientvit-sam/blob/main/gazesam/example.mp4).
 
 Input video + default engines example: `python gazesam_demo.py --video input_videos/example.mp4 --precision-mode default`
 
