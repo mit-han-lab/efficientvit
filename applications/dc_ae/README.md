@@ -2,7 +2,7 @@
 
 [[paper](https://arxiv.org/abs/2410.10733)]
 
-![demo](../../assets/dc_ae_demo.gif)
+![demo](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0/resolve/main/assets/dc_ae_demo.gif)
 <p align="center">
 <b> Figure 1: We address the reconstruction accuracy drop of high spatial-compression autoencoders.
 </p>
@@ -13,11 +13,11 @@
 </p>
 
 <p align="left">
-<img src="../../assets/Sana-0.6B-laptop.png"  width="1200">
+<img src="https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0/resolve/main/assets/Sana-0.6B-laptop.png"  width="1200">
 </p>
 
 <p align="center">
-<img src="../../assets/dc_ae_sana.jpg"  width="1200">
+<img src="https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0/resolve/main/assets/dc_ae_sana.jpg"  width="1200">
 </p>
 
 <p align="center">
@@ -136,7 +136,7 @@ torchrun --nnodes 1 --nproc_per_node=1 -m applications.dc_ae.demo_dc_ae_diffusio
 
 Expected results:
 <p align="left">
-<img src="../../assets/dc_ae_diffusion_example.png"  width="600">
+<img src="https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0/resolve/main/assets/dc_ae_diffusion_example.png"  width="600">
 </p>
 
 ## Evaluate DC-AE-Diffusion Models

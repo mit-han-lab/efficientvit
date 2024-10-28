@@ -2,7 +2,7 @@
 
 EfficientViT-GazeSAM is a gaze-prompted image segmentation model capable of running in real time with TensorRT on an NVIDIA RTX 4070.  GazeSAM is comprised of a face detection component (ProxylessGaze), gaze detection component (L2CS-Net), an object detection component (YOLO-NAS), a depth estimation component (Depth-Anything), and an image segmentation component (EfficientViT).
 
-![GazeSAM demo](../../assets/efficientvit_gazesam_demo.gif)
+![GazeSAM demo](https://huggingface.co/mit-han-lab/efficientvit-sam/resolve/main/gazesam/efficientvit_gazesam_demo.gif)
 
 ## Installation and Setup
 
@@ -57,7 +57,7 @@ GazeSAM can process webcam and video file inputs. To run with webcam, run `pytho
 
  By default, we run with TensorRT (use the `runtime` flag to change this, but note that only TensorRT mode will produce results in real-time).  Results are saved by default to the `output_videos` directory (modifiable via the `output-dir` flag).
 
- If you generated engines using the optimized script, set `--precision-mode optimized`.  Modes described [here](models/README.md).
+ If you generated engines using the optimized script, set `--precision-mode optimized`.  Modes described [here](models/README.md). You can download the example video [here](https://huggingface.co/mit-han-lab/efficientvit-sam/blob/main/gazesam/example.mp4).
 
 Input video + default engines example: `python gazesam_demo.py --video input_videos/example.mp4 --precision-mode default`
 
