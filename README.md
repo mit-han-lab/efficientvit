@@ -110,7 +110,7 @@
 ```bash
 conda create -n efficientvit python=3.10
 conda activate efficientvit
-pip install -r requirements.txt
+pip install -U -r requirements.txt
 ```
 
 ## Third-Party Implementation/Integration
