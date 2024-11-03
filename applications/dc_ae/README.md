@@ -136,7 +136,7 @@ torchrun --nnodes 1 --nproc_per_node=1 -m applications.dc_ae.demo_dc_ae_diffusio
 
 Expected results:
 <p align="left">
-<img src="https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0/resolve/main/assets/dc_ae_diffusion_example.png"  width="600">
+<img src="../../assets/dc_ae_diffusion_example.png"  width="600">
 </p>
 
 ## Evaluate DC-AE-Diffusion Models
