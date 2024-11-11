@@ -13,7 +13,7 @@ torch-fidelity
 diffusers
 omegaconf
 ipdb
-wandb
+wandb[media]
 
 matplotlib
 huggingface-hub
