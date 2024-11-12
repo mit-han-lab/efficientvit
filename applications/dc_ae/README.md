@@ -122,7 +122,7 @@ save_image(image_samples * 0.5 + 0.5, "demo_dc_ae_diffusion.png", nrow=int(np.sq
 - Generate reference for FID computation:
 
 ```bash
-torchrun --nnodes 1 --nproc_per_node=8 -m applications.dc_ae.generate_reference \
+torchrun --nnodes=1 --nproc_per_node=8 -m applications.dc_ae.generate_reference \
     dataset=imagenet imagenet.resolution=512 imagenet.image_mean=[0.,0.,0.] imagenet.image_std=[1.,1.,1.] split=test \
     fid.save_path=assets/data/fid/imagenet_512_val.npz
 ```
@@ -131,7 +131,7 @@ torchrun --nnodes 1 --nproc_per_node=8 -m applications.dc_ae.generate_reference 
 
 ```bash
 # full DC-AE model list: https://huggingface.co/collections/mit-han-lab/dc-ae-670085b9400ad7197bb1009b
-torchrun --nnodes 1 --nproc_per_node=8 -m applications.dc_ae.eval_dc_ae_model dataset=imagenet_512 model=dc-ae-f64c128-in-1.0 run_dir=tmp
+torchrun --nnodes=1 --nproc_per_node=8 -m applications.dc_ae.eval_dc_ae_model dataset=imagenet_512 model=dc-ae-f64c128-in-1.0 run_dir=tmp
 
 # Expected results:
 #   fid: 0.2167766520628902
@@ -145,7 +145,7 @@ torchrun --nnodes 1 --nproc_per_node=8 -m applications.dc_ae.eval_dc_ae_model da
 ``` bash
 # full DC-AE-Diffusion model list: https://huggingface.co/collections/mit-han-lab/dc-ae-diffusion-670dbb8d6b6914cf24c1a49d
 
-torchrun --nnodes 1 --nproc_per_node=1 -m applications.dc_ae.demo_dc_ae_diffusion_model model=dc-ae-f64c128-in-1.0-uvit-h-in-512px-train2000k run_dir=.demo/diffusion/dc-ae-f64c128-in-1.0-uvit-h-in-512px-train2000k
+torchrun --nnodes=1 --nproc_per_node=1 -m applications.dc_ae.demo_dc_ae_diffusion_model model=dc-ae-f64c128-in-1.0-uvit-h-in-512px-train2000k run_dir=.demo/diffusion/dc-ae-f64c128-in-1.0-uvit-h-in-512px-train2000k
 ```
 
 Expected results:
@@ -159,7 +159,7 @@ Expected results:
 
 ```bash
 # generate reference for FID computation
-torchrun --nnodes 1 --nproc_per_node=8 -m applications.dc_ae.generate_reference \
+torchrun --nnodes=1 --nproc_per_node=8 -m applications.dc_ae.generate_reference \
     dataset=imagenet imagenet.resolution=512 imagenet.image_mean=[0.,0.,0.] imagenet.image_std=[1.,1.,1.] split=train \
     fid.save_path=assets/data/fid/imagenet_512_train.npz
 ```
@@ -169,7 +169,7 @@ torchrun --nnodes 1 --nproc_per_node=8 -m applications.dc_ae.generate_reference 
 ```bash
 # full DC-AE-Diffusion model list: https://huggingface.co/collections/mit-han-lab/dc-ae-diffusion-670dbb8d6b6914cf24c1a49d
 
-torchrun --nnodes 1 --nproc_per_node=8 -m applications.dc_ae.eval_dc_ae_diffusion_model dataset=imagenet_512 model=dc-ae-f64c128-in-1.0-uvit-h-in-512px cfg_scale=1.0 run_dir=tmp
+torchrun --nnodes=1 --nproc_per_node=8 -m applications.dc_ae.eval_dc_ae_diffusion_model dataset=imagenet_512 model=dc-ae-f64c128-in-1.0-uvit-h-in-512px cfg_scale=1.0 run_dir=tmp
 # Expected results:
 #   fid: 13.754458694549271
 ```
@@ -180,7 +180,7 @@ torchrun --nnodes 1 --nproc_per_node=8 -m applications.dc_ae.eval_dc_ae_diffusio
 # full DC-AE-Diffusion model list: https://huggingface.co/collections/mit-han-lab/dc-ae-diffusion-670dbb8d6b6914cf24c1a49d
 # cfg=1.3 for mit-han-lab/dc-ae-f32c32-in-1.0-dit-xl-in-512px
 # and cfg=1.5 for all other models
-torchrun --nnodes 1 --nproc_per_node=8 -m applications.dc_ae.eval_dc_ae_diffusion_model dataset=imagenet_512 model=dc-ae-f64c128-in-1.0-uvit-h-in-512px cfg_scale=1.5 run_dir=tmp
+torchrun --nnodes=1 --nproc_per_node=8 -m applications.dc_ae.eval_dc_ae_diffusion_model dataset=imagenet_512 model=dc-ae-f64c128-in-1.0-uvit-h-in-512px cfg_scale=1.5 run_dir=tmp
 # Expected results:
 #   fid: 2.963459255529642
 ```
@@ -190,7 +190,7 @@ torchrun --nnodes 1 --nproc_per_node=8 -m applications.dc_ae.eval_dc_ae_diffusio
 - Generate and save latent:
 
 ```bash
-torchrun --nnodes 1 --nproc_per_node=8 -m applications.dc_ae.dc_ae_generate_latent resolution=512 \
+torchrun --nnodes=1 --nproc_per_node=8 -m applications.dc_ae.dc_ae_generate_latent resolution=512 \
     image_root_path=~/dataset/imagenet/train batch_size=64 \
     model_name=dc-ae-f64c128-in-1.0 scaling_factor=0.2889 \
     latent_root_path=assets/data/latent/dc_ae_f64c128_in_1.0/imagenet_512
@@ -200,7 +200,7 @@ torchrun --nnodes 1 --nproc_per_node=8 -m applications.dc_ae.dc_ae_generate_late
 
 ``` bash
 # Example: DC-AE-f64 + UViT-H on ImageNet 512x512
-torchrun --nnodes 1 --nproc_per_node=8 -m applications.dc_ae.train_dc_ae_diffusion_model resolution=512 \
+torchrun --nnodes=1 --nproc_per_node=8 -m applications.dc_ae.train_dc_ae_diffusion_model resolution=512 \
     train_dataset=latent_imagenet latent_imagenet.batch_size=128 latent_imagenet.data_dir=assets/data/latent/dc_ae_f64c128_in_1.0/imagenet_512 \
     evaluate_dataset=sample_class sample_class.num_samples=50000 \
     autoencoder=dc-ae-f64c128-in-1.0 scaling_factor=0.2889 \

@@ -511,3 +511,14 @@ def dc_ae_uvit_h_in_512px(ae_name: str, scaling_factor: float, in_channels: int,
         f"uvit.pretrained_path={'null' if pretrained_path is None else pretrained_path} "
         "fid.ref_path=assets/data/fid/imagenet_512_train.npz"
     )
+
+
+def dc_ae_uvit_2b_in_512px(
+    ae_name: str, scaling_factor: float, in_channels: int, pretrained_path: Optional[str]
+) -> str:
+    return (
+        f"autoencoder={ae_name} scaling_factor={scaling_factor} "
+        f"model=uvit uvit.depth=28 uvit.hidden_size=2048 uvit.num_heads=32 uvit.in_channels={in_channels} uvit.patch_size=1 "
+        f"uvit.pretrained_path={'null' if pretrained_path is None else pretrained_path} "
+        "fid.ref_path=assets/data/fid/imagenet_512_train.npz"
+    )
