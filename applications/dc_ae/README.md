@@ -78,6 +78,12 @@ y = dc_ae.decode(latent)
 save_image(y * 0.5 + 0.5, "demo_dc_ae.png")
 ```
 
+Alternatively, one can also use the following script to get reconstruction result.
+
+``` bash
+python -m applications.dc_ae.demo_dc_ae_model model=dc-ae-f32c32-in-1.0 run_dir=.demo/reconstruction/dc-ae-f32c32-in-1.0 input_path_list=[assets/fig/girl.png]
+```
+
 ### Efficient Diffusion Models with DC-AE
 
 ```python
