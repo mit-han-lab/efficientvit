@@ -196,10 +196,17 @@ torchrun --nnodes=1 --nproc_per_node=8 -m applications.dc_ae.eval_dc_ae_diffusio
 - Generate and save latent:
 
 ```bash
+# Example: DC-AE-f64
 torchrun --nnodes=1 --nproc_per_node=8 -m applications.dc_ae.dc_ae_generate_latent resolution=512 \
     image_root_path=~/dataset/imagenet/train batch_size=64 \
     model_name=dc-ae-f64c128-in-1.0 scaling_factor=0.2889 \
     latent_root_path=assets/data/latent/dc_ae_f64c128_in_1.0/imagenet_512
+
+# Example: DC-AE-f32
+torchrun --nnodes=1 --nproc_per_node=8 -m applications.dc_ae.dc_ae_generate_latent resolution=512 \
+    image_root_path=~/dataset/imagenet/train batch_size=64 \
+    model_name=dc-ae-f32c32-in-1.0 scaling_factor=0.3189 \
+    latent_root_path=assets/data/latent/dc_ae_f32c32_in_1.0/imagenet_512
 ```
 
 - Run training
@@ -216,6 +223,18 @@ torchrun --nnodes=1 --nproc_per_node=8 -m applications.dc_ae.train_dc_ae_diffusi
     max_steps=500000 ema_decay=0.9999 \
     fid.ref_path=assets/data/fid/imagenet_512_train.npz \
     run_dir=.exp/diffusion/imagenet_512/dc_ae_f64c128_in_1.0/uvit_h_1/bs_1024_lr_2e-4_bf16 log=False
+
+# Example: DC-AE-f32 + DiT-XL on ImageNet 512x512
+torchrun --nnodes=1 --nproc_per_node=8 -m applications.dc_ae.train_dc_ae_diffusion_model resolution=512 \
+    train_dataset=latent_imagenet latent_imagenet.batch_size=32 latent_imagenet.data_dir=assets/data/latent/dc_ae_f32c32_in_1.0/imagenet_512 \
+    evaluate_dataset=sample_class sample_class.num_samples=50000 \
+    autoencoder=dc-ae-f32c32-in-1.0 scaling_factor=0.3189 \
+    model=dit dit.learn_sigma=True dit.in_channels=32 dit.patch_size=1 dit.depth=28 dit.hidden_size=1152 dit.num_heads=16 \
+    dit.train_scheduler=GaussianDiffusion dit.eval_scheduler=GaussianDiffusion \
+    optimizer.name=adamw optimizer.lr=0.0001 optimizer.weight_decay=0 optimizer.betas=[0.9,0.999] lr_scheduler.name=constant amp=fp16 \
+    max_steps=3000000 ema_decay=0.9999 \
+    fid.ref_path=assets/data/fid/imagenet_512_train.npz \
+    run_dir=.exp/diffusion/imagenet_512/dc_ae_f32c32_in_1.0/dit_xl_1/bs_256_lr_1e-4_fp16 log=False
 ```
 
 ## Reference
