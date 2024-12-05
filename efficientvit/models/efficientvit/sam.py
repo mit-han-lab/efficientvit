@@ -301,6 +301,18 @@ class EfficientViTSamPredictor:
         boxes = self.apply_coords(boxes.reshape(-1, 2, 2))
         return boxes.reshape(-1, 4)
 
+    def apply_boxes_torch(self, boxes: torch.Tensor) -> torch.Tensor:
+        boxes = self.apply_coords_torch(boxes.reshape(-1, 2, 2))
+        return boxes.reshape(-1, 4)
+
+    def apply_coords_torch(self, coords: torch.Tensor, im_size=None) -> np.ndarray:
+        old_h, old_w = self.original_size
+        new_h, new_w = self.input_size
+        coords_copy = coords.detach().clone().to(torch.float)
+        coords_copy[..., 0] = coords_copy[..., 0] * (new_w / old_w)
+        coords_copy[..., 1] = coords_copy[..., 1] * (new_h / old_h)
+        return coords_copy
+
     @torch.inference_mode()
     def set_image(self, image: np.ndarray, image_format: str = "RGB") -> None:
         assert image_format in [
@@ -319,6 +331,22 @@ class EfficientViTSamPredictor:
 
         torch_data = self.model.transform(image).unsqueeze(dim=0).to(get_device(self.model))
         self.features = self.model.image_encoder(torch_data)
+        self.is_image_set = True
+
+    @torch.inference_mode()
+    def set_image_batch(self, image: torch.Tensor) -> None:
+        """
+        image torch.Tensor : Shape (B,C,H,W) with data expected to be preprocessed already, see EfficientViTSam.transform for the expected transforms.
+        """
+        self.reset_image()
+
+        original_height, original_width = image.shape[-2], image.shape[-1]
+        self.original_size = (original_height, original_width)
+        self.input_size = ResizeLongestSide.get_preprocess_shape(
+            *self.original_size, long_side_length=self.model.image_size[1]
+        )
+
+        self.features = self.model.image_encoder(image)
         self.is_image_set = True
 
     def predict(
@@ -405,12 +433,12 @@ class EfficientViTSamPredictor:
         mask_input: Optional[torch.Tensor] = None,
         multimask_output: bool = True,
         return_logits: bool = False,
+        image_index: Optional[int] = None,
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """
         Predict masks for the given input prompts, using the currently set image.
         Input prompts are batched torch tensors and are expected to already be
         transformed to the input frame using ResizeLongestSide.
-
         Arguments:
           point_coords (torch.Tensor or None): A BxNx2 array of point prompts to the
             model. Each point is in (X,Y) in pixels.
@@ -431,7 +459,7 @@ class EfficientViTSamPredictor:
             input prompts, multimask_output=False can give better results.
           return_logits (bool): If true, returns un-thresholded masks logits
             instead of a binary mask.
-
+          image_index (int): If provided will be used to index the image embeddings used by the decoder. This needs to be used if one uses set_image_batch.
         Returns:
           (torch.Tensor): The output masks in BxCxHxW format, where C is the
             number of masks, and (H, W) is the original image size.
@@ -443,12 +471,10 @@ class EfficientViTSamPredictor:
         """
         if not self.is_image_set:
             raise RuntimeError("An image must be set with .set_image(...) before mask prediction.")
-
         if point_coords is not None:
             points = (point_coords, point_labels)
         else:
             points = None
-
         # Embed prompts
         sparse_embeddings, dense_embeddings = self.model.prompt_encoder(
             points=points,
@@ -457,20 +483,21 @@ class EfficientViTSamPredictor:
         )
 
         # Predict masks
+        if image_index is not None:
+            image_embeddings = self.features[image_index].unsqueeze(0)
+        else:
+            image_embeddings = self.features
         low_res_masks, iou_predictions = self.model.mask_decoder(
-            image_embeddings=self.features,
+            image_embeddings=image_embeddings,
             image_pe=self.model.prompt_encoder.get_dense_pe(),
             sparse_prompt_embeddings=sparse_embeddings,
             dense_prompt_embeddings=dense_embeddings,
             multimask_output=multimask_output,
         )
-
         # Upscale the masks to the original image resolution
         masks = self.model.postprocess_masks(low_res_masks, self.input_size, self.original_size)
-
         if not return_logits:
             masks = masks > self.model.mask_threshold
-
         return masks, iou_predictions, low_res_masks
 
 
