@@ -343,7 +343,7 @@ class EfficientViTSamPredictor:
         original_height, original_width = image.shape[-2], image.shape[-1]
         self.original_size = (original_height, original_width)
         self.input_size = ResizeLongestSide.get_preprocess_shape(
-            *self.original_size, long_side_length=self.model.image_size[1]
+            *self.original_size, long_side_length=self.model.image_size[0]
         )
 
         self.features = self.model.image_encoder(image)
