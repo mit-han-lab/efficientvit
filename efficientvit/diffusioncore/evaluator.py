@@ -82,12 +82,12 @@ class Evaluator:
             device = torch.device("cuda")
             dtype = get_dtype_from_str(cfg.autoencoder_dtype)
             if cfg.autoencoder in REGISTERED_DCAE_MODEL:
-                self.autoencoder = DCAE_HF.from_pretrained(f"mit-han-lab/{cfg.autoencoder}").to(
+                self.autoencoder = DCAE_HF.from_pretrained(f"mit-han-lab/{cfg.autoencoder}").eval().to(
                     device=device, dtype=dtype
                 )
                 assert cfg.scaling_factor is not None
             elif cfg.autoencoder in ["stabilityai/sd-vae-ft-ema", "flux-vae"]:
-                self.autoencoder = AutoencoderKL(cfg.autoencoder).to(device=device, dtype=dtype)
+                self.autoencoder = AutoencoderKL(cfg.autoencoder).eval().to(device=device, dtype=dtype)
                 cfg.scaling_factor = self.autoencoder.model.config.scaling_factor
             else:
                 raise ValueError(f"{cfg.model} is not supported for evaluating and training")

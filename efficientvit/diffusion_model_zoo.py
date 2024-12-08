@@ -19,6 +19,13 @@ REGISTERED_DCAE_DIFFUSION_MODEL: dict[str, tuple[Callable, str, float, int, Opti
         32,
         None,
     ),
+    "dc-ae-f32c32-in-1.0-dit-xl-in-512px-trainbs1024": (
+        dc_ae_dit_xl_in_512px,
+        "dc-ae-f32c32-in-1.0",
+        0.3189,
+        32,
+        None,
+    ),
     ################################################################################
     "dc-ae-f32c32-in-1.0-uvit-s-in-512px": (
         dc_ae_uvit_s_in_512px,

@@ -78,13 +78,25 @@ y = dc_ae.decode(latent)
 save_image(y * 0.5 + 0.5, "demo_dc_ae.png")
 ```
 
-Alternatively, one can also use the following script to get reconstruction result.
+Alternatively, one can also use the following script to get the reconstruction result.
 
 ``` bash
 python -m applications.dc_ae.demo_dc_ae_model model=dc-ae-f32c32-in-1.0 run_dir=.demo/reconstruction/dc-ae-f32c32-in-1.0 input_path_list=[assets/fig/girl.png]
 ```
 
 ### Efficient Diffusion Models with DC-AE
+
+| Autoencoder                                                          | Diffusion Model                                                                                                      | Params  | MACs   | FID (w/o cfg) | FID (w/ cfg) |
+| :------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------: | :-----: | :----: | :-----------: | :----------: |
+| [DC-AE-f32](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0)  | [UViT-S](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0-uvit-s-in-512px)                                     |   44.79 |  12.27 |         46.12 |        18.08 |
+| [DC-AE-f32](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0)  | [DiT-XL](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0-dit-xl-in-512px)                                     |  674.89 | 118.68 |          9.56 |         2.84 |
+| [DC-AE-f32](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0)  | [DiT-XL (train batch size 1024)](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0-dit-xl-in-512px-trainbs1024) |  674.89 | 118.68 |          6.88 |         2.41 |
+| [DC-AE-f32](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0)  | [UViT-H](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0-uvit-h-in-512px)                                     |  500.87 | 133.25 |          9.83 |         2.53 |
+| [DC-AE-f64](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0) | [UViT-H](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0-uvit-h-in-512px)                                    |  500.87 |  33.25 |         13.96 |         3.01 |
+| [DC-AE-f64](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0) | [UViT-H (train 2000k steps)](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0-uvit-h-in-512px-train2000k)     |  500.87 |  33.25 |         12.26 |         2.66 |
+| [DC-AE-f32](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0)  | [UViT-2B](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0-uvit-2b-in-512px)                                   | 1580.40 | 414.91 |          8.13 |         2.30 |
+| [DC-AE-f64](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0) | [UViT-2B](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0-uvit-2b-in-512px)                                  | 1580.40 | 104.65 |          7.78 |         2.47 |
+| [DC-AE-f64](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0) | [UViT-2B (train 2000k steps)](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0-uvit-2b-in-512px-train2000k)   | 1580.40 | 104.65 |          6.50 |         2.25 |
 
 ```python
 # build DC-AE-Diffusion models
