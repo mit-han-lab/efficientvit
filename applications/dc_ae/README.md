@@ -86,7 +86,7 @@ python -m applications.dc_ae.demo_dc_ae_model model=dc-ae-f32c32-in-1.0 run_dir=
 
 ### Efficient Diffusion Models with DC-AE
 
-| Autoencoder                                                          | Diffusion Model                                                                                                      | Params  | MACs   | FID (w/o cfg) | FID (w/ cfg) |
+| Autoencoder                                                          | Diffusion Model                                                                                                      | Params  | MACs   | ImageNet 512x512 FID (without cfg) | ImageNet 512x512 FID (with cfg) |
 | :------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------: | :-----: | :----: | :-----------: | :----------: |
 | [DC-AE-f32](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0)  | [UViT-S](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0-uvit-s-in-512px)                                     |   44.79 |  12.27 |         46.12 |        18.08 |
 | [DC-AE-f32](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0)  | [DiT-XL](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0-dit-xl-in-512px)                                     |  674.89 | 118.68 |          9.56 |         2.84 |
