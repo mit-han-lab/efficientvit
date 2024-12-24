@@ -2,23 +2,27 @@
 
 **Efficient vision foundation models for high-resolution generation and perception.**
 
+## News
+
+- [2024/12/24] **diffusers** supports DC-AE models. All [DC-AE models in diffusers safetensors](https://huggingface.co/collections/mit-han-lab/dc-ae-670085b9400ad7197bb1009b) are released. [Usage](https://github.com/mit-han-lab/efficientvit/tree/master/applications/dc_ae#deep-compression-autoencoder-diffusers).
+- [2024/10/21] DC-AE and EfficientViT block are used in our latest text-to-image diffusion model SANA! Check the [project page](https://nvlabs.github.io/Sana/) for more details.
+- [2024/10/15] We released **Deep Compression Autoencoder (DC-AE)**: [link](#deep-compression-autoencoder-for-efficient-high-resolution-diffusion-models-paper-readme)!
+- [2024/07/10] EfficientViT is used as the backbone in [Grounding DINO 1.5 Edge](https://arxiv.org/pdf/2405.10300) for efficient open-set object detection.
+- [2024/07/10] EfficientViT-SAM is used in [MedficientSAM](https://github.com/hieplpvip/medficientsam), the 1st place model in [CVPR 2024 Segment Anything In Medical Images On Laptop Challenge](https://www.codabench.org/competitions/1847/).
+- [2024/07/10] An FPGA-based accelerator for EfficientViT: [link](https://arxiv.org/abs/2403.20230).
+- [2024/04/23] We released the training code of EfficientViT-SAM.
+- [2024/04/06] EfficientViT-SAM is accepted by [eLVM@CVPR'24](https://sites.google.com/view/elvm/home?authuser=0).
+- [2024/03/19] Online demo of EfficientViT-SAM is available: [https://evitsam.hanlab.ai/](https://evitsam.hanlab.ai/). 
+- [2024/02/07] We released [EfficientViT-SAM](https://arxiv.org/abs/2402.05008), the first accelerated SAM model that matches/outperforms SAM-ViT-H's zero-shot performance, delivering the SOTA performance-efficiency trade-off.
+- [2023/11/20] EfficientViT is available in the [NVIDIA Jetson Generative AI Lab](https://www.jetson-ai-lab.com/tutorial_efficientvit.html).
+- [2023/09/12] EfficientViT is highlighted by [MIT home page](https://www.mit.edu/archive/spotlight/efficient-computer-vision/) and [MIT News](https://news.mit.edu/2023/ai-model-high-resolution-computer-vision-0912).
+- [2023/07/18] EfficientViT is accepted by ICCV 2023.
+
 ## Content
 
 ### Deep Compression Autoencoder for Efficient High-Resolution Diffusion Models [[paper](https://arxiv.org/abs/2410.10733)] [[readme](applications/dc_ae/README.md)]
 
 **Deep Compression Autoencoder (DC-AE) is a new family of high-spatial compression autoencoders with a spatial compression ratio of up to 128 while maintaining reconstruction quality. It accelerates all latent diffusion models regardless of the diffusion model architecture.**
-
-#### Updates
-
-- We add UViT-2B trained with DC-AE-f64p1 on ImageNet 512x512: [link](https://huggingface.co/collections/mit-han-lab/dc-ae-diffusion-670dbb8d6b6914cf24c1a49d).
-<p align="left">
-<img src="assets/uvit_2b_imagenet_512px.png"  width="1200">
-</p>
-
-- We add model scaling results on ImageNet 512x512 with UViT variants (UViT-S -> UViT-2B). DC-AE-f64 benefits more from scaling up than SD-VAE-f8:
-<p align="left">
-<img src="assets/diffusion_scaling_up.jpg"  width="300">
-</p>
 
 #### Demo
 
@@ -101,23 +105,6 @@
 **Gaze-prompted image segmentation models capable of running in real time with TensorRT on an NVIDIA RTX 4070.**
 
 ![GazeSAM demo](https://huggingface.co/mit-han-lab/efficientvit-sam/resolve/main/gazesam/efficientvit_gazesam_demo.gif)
-
-## News
-
-**If you are interested in getting updates, please join our mailing list [here](https://forms.gle/Z6DNkRidJ1ouxmUk9).**
-
-- [2024/10/21] DC-AE and EfficientViT block are used in our latest text-to-image diffusion model SANA! Check the [project page](https://nvlabs.github.io/Sana/) for more details.
-- [2024/10/15] We released **Deep Compression Autoencoder (DC-AE)**: [link](#deep-compression-autoencoder-for-efficient-high-resolution-diffusion-models-paper-readme)!
-- [2024/07/10] EfficientViT is used as the backbone in [Grounding DINO 1.5 Edge](https://arxiv.org/pdf/2405.10300) for efficient open-set object detection.
-- [2024/07/10] EfficientViT-SAM is used in [MedficientSAM](https://github.com/hieplpvip/medficientsam), the 1st place model in [CVPR 2024 Segment Anything In Medical Images On Laptop Challenge](https://www.codabench.org/competitions/1847/).
-- [2024/07/10] An FPGA-based accelerator for EfficientViT: [link](https://arxiv.org/abs/2403.20230).
-- [2024/04/23] We released the training code of EfficientViT-SAM.
-- [2024/04/06] EfficientViT-SAM is accepted by [eLVM@CVPR'24](https://sites.google.com/view/elvm/home?authuser=0).
-- [2024/03/19] Online demo of EfficientViT-SAM is available: [https://evitsam.hanlab.ai/](https://evitsam.hanlab.ai/). 
-- [2024/02/07] We released [EfficientViT-SAM](https://arxiv.org/abs/2402.05008), the first accelerated SAM model that matches/outperforms SAM-ViT-H's zero-shot performance, delivering the SOTA performance-efficiency trade-off.
-- [2023/11/20] EfficientViT is available in the [NVIDIA Jetson Generative AI Lab](https://www.jetson-ai-lab.com/tutorial_efficientvit.html).
-- [2023/09/12] EfficientViT is highlighted by [MIT home page](https://www.mit.edu/archive/spotlight/efficient-computer-vision/) and [MIT News](https://news.mit.edu/2023/ai-model-high-resolution-computer-vision-0912).
-- [2023/07/18] EfficientViT is accepted by ICCV 2023.
 
 ## Getting Started
 
