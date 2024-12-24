@@ -44,6 +44,40 @@ We present Deep Compression Autoencoder (DC-AE), a new family of autoencoder mod
 
 ## Usage
 
+### Deep Compression Autoencoder in diffusers
+
+```bash
+pip install -U diffusers
+```
+
+```python
+from PIL import Image
+import torch
+import torchvision.transforms as transforms
+from torchvision.utils import save_image
+from diffusers import AutoencoderDC
+
+device = torch.device("cuda")
+dc_ae: AutoencoderDC = AutoencoderDC.from_pretrained(f"mit-han-lab/dc-ae-f64c128-in-1.0-diffusers", torch_dtype=torch.float32).to(device).eval()
+
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize(0.5, 0.5),
+])
+
+image = Image.open("assets/fig/girl.png")
+x = transform(image)[None].to(device)
+latent = dc_ae.encode(x).latent
+y = dc_ae.decode(latent).sample
+save_image(y * 0.5 + 0.5, "demo_dc_ae.png")
+```
+
+Alternatively, one can also use the following script to get the reconstruction result.
+
+``` bash
+python -m applications.dc_ae.demo_dc_ae_model_diffusers model=dc-ae-f32c32-in-1.0-diffusers run_dir=.demo/reconstruction/dc-ae-f32c32-in-1.0-diffusers input_path_list=[assets/fig/girl.png]
+```
+
 ### Deep Compression Autoencoder
 
 ```python
