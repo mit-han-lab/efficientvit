@@ -2,18 +2,6 @@
 
 [[paper](https://arxiv.org/abs/2410.10733)]
 
-## Updates
-
-- We add UViT-2B trained with DC-AE-f64p1 on ImageNet 512x512: [link](https://huggingface.co/collections/mit-han-lab/dc-ae-diffusion-670dbb8d6b6914cf24c1a49d).
-<p align="left">
-<img src="../../assets/uvit_2b_imagenet_512px.png"  width="1200">
-</p>
-
-- We add model scaling results on ImageNet 512x512 with UViT variants (UViT-S -> UViT-2B). DC-AE-f64 benefits more from scaling up than SD-VAE-f8:
-<p align="left">
-<img src="../../assets/diffusion_scaling_up.jpg"  width="300">
-</p>
-
 ## Demo
 
 ![demo](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0/resolve/main/assets/dc_ae_demo.gif)
@@ -44,7 +32,7 @@ We present Deep Compression Autoencoder (DC-AE), a new family of autoencoder mod
 
 ## Usage
 
-### Deep Compression Autoencoder in diffusers
+### Deep Compression Autoencoder (Diffusers)
 
 ```bash
 pip install -U diffusers
@@ -72,13 +60,13 @@ y = dc_ae.decode(latent).sample
 save_image(y * 0.5 + 0.5, "demo_dc_ae.png")
 ```
 
-Alternatively, one can also use the following script to get the reconstruction result.
+Alternatively, you can also use the following script to get the reconstruction result.
 
 ``` bash
 python -m applications.dc_ae.demo_dc_ae_model_diffusers model=dc-ae-f32c32-in-1.0-diffusers run_dir=.demo/reconstruction/dc-ae-f32c32-in-1.0-diffusers input_path_list=[assets/fig/girl.png]
 ```
 
-### Deep Compression Autoencoder
+### Deep Compression Autoencoder (EfficientViT)
 
 ```python
 # build DC-AE models
@@ -112,7 +100,7 @@ y = dc_ae.decode(latent)
 save_image(y * 0.5 + 0.5, "demo_dc_ae.png")
 ```
 
-Alternatively, one can also use the following script to get the reconstruction result.
+Alternatively, you can also use the following script to get the reconstruction result.
 
 ``` bash
 python -m applications.dc_ae.demo_dc_ae_model model=dc-ae-f32c32-in-1.0 run_dir=.demo/reconstruction/dc-ae-f32c32-in-1.0 input_path_list=[assets/fig/girl.png]
