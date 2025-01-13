@@ -236,7 +236,7 @@ torchrun --nnodes=1 --nproc_per_node=8 -m applications.dc_ae.eval_dc_ae_diffusio
 
 torchrun --nnodes=1 --nproc_per_node=8 -m applications.dc_ae.eval_dc_ae_diffusion_model dataset=imagenet_512 model=dc-ae-f32c32-in-1.0-usit-2b-in-512px cfg_scale=1.15 run_dir=tmp
 # Expected results:
-#   fid: 1.7336416237349113
+#   fid: 1.7210562991380698
 ```
 
 ## Train DC-AE-Diffusion Models
