@@ -6,7 +6,13 @@ from omegaconf import OmegaConf
 
 from efficientvit.diffusioncore.evaluator import Evaluator, EvaluatorConfig
 from efficientvit.diffusioncore.models.dit import dc_ae_dit_xl_in_512px
-from efficientvit.diffusioncore.models.uvit import dc_ae_uvit_2b_in_512px, dc_ae_uvit_h_in_512px, dc_ae_uvit_s_in_512px
+from efficientvit.diffusioncore.models.uvit import (
+    dc_ae_usit_2b_in_512px,
+    dc_ae_usit_h_in_512px,
+    dc_ae_uvit_2b_in_512px,
+    dc_ae_uvit_h_in_512px,
+    dc_ae_uvit_s_in_512px,
+)
 
 __all__ = ["create_dc_ae_diffusion_model", "DCAE_Diffusion_HF"]
 
@@ -43,6 +49,21 @@ REGISTERED_DCAE_DIFFUSION_MODEL: dict[str, tuple[Callable, str, float, int, Opti
     ),
     "dc-ae-f32c32-in-1.0-uvit-2b-in-512px": (
         dc_ae_uvit_2b_in_512px,
+        "dc-ae-f32c32-in-1.0",
+        0.3189,
+        32,
+        None,
+    ),
+    ################################################################################
+    "dc-ae-f32c32-in-1.0-usit-h-in-512px": (
+        dc_ae_usit_h_in_512px,
+        "dc-ae-f32c32-in-1.0",
+        0.3189,
+        32,
+        None,
+    ),
+    "dc-ae-f32c32-in-1.0-usit-2b-in-512px": (
+        dc_ae_usit_2b_in_512px,
         "dc-ae-f32c32-in-1.0",
         0.3189,
         32,

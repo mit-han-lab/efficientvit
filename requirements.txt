@@ -10,6 +10,7 @@ tqdm
 torchprofile
 scipy
 torch-fidelity
+torchdiffeq
 diffusers
 omegaconf
 ipdb

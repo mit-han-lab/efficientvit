@@ -14,6 +14,9 @@ from efficientvit.apps.utils.dist import is_master
 from efficientvit.diffusioncore.models.uvit_sampler.dpm_solver_pp import DPM_Solver, NoiseScheduleVP
 from efficientvit.models.utils.network import get_device, get_submodule_weights
 
+from .sit_sampler import Sampler as SiTSampler
+from .sit_sampler import create_transport as sit_create_transport
+
 __all__ = ["UViTConfig", "UViT", "dc_ae_uvit_s_in_512px", "dc_ae_uvit_h_in_512px"]
 
 
@@ -355,26 +358,41 @@ class UViT(nn.Module):
             self.apply(self._init_weights)
 
         # scheduler
+        if cfg.train_scheduler == "DPM_Solver":
+            _betas = (torch.linspace(0.00085**0.5, 0.0120**0.5, 1000, dtype=torch.float64) ** 2).numpy()
+            self.train_scheduler = UViTSchedule(_betas)
+        elif cfg.train_scheduler == "SiTSampler":
+            self.transport = sit_create_transport("Linear", "velocity", None, None, None)
+        else:
+            raise NotImplementedError(f"train_scheduler {cfg.train_scheduler} is not supported")
+
         if cfg.eval_scheduler == "DPM_Solver":
             device = torch.device("cuda")
             _betas = (torch.linspace(0.00085**0.5, 0.0120**0.5, 1000, dtype=torch.float64) ** 2).numpy()
             self.eval_scheduler = NoiseScheduleVP(
                 schedule="discrete", betas=torch.tensor(_betas, device=device).float()
             )
+        elif cfg.eval_scheduler in ["ODE_dopri5", "ODE_heun2"]:
+            assert cfg.train_scheduler == "SiTSampler"
+            sampler = SiTSampler(self.transport)
+            if cfg.eval_scheduler == "ODE_dopri5":
+                self.eval_scheduler = sampler.sample_ode(
+                    sampling_method="dopri5", num_steps=cfg.num_inference_steps, atol=1e-6, rtol=0.001, reverse=False
+                )
+            elif cfg.eval_scheduler == "ODE_heun2":
+                self.eval_scheduler = sampler.sample_ode(
+                    sampling_method="heun2", num_steps=cfg.num_inference_steps, atol=1e-6, rtol=0.001, reverse=False
+                )
+            else:
+                raise ValueError(f"eval scheduler {cfg.eval_scheduler} is not supported")
         else:
             raise NotImplementedError(f"eval_scheduler {cfg.eval_scheduler} is not supported")
-
-        if cfg.train_scheduler == "DPM_Solver":
-            _betas = (torch.linspace(0.00085**0.5, 0.0120**0.5, 1000, dtype=torch.float64) ** 2).numpy()
-            self.train_scheduler = UViTSchedule(_betas)
-        else:
-            raise NotImplementedError(f"train_scheduler {cfg.train_scheduler} is not supported")
 
     def get_trainable_modules(self) -> nn.ModuleDict:
         return nn.ModuleDict({"uvit": self})
 
     def load_model(self):
-        checkpoint = torch.load(self.cfg.pretrained_path, map_location="cpu", weights_only=True)
+        checkpoint = torch.load(self.cfg.pretrained_path, map_location="cpu")
         if self.cfg.pretrained_source == "uvit":
             if "ema" in checkpoint:
                 checkpoint = checkpoint["ema"]
@@ -459,6 +477,10 @@ class UViT(nn.Module):
             n, eps, xn = self.train_scheduler.sample(x)  # n in {1, ..., 1000}
             eps_pred = self.forward_without_cfg(xn, n, y)
             loss = (eps - eps_pred).square().mean()
+        elif self.cfg.train_scheduler == "SiTSampler":
+            model_kwargs = dict(y=y)
+            loss_dict = self.transport.training_losses(self.forward_without_cfg, x, model_kwargs)
+            loss = loss_dict["loss"].mean()
         else:
             raise NotImplementedError(f"train scheduler {self.cfg.train_scheduler} is not supported")
         info["loss_dict"] = {"loss": loss}
@@ -489,6 +511,15 @@ class UViT(nn.Module):
 
             dpm_solver = DPM_Solver(model_fn, self.eval_scheduler, predict_x0=True, thresholding=False)
             samples = dpm_solver.sample(samples, steps=self.cfg.num_inference_steps, eps=1.0 / N, T=1.0)
+        elif self.cfg.eval_scheduler in ["ODE_dopri5", "ODE_heun2"]:
+            if scale != 1.0:
+                assert null_inputs is not None
+                samples = torch.cat([samples, samples], dim=0)
+                inputs = torch.cat([inputs, null_inputs], dim=0)
+                samples = self.eval_scheduler(samples, self.forward_with_cfg, y=inputs, cfg_scale=scale)[-1]
+                samples, _ = samples.chunk(2, dim=0)
+            else:
+                samples = self.eval_scheduler(samples, self.forward_without_cfg, y=inputs)[-1]
         else:
             raise NotImplementedError(f"eval scheduler {self.cfg.eval_scheduler} is not supported")
 
@@ -519,6 +550,28 @@ def dc_ae_uvit_2b_in_512px(
     return (
         f"autoencoder={ae_name} scaling_factor={scaling_factor} "
         f"model=uvit uvit.depth=28 uvit.hidden_size=2048 uvit.num_heads=32 uvit.in_channels={in_channels} uvit.patch_size=1 "
+        f"uvit.pretrained_path={'null' if pretrained_path is None else pretrained_path} "
+        "fid.ref_path=assets/data/fid/imagenet_512_train.npz"
+    )
+
+
+def dc_ae_usit_h_in_512px(ae_name: str, scaling_factor: float, in_channels: int, pretrained_path: Optional[str]) -> str:
+    return (
+        f"autoencoder={ae_name} scaling_factor={scaling_factor} "
+        f"model=uvit uvit.depth=28 uvit.hidden_size=1152 uvit.num_heads=16 uvit.in_channels={in_channels} uvit.patch_size=1 "
+        "uvit.train_scheduler=SiTSampler uvit.eval_scheduler=ODE_dopri5 uvit.num_inference_steps=250 "
+        f"uvit.pretrained_path={'null' if pretrained_path is None else pretrained_path} "
+        "fid.ref_path=assets/data/fid/imagenet_512_train.npz"
+    )
+
+
+def dc_ae_usit_2b_in_512px(
+    ae_name: str, scaling_factor: float, in_channels: int, pretrained_path: Optional[str]
+) -> str:
+    return (
+        f"autoencoder={ae_name} scaling_factor={scaling_factor} "
+        f"model=uvit uvit.depth=28 uvit.hidden_size=2048 uvit.num_heads=32 uvit.in_channels={in_channels} uvit.patch_size=1 "
+        "uvit.train_scheduler=SiTSampler uvit.eval_scheduler=ODE_dopri5 uvit.num_inference_steps=250 "
         f"uvit.pretrained_path={'null' if pretrained_path is None else pretrained_path} "
         "fid.ref_path=assets/data/fid/imagenet_512_train.npz"
     )

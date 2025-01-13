@@ -281,8 +281,8 @@ class Trainer(Evaluator):
                 self.resume_from_checkpoint(os.path.join(self.checkpoint_dir, "checkpoint_.pt"))
         elif self.cfg.resume_path is not None:
             self.resume_from_checkpoint(self.cfg.resume_path)
-
-        self.print_and_f_log("can not find a checkpoint, will train from scratch\n")
+        else:
+            self.print_and_f_log("can not find a checkpoint, will train from scratch\n")
 
     def after_step(self, loss: torch.Tensor) -> dict[str, Any]:
         info: dict[str, Any] = {}
