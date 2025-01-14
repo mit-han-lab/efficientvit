@@ -1,3 +1,4 @@
+# modified from https://github.com/baofff/U-ViT
 import math
 from dataclasses import dataclass
 from functools import partial

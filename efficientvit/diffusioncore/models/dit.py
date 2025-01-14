@@ -1,3 +1,4 @@
+# modified from https://github.com/facebookresearch/DiT
 import math
 from dataclasses import dataclass
 from typing import Optional

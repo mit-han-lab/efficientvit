@@ -1,3 +1,4 @@
+# modified from https://github.com/willisma/SiT
 from .transport import ModelType, PathType, Sampler, Transport, WeightType
 
 

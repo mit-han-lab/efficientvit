@@ -1,3 +1,4 @@
+# modified from https://github.com/willisma/SiT
 import enum
 import logging
 

@@ -1,3 +1,4 @@
+# modified from https://github.com/willisma/SiT
 from functools import partial
 
 import numpy as np
