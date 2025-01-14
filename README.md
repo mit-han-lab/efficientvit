@@ -4,12 +4,12 @@
 
 ## News
 
-- [2024/12/24] **diffusers** supports DC-AE models. All [DC-AE models in diffusers safetensors](https://huggingface.co/collections/mit-han-lab/dc-ae-670085b9400ad7197bb1009b) are released. [Usage](https://github.com/mit-han-lab/efficientvit/tree/master/applications/dc_ae#deep-compression-autoencoder-diffusers).
+- (🔥 New) [2025/01/14] We released **DC-AE+USiT models**: [model](https://huggingface.co/collections/mit-han-lab/dc-ae-diffusion-670dbb8d6b6914cf24c1a49d), [training](https://github.com/mit-han-lab/efficientvit/blob/master/applications/dc_ae/README.md#dc-ae--usit). Using the default training and sampling settings, DC-AE+USiT-2B achieves 1.72 FID on ImageNet 512x512, surpassing the SOTA diffusion model EDM2-XXL and SOTA auto-regressive image generative models (MAGVIT-v2 and MAR-L). 
+- (🔥 New) [2024/12/24] **diffusers** supports DC-AE models. All [DC-AE models in diffusers safetensors](https://huggingface.co/collections/mit-han-lab/dc-ae-670085b9400ad7197bb1009b) are released. [Usage](https://github.com/mit-han-lab/efficientvit/tree/master/applications/dc_ae#deep-compression-autoencoder-diffusers).
 - [2024/10/21] DC-AE and EfficientViT block are used in our latest text-to-image diffusion model SANA! Check the [project page](https://nvlabs.github.io/Sana/) for more details.
 - [2024/10/15] We released **Deep Compression Autoencoder (DC-AE)**: [link](#deep-compression-autoencoder-for-efficient-high-resolution-diffusion-models-paper-readme)!
 - [2024/07/10] EfficientViT is used as the backbone in [Grounding DINO 1.5 Edge](https://arxiv.org/pdf/2405.10300) for efficient open-set object detection.
 - [2024/07/10] EfficientViT-SAM is used in [MedficientSAM](https://github.com/hieplpvip/medficientsam), the 1st place model in [CVPR 2024 Segment Anything In Medical Images On Laptop Challenge](https://www.codabench.org/competitions/1847/).
-- [2024/07/10] An FPGA-based accelerator for EfficientViT: [link](https://arxiv.org/abs/2403.20230).
 - [2024/04/23] We released the training code of EfficientViT-SAM.
 - [2024/04/06] EfficientViT-SAM is accepted by [eLVM@CVPR'24](https://sites.google.com/view/elvm/home?authuser=0).
 - [2024/03/19] Online demo of EfficientViT-SAM is available: [https://evitsam.hanlab.ai/](https://evitsam.hanlab.ai/). 
