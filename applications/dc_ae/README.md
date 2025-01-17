@@ -68,15 +68,15 @@ python -m applications.dc_ae.demo_dc_ae_model_diffusers model=dc-ae-f32c32-in-1.
 
 ### Deep Compression Autoencoder (EfficientViT)
 
-| Autoencoder                                                                         | Latent Shape                                | Training Dataset      |
-| :---------------------------------------------------------------------------------: | :-----------------------------------------: | :-------------------: |
-| [dc-ae-f32c32-in-1.0](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0)       | $32\times\frac{H}{32}\times\frac{W}{32}$    | ImageNet              |
-| [dc-ae-f64c128-in-1.0](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0)     | $128\times\frac{H}{64}\times\frac{W}{64}$   | ImageNet              |
-| [dc-ae-f128c512-in-1.0](https://huggingface.co/mit-han-lab/dc-ae-f128c512-in-1.0)   | $512\times\frac{H}{128}\times\frac{W}{128}$ | ImageNet              |
-| [dc-ae-f32c32-mix-1.0](https://huggingface.co/mit-han-lab/dc-ae-f32c32-mix-1.0)     | $32\times\frac{H}{32}\times\frac{W}{32}$    | A Mixture of Datasets |
-| [dc-ae-f64c128-mix-1.0](https://huggingface.co/mit-han-lab/dc-ae-f64c128-mix-1.0)   | $128\times\frac{H}{64}\times\frac{W}{64}$   | A Mixture of Datasets |
-| [dc-ae-f128c512-mix-1.0](https://huggingface.co/mit-han-lab/dc-ae-f128c512-mix-1.0) | $512\times\frac{H}{128}\times\frac{W}{128}$ | A Mixture of Datasets |
-| [dc-ae-f32c32-sana-1.0](https://huggingface.co/mit-han-lab/dc-ae-f32c32-sana-1.0)   | $32\times\frac{H}{32}\times\frac{W}{32}$    | A Mixture of Datasets |
+| Autoencoder                                                                         | Latent Shape                                | Training Dataset      | Note   |
+| :---------------------------------------------------------------------------------: | :-----------------------------------------: | :-------------------: | :----: |
+| [dc-ae-f32c32-in-1.0](https://huggingface.co/mit-han-lab/dc-ae-f32c32-in-1.0)       | $32\times\frac{H}{32}\times\frac{W}{32}$    | ImageNet              | |
+| [dc-ae-f64c128-in-1.0](https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0)     | $128\times\frac{H}{64}\times\frac{W}{64}$   | ImageNet              | |
+| [dc-ae-f128c512-in-1.0](https://huggingface.co/mit-han-lab/dc-ae-f128c512-in-1.0)   | $512\times\frac{H}{128}\times\frac{W}{128}$ | ImageNet              | |
+| [dc-ae-f32c32-mix-1.0](https://huggingface.co/mit-han-lab/dc-ae-f32c32-mix-1.0)     | $32\times\frac{H}{32}\times\frac{W}{32}$    | A Mixture of Datasets | |
+| [dc-ae-f64c128-mix-1.0](https://huggingface.co/mit-han-lab/dc-ae-f64c128-mix-1.0)   | $128\times\frac{H}{64}\times\frac{W}{64}$   | A Mixture of Datasets | |
+| [dc-ae-f128c512-mix-1.0](https://huggingface.co/mit-han-lab/dc-ae-f128c512-mix-1.0) | $512\times\frac{H}{128}\times\frac{W}{128}$ | A Mixture of Datasets | |
+| [dc-ae-f32c32-sana-1.0](https://huggingface.co/mit-han-lab/dc-ae-f32c32-sana-1.0)   | $32\times\frac{H}{32}\times\frac{W}{32}$    | A Mixture of Datasets | The autoencoder used in [SANA](https://github.com/NVlabs/Sana) |
 
 ```python
 # build DC-AE models
