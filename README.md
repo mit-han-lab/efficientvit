@@ -2,6 +2,8 @@
 
 **Efficient vision foundation models for high-resolution generation and perception.**
 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/deep-compression-autoencoder-for-efficient/image-generation-on-imagenet-512x512)](https://paperswithcode.com/sota/image-generation-on-imagenet-512x512?p=deep-compression-autoencoder-for-efficient)
+
 ## News
 
 - (🔥 New) [2025/01/14] We released **DC-AE+USiT models**: [model](https://huggingface.co/collections/mit-han-lab/dc-ae-diffusion-670dbb8d6b6914cf24c1a49d), [training](https://github.com/mit-han-lab/efficientvit/blob/master/applications/dc_ae/README.md#dc-ae--usit). Using the default training settings and sampling strategy, DC-AE+USiT-2B achieves 1.72 FID on ImageNet 512x512, surpassing the SOTA diffusion model EDM2-XXL and SOTA auto-regressive image generative models (MAGVIT-v2 and MAR-L). 
