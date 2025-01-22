@@ -34,10 +34,10 @@ def main():
     dc_ae_diffusion = DCAE_Diffusion_HF.from_pretrained(f"mit-han-lab/{cfg.model}")
     dc_ae_diffusion.autoencoder = dc_ae_diffusion.autoencoder.to(
         device=device, dtype=get_dtype_from_str(cfg.autoencoder_dtype)
-    )
+    ).eval()
     dc_ae_diffusion.diffusion_model = dc_ae_diffusion.diffusion_model.to(
         device=device, dtype=get_dtype_from_str(cfg.diffusion_model_dtype)
-    )
+    ).eval()
 
     torch.manual_seed(0)
     torch.cuda.manual_seed_all(0)
