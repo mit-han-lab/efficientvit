@@ -44,7 +44,7 @@ ______________________________________________________________________
 </p>
 
 <p align="center">
-<b> Figure 3: DC-AE enables efficient text-to-image generation on the laptop. For more details, please check our text-to-image diffusion model <a href="https://nvlabs.github.io/Sana/">SANA</a>.
+<b> Figure 3: DC-AE enables efficient text-to-image generation on the laptop: <a href="https://nvlabs.github.io/Sana/">SANA</a>.
 </p>
 
 - [Usage of Deep Compression Autoencoder](applications/dc_ae/README.md#deep-compression-autoencoder)
