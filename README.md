@@ -38,10 +38,6 @@
 <b> Figure 2: DC-AE speeds up latent diffusion models.
 </p>
 
-<p align="left">
-<img src="https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0/resolve/main/assets/Sana-0.6B-laptop.png"  width="1200">
-</p>
-
 <p align="center">
 <img src="https://huggingface.co/mit-han-lab/dc-ae-f64c128-in-1.0/resolve/main/assets/dc_ae_sana.jpg"  width="1200">
 </p>
