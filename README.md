@@ -5,6 +5,7 @@
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/deep-compression-autoencoder-for-efficient/image-generation-on-imagenet-512x512)](https://paperswithcode.com/sota/image-generation-on-imagenet-512x512?p=deep-compression-autoencoder-for-efficient)
 
 ## News
+- (🔥 New) [2025/01/24] We released DC-AE-SANA-1.1: [doc](https://github.com/mit-han-lab/efficientvit/blob/master/assets/docs/dc_ae_sana_1.1.md). 
 - (🔥 New) [2025/01/23] DC-AE and SANA are accepted by ICLR 2025.
 - (🔥 New) [2025/01/14] We released **DC-AE+USiT models**: [model](https://huggingface.co/collections/mit-han-lab/dc-ae-diffusion-670dbb8d6b6914cf24c1a49d), [training](https://github.com/mit-han-lab/efficientvit/blob/master/applications/dc_ae/README.md#dc-ae--usit). Using the default training settings and sampling strategy, DC-AE+USiT-2B achieves 1.72 FID on ImageNet 512x512, surpassing the SOTA diffusion model EDM2-XXL and SOTA auto-regressive image generative models (MAGVIT-v2 and MAR-L). 
 - (🔥 New) [2024/12/24] **diffusers** supports DC-AE models. All [DC-AE models in diffusers safetensors](https://huggingface.co/collections/mit-han-lab/dc-ae-670085b9400ad7197bb1009b) are released. [Usage](https://github.com/mit-han-lab/efficientvit/tree/master/applications/dc_ae#deep-compression-autoencoder-diffusers).
@@ -22,7 +23,7 @@
 
 ## Content
 
-### Deep Compression Autoencoder for Efficient High-Resolution Diffusion Models [[paper](https://arxiv.org/abs/2410.10733)] [[readme](applications/dc_ae/README.md)]
+### [ICLR 2025] Deep Compression Autoencoder for Efficient High-Resolution Diffusion Models [[paper](https://arxiv.org/abs/2410.10733)] [[readme](applications/dc_ae/README.md)]
 
 **Deep Compression Autoencoder (DC-AE) is a new family of high-spatial compression autoencoders with a spatial compression ratio of up to 128 while maintaining reconstruction quality. It accelerates all latent diffusion models regardless of the diffusion model architecture.**
 
@@ -54,7 +55,7 @@
 - [Train DC-AE-Diffusion Models](applications/dc_ae/README.md#train-dc-ae-diffusion-models)
 - [Reference](applications/dc_ae/README.md#reference)
 
-### EfficientViT-SAM: Accelerated Segment Anything Model Without Accuracy Loss [[paper](https://arxiv.org/abs/2402.05008)] [[online demo](https://evitsam.hanlab.ai/)] [[readme](applications/efficientvit_sam/README.md)]
+### [CVPR 2024 eLVM Workshop] EfficientViT-SAM: Accelerated Segment Anything Model Without Accuracy Loss [[paper](https://arxiv.org/abs/2402.05008)] [[online demo](https://evitsam.hanlab.ai/)] [[readme](applications/efficientvit_sam/README.md)]
 
 **EfficientViT-SAM is a new family of accelerated segment anything models by replacing SAM's heavy image encoder with EfficientViT. It delivers a 48.9x measured TensorRT speedup on A100 GPU over SAM-ViT-H without sacrificing accuracy.**
 
@@ -70,7 +71,7 @@
 - [Train EfficientViT-SAM](applications/efficientvit_sam/README.md#training)
 - [Reference](applications/efficientvit_sam/README.md#reference)
 
-### EfficientViT-Classification [[paper](https://arxiv.org/abs/2205.14756)] [[readme](applications/efficientvit_cls/README.md)]
+### [ICCV 2023] EfficientViT-Classification [[paper](https://arxiv.org/abs/2205.14756)] [[readme](applications/efficientvit_cls/README.md)]
 
 **Efficient image classification models with EfficientViT backbones.**
 
@@ -85,7 +86,7 @@
 - [Train EfficientViT Classification Models](applications/efficientvit_cls/README.md#training)
 - [Reference](applications/efficientvit_cls/README.md#reference)
 
-### EfficientViT-Segmentation [[paper](https://arxiv.org/abs/2205.14756)] [[readme](applications/efficientvit_seg/README.md)]
+### [ICCV 2023] EfficientViT-Segmentation [[paper](https://arxiv.org/abs/2205.14756)] [[readme](applications/efficientvit_seg/README.md)]
 
 **Efficient semantic segmantation models with EfficientViT backbones.**
 
