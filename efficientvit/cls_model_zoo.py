@@ -59,7 +59,7 @@ def create_efficientvit_cls_model(
 ) -> EfficientViTCls:
     if name not in REGISTERED_EFFICIENTVIT_CLS_MODEL:
         raise ValueError(
-            f"Do not find {name} in the model zoo. List of models: {list(REGISTERED_EFFICIENTVIT_CLS_MODEL.keys())}"
+            f"Cannot find {name} in the model zoo. List of models: {list(REGISTERED_EFFICIENTVIT_CLS_MODEL.keys())}"
         )
     else:
         model_cls, norm_eps, default_pt = REGISTERED_EFFICIENTVIT_CLS_MODEL[name]
@@ -69,7 +69,7 @@ def create_efficientvit_cls_model(
 
     if pretrained:
         if weight_url is None:
-            raise ValueError(f"Do not find the pretrained weight of {name}.")
+            raise ValueError(f"Cannot find the pretrained weight of {name}.")
         else:
             weight = load_state_dict_from_file(weight_url)
             model.load_state_dict(weight)
