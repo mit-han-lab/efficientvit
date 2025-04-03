@@ -67,7 +67,7 @@ class SAMDistributedSampler(DistributedSampler):
 
     def set_sub_num_samples(self) -> int:
         self.sub_num_samples = self.num_samples // self.sub_epochs_per_epoch
-        if self.sub_num_samples % self.sub_epochs_per_epoch > self.sub_epoch:
+        if self.num_samples % self.sub_epochs_per_epoch > self.sub_epoch:
             self.sub_num_samples += 1
 
     def set_epoch_and_sub_epoch(self, epoch: int, sub_epoch: int) -> None:
