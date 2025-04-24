@@ -23,7 +23,7 @@ ______________________________________________________________________
 
 ## Content
 
-### [ICLR 2025] Deep Compression Autoencoder for Efficient High-Resolution Diffusion Models [[paper](https://arxiv.org/abs/2410.10733)] [[readme](applications/dc_ae/README.md)]
+### [ICLR 2025] Deep Compression Autoencoder for Efficient High-Resolution Diffusion Models [[paper](https://arxiv.org/abs/2410.10733)] [[readme](applications/dc_ae/README.md)] [[poster](assets/dc_ae_poster.pdf)]
 
 **Deep Compression Autoencoder (DC-AE) is a new family of high-spatial compression autoencoders with a spatial compression ratio of up to 128 while maintaining reconstruction quality. It accelerates all latent diffusion models regardless of the diffusion model architecture.**
 
